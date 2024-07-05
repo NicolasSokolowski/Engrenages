@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "del-cli": "^5.1.0",
+    "express": "^4.19.2",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "typescript": "^5.5.3"
+  },
+  "name": "@zencorp/engrenages",
+  "version": "1.0.0",
+  "main": "./build/index.js",
+  "types": ".build/index.d.ts",
+  "files": [
+    "build/**/*"
+  ],
+  "devDependencies": {},
+  "scripts": {
+    "clean": "npm run clean && tsc",
+    "build": "del ./build/*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
