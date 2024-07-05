@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateRequest = void 0;
 const RequestValidationError_error_1 = require("../errors/RequestValidationError.error");
 const validateRequest = (sourceProperty, schema) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -19,4 +20,4 @@ const validateRequest = (sourceProperty, schema) => (req, res, next) => __awaite
         next(new RequestValidationError_error_1.RequestValidationError(err));
     }
 });
-exports.default = validateRequest;
+exports.validateRequest = validateRequest;
