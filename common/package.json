@@ -7,7 +7,7 @@
     "jsonwebtoken": "^9.0.2"
   },
   "name": "@zencorp/engrenages",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "files": [
