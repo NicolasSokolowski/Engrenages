@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
     "del-cli": "^5.1.0",
     "express": "^4.19.2",
     "joi": "^17.13.3",
@@ -7,13 +9,12 @@
     "typescript": "^5.5.3"
   },
   "name": "@zencorp/engrenages",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "./build/index.js",
   "types": ".build/index.d.ts",
   "files": [
     "build/**/*"
   ],
-  "devDependencies": {},
   "scripts": {
     "clean": "npm run clean && tsc",
     "build": "del ./build/*"
