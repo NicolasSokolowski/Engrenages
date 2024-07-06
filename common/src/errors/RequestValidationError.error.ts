@@ -6,6 +6,8 @@ export class RequestValidationError extends CustomError {
 
   constructor(public errors: Joi.ValidationErrorItem[]) {
     super("Invalid request parameters");
+
+    Object.setPrototypeOf(this, RequestValidationError.prototype)
   };
 
   serializeErrors() {
