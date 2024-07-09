@@ -17,7 +17,7 @@ const validateRequest = (sourceProperty, schema) => (req, res, next) => __awaite
         next();
     }
     catch (err) {
-        next(new RequestValidationError_error_1.RequestValidationError(err));
+        next(new RequestValidationError_error_1.RequestValidationError(err.details));
     }
 });
 exports.validateRequest = validateRequest;

@@ -6,6 +6,7 @@ class BadRequestError extends CustomError_error_1.CustomError {
     constructor(message) {
         super(message);
         this.statusCode = 400;
+        Object.setPrototypeOf(this, BadRequestError.prototype);
     }
     ;
     serializeErrors() {

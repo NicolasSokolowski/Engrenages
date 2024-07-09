@@ -7,6 +7,7 @@ class RequestValidationError extends CustomError_error_1.CustomError {
         super("Invalid request parameters");
         this.errors = errors;
         this.statusCode = 400;
+        Object.setPrototypeOf(this, RequestValidationError.prototype);
     }
     ;
     serializeErrors() {
