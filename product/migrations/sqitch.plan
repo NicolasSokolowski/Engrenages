@@ -1,0 +1,5 @@
+%syntax-version=1.0.0
+%project=engrenages_product
+
+table_creation 2024-07-05T15:46:48Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # creation de la table
+product_function 2024-07-05T21:40:38Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # creation de fonctions pour la table product
