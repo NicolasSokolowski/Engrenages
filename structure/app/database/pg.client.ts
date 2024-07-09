@@ -1,10 +1,8 @@
 import "dotenv/config";
 import { Pool } from "pg";
 
-const URI = process.env.PG_URI;
-
 const poolConfig = {
-  connectionString: `${URI}`
+  connectionString: `${process.env.PG_URI}`
 }
 
 const pool = new Pool(poolConfig);
