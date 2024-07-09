@@ -1,4 +1,4 @@
-import { app } from "./app/app.index";
+import { app } from "./app/index.app";
 import { pool } from "./app/database/pg.client";
 
 const start = async () => {

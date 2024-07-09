@@ -1,0 +1,54 @@
+### Create a product
+POST http://localhost:3000/api/product
+Content-Type: application/json
+
+{
+  "title": "New product 126",
+  "description": "product description",
+  "ean": "1235689256223",
+  "length": 12.23,
+  "width": 10.12,
+  "height": 8.50,
+  "product_img": "fake_lien",
+  "price": 23.70
+}
+
+### Update a product
+PATCH http://localhost:3000/api/product/1
+Content-Type: application/json
+
+{
+  "title": "product 3234",
+  "description": "product description",
+  "ean": "1234567890433",
+  "length": "12.23",
+  "width": 10.12,
+  "height": 8.50,
+  "product_img": "fake_lien",
+  "price": 23.70
+}
+
+### Update a product with only one entree
+PATCH http://localhost:3000/api/product/1
+Content-Type: application/json
+
+{
+  "title": " one single product"
+}
+
+### Delete a product
+DELETE http://localhost:3000/api/product/1
+
+### Find a product by ID
+GET http://localhost:3000/api/product/4
+
+### Find all products
+GET http://localhost:3000/api/product
+
+### Update a product
+PATCH http://localhost:3000/api/product/8
+Content-Type: application/json
+
+{
+  "title": 4
+}
