@@ -1,5 +1,5 @@
-export * from "./common_interfaces/EntityDatamapperRequirements";
-export * from "./Controllers/CoreController";
+export * from "./datamappers/EntityDatamapperRequirements";
+export * from "./controllers/CoreController";
 export * from "./datamappers/CoreDatamapper";
 export * from "./datamappers/TableNames";
 export * from "./errors/BadRequestError.error";

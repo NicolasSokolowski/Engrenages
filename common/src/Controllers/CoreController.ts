@@ -1,17 +1,16 @@
-import { EntityDatamapperRequirements } from "../common_interfaces/EntityDatamapperRequirements";
 import { Request, Response } from "express";
 import { BadRequestError } from "../errors/BadRequestError.error";
 import { NotFoundError } from "../errors/NotFoundError.error";
 import { DatabaseConnectionError } from "../errors/DatabaseConnectionError.error";
+import { EntityControllerRequirements } from "./EntityControllerRequirements";
+import { EntityDatamapperRequirements } from "../datamappers/EntityDatamapperRequirements";
 
-type EntityDatamapperRequirementsWithoutData = Omit<EntityDatamapperRequirements, "data">;
-
-export abstract class CoreController<T extends EntityDatamapperRequirements> {
+export abstract class CoreController<T extends EntityControllerRequirements, Y extends EntityDatamapperRequirements> {
   abstract update(req: Request, res: Response): Promise<void>;
 
-  constructor(public datamapper: EntityDatamapperRequirementsWithoutData) {}
+  constructor(public datamapper: T["datamapper"]) {}
 
-  getByPk = async (req: Request, res: Response) => {
+  getByPk = async (req: Request, res: Response): Promise<void> => {
     const id: number = parseInt(req.params.id);
 
     if (!id) {
@@ -27,7 +26,7 @@ export abstract class CoreController<T extends EntityDatamapperRequirements> {
     res.status(200).send(searchedItem);
   }
 
-  getAll = async (req: Request, res: Response) => {
+  getAll = async (req: Request, res: Response): Promise<void> => {
     const itemsList = await this.datamapper.findAll();
 
     if (!itemsList) {
@@ -37,8 +36,8 @@ export abstract class CoreController<T extends EntityDatamapperRequirements> {
     res.status(200).send(itemsList);
   }
 
-  create = async (req: Request, res: Response) => {
-    const item: T["data"] = req.body;
+  create = async (req: Request, res: Response): Promise<void> => {
+    const item: Y["data"] = req.body;
 
     const createdItem = await this.datamapper.insert(item);
 
