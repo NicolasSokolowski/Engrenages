@@ -1,3 +1,6 @@
+export * from "./datamappers/CoreDatamapper";
+export * from "./datamappers/TableNames";
+
 export * from "./errors/BadRequestError.error";
 export * from "./errors/CustomError.error";
 export * from "./errors/DatabaseConnectionError.error";
