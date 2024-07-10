@@ -1,6 +1,6 @@
 import { TableNames } from "./TableNames";
 import { Pool } from "pg";
-interface entityDatamapperRequirements {
+export interface entityDatamapperRequirements {
     tableName: TableNames;
     pool: Pool;
     data: any;
@@ -14,4 +14,3 @@ export declare abstract class CoreDatamapper<T extends entityDatamapperRequireme
     update: (entityObject: T["data"], currentVersion: number) => Promise<any>;
     delete: (id: number) => Promise<any>;
 }
-export {};

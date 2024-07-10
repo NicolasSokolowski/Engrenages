@@ -1,7 +1,7 @@
 import { TableNames } from "./TableNames";
 import { Pool } from "pg";
 
-interface entityDatamapperRequirements {
+export interface entityDatamapperRequirements {
   tableName: TableNames;
   pool: Pool;
   data: any;
