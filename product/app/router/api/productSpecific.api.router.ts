@@ -1,8 +1,7 @@
 import express from "express";
-import { controllerWrapper } from "@zencorp/engrenages";
+import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
 import { productController } from "../../controllers/index.controller";
 import { productUpdateSchema } from "../../validation/schemas/product.index.schema";
-import { validateRequest } from "@zencorp/engrenages";
 
 const productSpecificRouter = express.Router({ mergeParams: true });
 
