@@ -13,6 +13,7 @@ export * from "./errors/NotFoundError.error";
 export * from "./errors/RequestValidationError.error";
 
 export * from "./helpers/controllerWrapper.helper";
+export * from "./helpers/makeRandomString.helper";
 
 export * from "./middlewares/errorHandler.middleware";
 export * from "./middlewares/routeNotFound.middleware";

@@ -26,6 +26,7 @@ __exportStar(require("./errors/NotAuthorizedError.error"), exports);
 __exportStar(require("./errors/NotFoundError.error"), exports);
 __exportStar(require("./errors/RequestValidationError.error"), exports);
 __exportStar(require("./helpers/controllerWrapper.helper"), exports);
+__exportStar(require("./helpers/makeRandomString.helper"), exports);
 __exportStar(require("./middlewares/errorHandler.middleware"), exports);
 __exportStar(require("./middlewares/routeNotFound.middleware"), exports);
 __exportStar(require("./middlewares/validateRequest.middleware"), exports);
