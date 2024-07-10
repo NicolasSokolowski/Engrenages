@@ -2,7 +2,7 @@ import { EntityDatamapperRequirements } from "../common_interfaces/EntityDatamap
 import { Request, Response } from "express";
 export declare abstract class CoreController<T extends EntityDatamapperRequirements> {
     datamapper: T;
-    abstract update: T["update"];
+    abstract update(req: Request, res: Response): Promise<T["data"]>;
     constructor(datamapper: T);
     getByPk: (req: Request, res: Response) => Promise<void>;
     getAll: (req: Request, res: Response) => Promise<void>;

@@ -6,7 +6,7 @@ import { DatabaseConnectionError } from "../errors/DatabaseConnectionError.error
 
 
 export abstract class CoreController<T extends EntityDatamapperRequirements> {
-  abstract update: T["update"];
+  abstract update(req: Request, res: Response): Promise<T["data"]>;
 
   constructor(public datamapper: T) {}
 
