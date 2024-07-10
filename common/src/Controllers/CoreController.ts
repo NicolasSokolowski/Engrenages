@@ -4,11 +4,12 @@ import { BadRequestError } from "../errors/BadRequestError.error";
 import { NotFoundError } from "../errors/NotFoundError.error";
 import { DatabaseConnectionError } from "../errors/DatabaseConnectionError.error";
 
+type EntityDatamapperRequirementsWithoutData = Omit<EntityDatamapperRequirements, "data">;
 
 export abstract class CoreController<T extends EntityDatamapperRequirements> {
   abstract update(req: Request, res: Response): Promise<void>;
 
-  constructor(public datamapper: T) {}
+  constructor(public datamapper: EntityDatamapperRequirementsWithoutData) {}
 
   getByPk = async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
