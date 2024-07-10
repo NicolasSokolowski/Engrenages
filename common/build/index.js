@@ -14,6 +14,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./datamappers/CoreDatamapper"), exports);
+__exportStar(require("./datamappers/TableNames"), exports);
 __exportStar(require("./errors/BadRequestError.error"), exports);
 __exportStar(require("./errors/CustomError.error"), exports);
 __exportStar(require("./errors/DatabaseConnectionError.error"), exports);
