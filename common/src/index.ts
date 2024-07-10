@@ -1,8 +1,8 @@
-export * from "./datamappers/EntityDatamapperRequirements";
-
 export * from "./controllers/CoreController";
+export * from "./controllers/EntityControllerRequirements";
 
 export * from "./datamappers/CoreDatamapper";
+export * from "./datamappers/EntityDatamapperRequirements";
 export * from "./datamappers/TableNames";
 
 export * from "./errors/BadRequestError.error";
