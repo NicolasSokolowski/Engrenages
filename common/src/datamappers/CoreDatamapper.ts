@@ -1,5 +1,3 @@
-import { TableNames } from "./TableNames";
-import { Pool } from "pg";
 import { EntityDatamapperRequirements } from "../common_interfaces/EntityDatamapperRequirements";
 
 
