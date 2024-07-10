@@ -1,13 +1,20 @@
 import { Request, Response } from "express";
-import { ProductDatamapperInterface, ProductInterface } from "../datamappers/product.datamapper";
+import { Pool } from "pg";
+import { ProductRequirements } from "../datamappers/ProductDatamapper";
 import { BadRequestError, DatabaseConnectionError, NotFoundError } from "@zencorp/engrenages";
 
-interface ProductControllerInterface {
-  datamapper: ProductDatamapperInterface;
+export interface ProductDatamapperRequirements {
+  tableName: string;
+  pool: Pool;
+  findByPk(productID: number): Promise<ProductRequirements["data"]>;
+  findAll(): Promise<ProductRequirements["data"][]>;
+  insert(product: ProductRequirements["data"]): Promise<ProductRequirements["data"]>;
+  update(product: ProductRequirements["data"], currentVersion: number): Promise<ProductRequirements["data"]>;
+  delete(productID: number): Promise<ProductRequirements["data"]>;
 }
 
-export default class ProductController implements ProductControllerInterface {
-  constructor(public datamapper: ProductDatamapperInterface) {}
+export default class ProductController {
+  constructor(public datamapper: ProductDatamapperRequirements) {}
 
   getByPk = async (req: Request, res: Response) => {
     const productID: number = parseInt(req.params.productID);
@@ -36,7 +43,7 @@ export default class ProductController implements ProductControllerInterface {
   }
 
   create = async (req: Request, res: Response) => {
-    const product: ProductInterface = req.body;
+    const product: ProductRequirements["data"] = req.body;
 
     const createdProduct = await this.datamapper.insert(product);
 
@@ -50,7 +57,7 @@ export default class ProductController implements ProductControllerInterface {
       throw new BadRequestError("This id doesn't exist");
     }
 
-    let { title, description, ean, length, width, height, product_img, price }: Partial<ProductInterface> = req.body;
+    let { title, description, ean, length, width, height, product_img, price }: Partial<ProductRequirements["data"]> = req.body;
 
     const productToUpdate = await this.datamapper.findByPk(productID);
 

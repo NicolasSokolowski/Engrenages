@@ -1,4 +1,4 @@
-import { ProductDatamapper } from "./product.datamapper";
+import { ProductDatamapper } from "./ProductDatamapper";
 
 const productDatamapper = new ProductDatamapper();
 
