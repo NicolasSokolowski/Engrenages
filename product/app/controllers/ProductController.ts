@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { BadRequestError, CoreController, DatabaseConnectionError, NotFoundError } from "@zencorp/engrenages";
-import { ProductRequirements } from "../interfaces/ProductRequirements";
+import { ProductControllerRequirements } from "./interfaces/ProductControllerRequirements";
+import { ProductDatamapperRequirements } from "../datamappers/interfaces/ProductDatamapperRequirements";
 
-type ProductRequirementsWithoutData = Omit<ProductRequirements, "data">;
 
-export class ProductController extends CoreController<ProductRequirements> {
-  constructor(datamapper: ProductRequirementsWithoutData) {
+export class ProductController extends CoreController<ProductControllerRequirements, ProductDatamapperRequirements> {
+  constructor(datamapper: ProductControllerRequirements["datamapper"]) {
     super(datamapper);
 
     this.datamapper = datamapper;
@@ -18,7 +18,7 @@ export class ProductController extends CoreController<ProductRequirements> {
       throw new BadRequestError("This id doesn't exist");
     }
 
-    let { title, description, ean, length, width, height, product_img, price }: Partial<ProductRequirements["data"]> = req.body;
+    let { title, description, ean, length, width, height, product_img, price }: Partial<ProductDatamapperRequirements["data"]> = req.body;
 
     const productToUpdate = await this.datamapper.findByPk(id);
 
