@@ -1,11 +1,5 @@
-import { TableNames } from "./TableNames";
-import { Pool } from "pg";
-export interface entityDatamapperRequirements {
-    tableName: TableNames;
-    pool: Pool;
-    data: any;
-}
-export declare abstract class CoreDatamapper<T extends entityDatamapperRequirements> {
+import { EntityDatamapperRequirements } from "../common_interfaces/EntityDatamapperRequirements";
+export declare abstract class CoreDatamapper<T extends EntityDatamapperRequirements> {
     abstract tableName: T["tableName"];
     abstract pool: T["pool"];
     findByPk: (id: number) => Promise<any>;

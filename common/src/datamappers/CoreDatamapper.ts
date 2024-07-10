@@ -1,13 +1,9 @@
 import { TableNames } from "./TableNames";
 import { Pool } from "pg";
+import { EntityDatamapperRequirements } from "../common_interfaces/EntityDatamapperRequirements";
 
-export interface entityDatamapperRequirements {
-  tableName: TableNames;
-  pool: Pool;
-  data: any;
-}
 
-export abstract class CoreDatamapper<T extends entityDatamapperRequirements> {
+export abstract class CoreDatamapper<T extends EntityDatamapperRequirements> {
   abstract tableName: T["tableName"];
   abstract pool: T["pool"];
 

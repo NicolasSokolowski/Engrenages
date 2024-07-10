@@ -1,3 +1,7 @@
+export * from "./common_interfaces/EntityDatamapperRequirements";
+
+export * from "./Controllers/CoreController";
+
 export * from "./datamappers/CoreDatamapper";
 export * from "./datamappers/TableNames";
 
