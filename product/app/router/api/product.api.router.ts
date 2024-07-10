@@ -16,6 +16,6 @@ productRouter.route("/")
     controllerWrapper(productController.create)
   );
 
-productRouter.use("/:productID", productSpecificRouter);
+productRouter.use("/:id", productSpecificRouter);
 
 export default productRouter;
