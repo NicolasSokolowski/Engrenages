@@ -1,7 +1,6 @@
 import request from "supertest";
 import { app } from "../app/index.app";
 import { makeRandomString } from "@zencorp/engrenages";
-import { createBlockageCode } from "./product_blockage_code.test";
 
 // Helper functions ---
 
@@ -217,10 +216,6 @@ it("returns a 404 status error when using an invalid URL", async () => {
 
 // --------------------
 
-
-
-// --------------------
-
 it("returns an error when specifying an unexisting product blockage name", async () => {
   await request(app)
     .post("/api/product")
@@ -257,5 +252,6 @@ it("creates a product and updates it with an existing blockage name", async () =
       "product_blockage_name": "ZZZ"
     })
     .expect(200);
-  
 });
+
+// --------------------

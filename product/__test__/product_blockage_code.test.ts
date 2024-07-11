@@ -1,7 +1,6 @@
 import request from "supertest";
 import { app } from "../app/index.app";
 import { makeRandomString } from "@zencorp/engrenages";
-import { createProduct } from "./product.test";
 
 // Helper functions ---
 
