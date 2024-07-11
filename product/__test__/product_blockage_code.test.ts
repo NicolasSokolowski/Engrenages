@@ -21,7 +21,7 @@ it("fetches all the existing product blockage code", async () => {
   await createBlockageCode();
 
   const response = await request(app)
-    .get("/api/blockage")
+    .get("/api/product/blockage")
     .send()
     .expect(200);
 
@@ -34,7 +34,7 @@ it("fetches a single product blockage type if given valid ID", async () => {
   const blockageCode = await createBlockageCode();
 
   const response = await request(app)
-    .get(`/api/blockage/${blockageCode}`)
+    .get(`/api/product/blockage/${blockageCode}`)
     .send()
     .expect(200);
 
@@ -45,7 +45,7 @@ it("fetches a single product blockage type if given valid ID", async () => {
 
 it("creates a product blockage type when given valid inputs", async () => {
   const response = await request(app)
-    .post("/api/blockage")
+    .post("/api/product/blockage")
     .send({
       "name": "FIR",
       "description": "Blockage test description"
@@ -60,7 +60,7 @@ it("creates a product blockage type when given valid inputs", async () => {
 
 it("returns an error when trying to create a product blockage type with invalid inputs", async () => {
   await request(app)
-    .post("/api/blockage")
+    .post("/api/product/blockage")
     .send({
       "name": 6666, // <-- sending 4 characters ("name" is VARCHAR(3))
       "description": "Blockage test description"
@@ -74,7 +74,7 @@ it("creates and updates a product blockage code when given valid inputs", async 
   const blockageCode = await createBlockageCode();
 
   const response = await request(app)
-    .patch(`/api/blockage/${blockageCode.body.id}`)
+    .patch(`/api/product/blockage/${blockageCode.body.id}`)
     .send({
       "name": "FIR"
     })
@@ -89,7 +89,7 @@ it("returns an error when trying to update a product blockage code with invalid 
   const blockageCode = await createBlockageCode();
 
   await request(app)
-    .patch(`/api/blockage/${blockageCode.body.id}`)
+    .patch(`/api/product/blockage/${blockageCode.body.id}`)
     .send({
       "description": true // <-- sending a boolean instead of a string
     })
@@ -102,12 +102,12 @@ it("creates and deletes a product when given valid input", async () => {
   const blockageCode = await createBlockageCode();
 
   await request(app)
-    .delete(`/api/blockage/${blockageCode.body.id}`)
+    .delete(`/api/product/blockage/${blockageCode.body.id}`)
     .send()
     .expect(200);
 
   await request(app)
-    .get(`/api/blockage/${blockageCode.body.id}`)
+    .get(`/api/product/blockage/${blockageCode.body.id}`)
     .send()
     .expect(404);
 });
@@ -118,21 +118,21 @@ it("creates and updates a product blockage type several type and checks the vers
   const blockageCode = await createBlockageCode();
 
   const responseOne = await request(app)
-    .patch(`/api/blockage/${blockageCode.body.id}`)
+    .patch(`/api/product/blockage/${blockageCode.body.id}`)
     .send({
       "name": "DMG"
     })
     .expect(200);
 
   const responseTwo = await request(app)
-    .patch(`/api/blockage/${blockageCode.body.id}`)
+    .patch(`/api/product/blockage/${blockageCode.body.id}`)
     .send({
       "description": "A new test description"
     })
     .expect(200);
 
   const responseThree = await request(app)
-    .patch(`/api/blockage/${blockageCode.body.id}`)
+    .patch(`/api/product/blockage/${blockageCode.body.id}`)
     .send({
       "name": "TEM"
     })
@@ -153,36 +153,36 @@ it("returns appropriate error when given invalid IDs", async () => {
   const invalidID = "notAnID";
 
   await request(app)
-    .get(`/api/blockage/${inexistingID}`)
+    .get(`/api/product/blockage/${inexistingID}`)
     .send()
     .expect(404);
 
   await request(app)
-    .get(`/api/blockage/${invalidID}`)
+    .get(`/api/product/blockage/${invalidID}`)
     .send()
     .expect(400);
 
   await request(app)
-    .patch(`/api/blockage/${inexistingID}`) 
+    .patch(`/api/product/blockage/${inexistingID}`) 
     .send({
       "title": makeRandomString(10) 
     })
     .expect(404);
 
   await request(app)
-    .patch(`/api/blockage/${invalidID}`)
+    .patch(`/api/product/blockage/${invalidID}`)
     .send({
       "title": makeRandomString(10) 
     })
     .expect(400);
 
   await request(app)
-    .delete(`/api/blockage/${inexistingID}`) 
+    .delete(`/api/product/blockage/${inexistingID}`) 
     .send()
     .expect(404);
 
   await request(app)
-    .delete(`/api/blockage/${invalidID}`)
+    .delete(`/api/product/blockage/${invalidID}`)
     .send()
     .expect(400);
 });
