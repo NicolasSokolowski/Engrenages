@@ -28,4 +28,4 @@ export default Joi.object({
   price: Joi.number().messages({
     "string.base": "The price must be of type number"
   })
-}).required()
+}).required();
