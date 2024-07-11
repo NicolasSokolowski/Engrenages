@@ -34,7 +34,7 @@ it("fetches a single product blockage type if given valid ID", async () => {
   const blockageCode = await createBlockageCode();
 
   const response = await request(app)
-    .get(`/api/product/blockage/${blockageCode}`)
+    .get(`/api/product/blockage/${blockageCode.body.id}`)
     .send()
     .expect(200);
 
@@ -47,12 +47,12 @@ it("creates a product blockage type when given valid inputs", async () => {
   const response = await request(app)
     .post("/api/product/blockage")
     .send({
-      "name": "FIR",
+      "name": "RIA",
       "description": "Blockage test description"
     })
     .expect(201);
 
-  expect(response.body.name).toEqual("FIR");
+  expect(response.body.name).toEqual("RIA");
   expect(response.body.description).toEqual("Blockage test description");
 });
 
@@ -91,7 +91,7 @@ it("returns an error when trying to update a product blockage code with invalid 
   await request(app)
     .patch(`/api/product/blockage/${blockageCode.body.id}`)
     .send({
-      "description": true // <-- sending a boolean instead of a string
+      "description": makeRandomString(111) // <-- sending a 101 characters string instead of a max 100
     })
     .expect(400);
 });
@@ -165,14 +165,14 @@ it("returns appropriate error when given invalid IDs", async () => {
   await request(app)
     .patch(`/api/product/blockage/${inexistingID}`) 
     .send({
-      "title": makeRandomString(10) 
+      "name": makeRandomString(3) 
     })
     .expect(404);
 
   await request(app)
     .patch(`/api/product/blockage/${invalidID}`)
     .send({
-      "title": makeRandomString(10) 
+      "name": makeRandomString(3) 
     })
     .expect(400);
 
