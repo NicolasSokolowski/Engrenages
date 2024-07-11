@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { BadRequestError, CoreController, DatabaseConnectionError, NotFoundError } from "@zencorp/engrenages";
-import { BlockageControllerRequirements } from "./interfaces/BlockageControllerRequirements";
-import { BlockageDatamapperRequirements } from "../datamappers/interfaces/BlockageDatamapperRequirements";
+import { BlockageControllerRequirements } from "../interfaces/BlockageControllerRequirements";
+import { BlockageDatamapperRequirements } from "../../datamappers/interfaces/BlockageDatamapperRequirements";
 
 export class BlockageController extends CoreController<BlockageControllerRequirements, BlockageDatamapperRequirements> {
   constructor(datamapper: BlockageControllerRequirements["datamapper"]) {

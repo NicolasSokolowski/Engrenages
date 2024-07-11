@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { BadRequestError, CoreController, DatabaseConnectionError, NotFoundError } from "@zencorp/engrenages";
-import { ProductControllerRequirements } from "./interfaces/ProductControllerRequirements";
-import { ProductDatamapperRequirements } from "../datamappers/interfaces/ProductDatamapperRequirements";
+import { ProductControllerRequirements } from "../interfaces/ProductControllerRequirements";
+import { ProductDatamapperRequirements } from "../../datamappers/interfaces/ProductDatamapperRequirements";
 
 
 export class ProductController extends CoreController<ProductControllerRequirements, ProductDatamapperRequirements> {
