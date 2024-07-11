@@ -56,6 +56,24 @@ it("creates a product when given valid inputs", async () => {
 
 // --------------------
 
+it("returns an error if given invalid input", async () => {
+  const response = await request(app)
+    .post("/api/product")
+    .send({
+      "title": 13, // <-- sending a number instead of a string
+      "description": "Test Description",
+      "ean": "1235239233223",
+      "length": 12.23,
+      "width": 10.12,
+      "height": 8.50,
+      "product_img": "test_link",
+      "price": 23.70
+    })
+    .expect(400);
+});
+
+// --------------------
+
 it("creates and updates a product", async () => {
   const product = await createProduct();
 
@@ -69,6 +87,10 @@ it("creates and updates a product", async () => {
   expect(response.body.title).toEqual("product's title");
   expect(response.body.version).toEqual(1);
 });
+
+// --------------------
+
+test.todo("returns an error when trying to update a product with invalid inputs");
 
 // --------------------
 
@@ -122,21 +144,7 @@ it("creates and delete a product", async () => {
 
 // --------------------
 
-it("returns an error if given invalid input", async () => {
-  const response = await request(app)
-    .post("/api/product")
-    .send({
-      "title": 13, // <-- sending a number instead of a string
-      "description": "Test Description",
-      "ean": "1235239233223",
-      "length": 12.23,
-      "width": 10.12,
-      "height": 8.50,
-      "product_img": "test_link",
-      "price": 23.70
-    })
-    .expect(400);
-});
+test.todo("returns an error when trying to delete a product with invalid input");
 
 // --------------------
 
