@@ -11,7 +11,8 @@ CREATE FUNCTION create_product(json) RETURNS TABLE (
   width DECIMAL,
   height DECIMAL,
   product_img TEXT,
-  price DECIMAL
+  price DECIMAL,
+  product_blockage_name CHAR(3)
 ) AS $$
 
   INSERT INTO "product"
@@ -23,18 +24,20 @@ CREATE FUNCTION create_product(json) RETURNS TABLE (
     "width",
     "height",
     "product_img",
-    "price"
+    "price",
+    "product_blockage_name"
   ) VALUES (
-    $1->>'title',
+    ($1->>'title')::VARCHAR(100),
     ($1->>'description')::TEXT,
-    $1->>'ean',
+    ($1->>'ean')::VARCHAR(13),
     ($1->>'length')::DECIMAL,
     ($1->>'width')::DECIMAL,
     ($1->>'height')::DECIMAL,
     ($1->>'product_img')::TEXT,
-    ($1->>'price')::DECIMAL
+    ($1->>'price')::DECIMAL,
+    ($1->>'product_blockage_name')::CHAR(3)
   )
-  RETURNING id, title, description, ean, length, width, height, product_img, price
+  RETURNING id, title, description, ean, length, width, height, product_img, price, product_blockage_name
 
 $$ LANGUAGE SQL STRICT;
 
@@ -48,6 +51,7 @@ CREATE FUNCTION update_product(json, version INT) RETURNS TABLE (
     height DECIMAL,
     product_img TEXT,
     price DECIMAL,
+    product_blockage_name CHAR(3),
     version INT,
     updated_at TIMESTAMPTZ
 ) AS $$
@@ -61,6 +65,7 @@ CREATE FUNCTION update_product(json, version INT) RETURNS TABLE (
     "height",
     "product_img",
     "price",
+    "product_blockage_name",
     "version",
     "updated_at"
   ) = (
@@ -72,11 +77,12 @@ CREATE FUNCTION update_product(json, version INT) RETURNS TABLE (
     COALESCE(($1->>'height')::DECIMAL, "height"),
     COALESCE(($1->>'product_img')::TEXT, "product_img"),
     COALESCE(($1->>'price')::DECIMAL, "price"),
+    COALESCE(($1->>'product_blockage_name')::CHAR(3), "product_blockage_name"),
     ("version")::INT +1,
     NOW()
   )
   WHERE "id" = ($1->>'id')::INT AND "version" = ($2)
-  RETURNING id, title, description, ean, length, width, height, product_img, price, version, "updated_at"
+  RETURNING id, title, description, ean, length, width, height, product_img, price, product_blockage_name, version, "updated_at"
 
 $$ LANGUAGE SQL STRICT;
 

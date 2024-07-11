@@ -1,10 +1,11 @@
 import request from "supertest";
 import { app } from "../app/index.app";
 import { makeRandomString } from "@zencorp/engrenages";
+import { createProduct } from "./product.test";
 
 // Helper functions ---
 
-const createBlockageCode = async () => {
+export const createBlockageCode = async () => {
   return request(app)
     .post("/api/product/blockage")
     .send({
@@ -189,3 +190,55 @@ it("returns appropriate error when given invalid IDs", async () => {
 
 // --------------------
 
+it("creates a product blockage code and creates a product with the created code", async () => {
+  await request(app)
+    .post("/api/product/blockage")
+    .send({
+      "name": "PNT",
+      "description": "Pont"
+    })
+    .expect(201);
+
+  await request(app)
+    .post("/api/product")
+    .send({
+      "title": makeRandomString(10),
+      "description": "Test Description",
+      "ean": makeRandomString(13),
+      "length": 12.23,
+      "width": 10.12,
+      "height": 8.50,
+      "product_img": "test_link",
+      "price": 23.70,
+      "product_blockage_name": "PNT"
+    })
+    .expect(201);
+});
+
+// --------------------
+
+it("returns an error when trying to delete a product blockage code used by a product", async () => {
+  const blockageName = await createBlockageCode();
+
+  await request(app)
+    .post("/api/product")
+    .send({
+      "title": makeRandomString(10),
+      "description": "Test Description",
+      "ean": makeRandomString(13),
+      "length": 12.23,
+      "width": 10.12,
+      "height": 8.50,
+      "product_img": "test_link",
+      "price": 23.70,
+      "product_blockage_name": `${blockageName.body.name}`     
+    })
+    .expect(201);
+
+  await request(app)
+    .delete(`/api/product/blockage/${blockageName.body.id}`)
+    .send()
+    .expect(400);
+});
+
+// --------------------

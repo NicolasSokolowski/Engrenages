@@ -1,7 +1,7 @@
 import express from "express";
 import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
 import { productController } from "../../controllers/index.controller";
-import { productCreateSchema } from "../../validation/schemas/product.index.schema";
+import { productCreateSchema } from "../../validation/index.shemas";
 import productSpecificRouter from "./productSpecific.router";
 import blockageRouter from "./blockage.router";
 

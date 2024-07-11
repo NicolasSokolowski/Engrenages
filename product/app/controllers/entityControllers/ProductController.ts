@@ -18,7 +18,7 @@ export class ProductController extends CoreController<ProductControllerRequireme
       throw new BadRequestError("This id doesn't exist");
     }
 
-    let { title, description, ean, length, width, height, product_img, price }: Partial<ProductDatamapperRequirements["data"]> = req.body;
+    let { title, description, ean, length, width, height, product_img, price, product_blockage_name }: Partial<ProductDatamapperRequirements["data"]> = req.body;
 
     const productToUpdate = await this.datamapper.findByPk(id);
 
@@ -40,6 +40,7 @@ export class ProductController extends CoreController<ProductControllerRequireme
     height ? height : height = productToUpdate.height;
     product_img ? product_img : product_img = productToUpdate.product_img;
     price ? price : price = productToUpdate.price;
+    product_blockage_name ? product_blockage_name : product_blockage_name = productToUpdate.product_blockage_name;
 
     const newDataProduct = { 
       ...productToUpdate, 
@@ -50,7 +51,8 @@ export class ProductController extends CoreController<ProductControllerRequireme
       width,
       height,
       product_img,
-      price
+      price,
+      product_blockage_name
     };
 
     const updatedProduct = await this.datamapper.update(newDataProduct, currentVersion);

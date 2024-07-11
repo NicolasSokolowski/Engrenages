@@ -12,6 +12,7 @@ export interface ProductDatamapperRequirements extends EntityDatamapperRequireme
     height: number;
     product_img: string;
     price: number;
+    product_blockage_name: string;
     version?: number;
   };
 }

@@ -10,4 +10,4 @@ export default Joi.object({
     "string.base": "The product blockage code description must be of type string",
     "string.max": "The product blockage code description must be equal or less than 100 characters"
   })
-});
+}).min(1);

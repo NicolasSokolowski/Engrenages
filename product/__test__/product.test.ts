@@ -1,10 +1,11 @@
 import request from "supertest";
 import { app } from "../app/index.app";
 import { makeRandomString } from "@zencorp/engrenages";
+import { createBlockageCode } from "./product_blockage_code.test";
 
 // Helper functions ---
 
-const createProduct = async () => {
+export const createProduct = async () => {
   return request(app)
     .post("/api/product")
     .send({
@@ -53,14 +54,14 @@ it("creates a product when given valid inputs", async () => {
   const response = await request(app)
     .post("/api/product")
     .send({
-      title: "TEST Product",
-      description: "Test Description",
-      ean: "1235239233223",
-      length: 12.23,
-      width: 10.12,
-      height: 8.50,
-      product_img: "test_link",
-      price: 23.70
+      "title": "TEST Product",
+      "description": "Test Description",
+      "ean": "1235239233223",
+      "length": 12.23,
+      "width": 10.12,
+      "height": 8.50,
+      "product_img": "test_link",
+      "price": 23.70
     })
     .expect(201);
 
@@ -217,3 +218,44 @@ it("returns a 404 status error when using an invalid URL", async () => {
 // --------------------
 
 
+
+// --------------------
+
+it("returns an error when specifying an unexisting product blockage name", async () => {
+  await request(app)
+    .post("/api/product")
+    .send({
+      "title": makeRandomString(10),
+      "description": "Test Description",
+      "ean": makeRandomString(13),
+      "length": 12.23,
+      "width": 10.12,
+      "height": 8.50,
+      "product_img": "test_link",
+      "price": 23.70,
+      "product_blockage_name": "XXX"
+    })
+    .expect(400);
+});
+
+// --------------------
+
+it("creates a product and updates it with an existing blockage name", async () => {
+    await request(app)
+      .post("/api/product/blockage")
+      .send({
+        "name": "ZZZ",
+        "description": "Sleeping"
+      })
+      .expect(201);
+
+  const product = await createProduct();
+
+  await request(app)
+    .patch(`/api/product/${product.body.id}`)
+    .send({
+      "product_blockage_name": "ZZZ"
+    })
+    .expect(200);
+  
+});

@@ -1,7 +1,7 @@
 import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
 import express from "express";
 import { blockageController } from "../../controllers/index.controller";
-import blockageCreateSchema from "../../validation/schemas/blockage.create.schema";
+import { blockageCreateSchema } from "../../validation/index.shemas";
 
 const blockageSpecificRouter = express.Router({ mergeParams: true });
 
