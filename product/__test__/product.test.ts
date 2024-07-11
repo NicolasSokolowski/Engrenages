@@ -36,6 +36,19 @@ it("fetches all the existing products", async () => {
 
 // --------------------
 
+it("fetches a single product when given valid ID", async () => {
+  const product = await createProduct();
+
+  const response = await request(app)
+    .get(`/api/product/${product.body.id}`)
+    .send()
+    .expect(200);
+
+  expect(product.body.id).toEqual(response.body.id);
+});
+
+// --------------------
+
 it("creates a product when given valid inputs", async () => {
   const response = await request(app)
     .post("/api/product")
@@ -56,8 +69,8 @@ it("creates a product when given valid inputs", async () => {
 
 // --------------------
 
-it("returns an error if given invalid input", async () => {
-  const response = await request(app)
+it("returns a 400 status error when trying to create a product if given invalid input", async () => {
+  await request(app)
     .post("/api/product")
     .send({
       "title": 13, // <-- sending a number instead of a string
@@ -90,7 +103,16 @@ it("creates and updates a product", async () => {
 
 // --------------------
 
-test.todo("returns an error when trying to update a product with invalid inputs");
+it("returns a 400 status error when trying to update a product with invalid inputs", async () => {
+  const product = await createProduct();
+
+  await request(app)
+    .patch(`/api/product/${product.body.id}`)
+    .send({
+      "title": 123 // <-- sending a number instead of a string
+    })
+    .expect(400);
+});
 
 // --------------------
 
@@ -131,7 +153,7 @@ it("creates and updates a product several times and checks the version", async (
 it("creates and delete a product", async () => {
   const product = await createProduct();
 
-  const response = await request(app)
+  await request(app)
     .delete(`/api/product/${product.body.id}`)
     .send()
     .expect(200);
@@ -144,7 +166,53 @@ it("creates and delete a product", async () => {
 
 // --------------------
 
-test.todo("returns an error when trying to delete a product with invalid input");
+it("returns appropriate status error when given invalid IDs", async () => {
+  const inexistingID = "999";
+  const invalidID = "notAnID";
+
+  await request(app)
+    .get(`/api/product/${inexistingID}`)
+    .send()
+    .expect(404);
+
+  await request(app)
+    .get(`/api/product/${invalidID}`)
+    .send()
+    .expect(400);
+
+  await request(app)
+    .patch(`/api/product/${inexistingID}`) 
+    .send({
+      "title": makeRandomString(10) 
+    })
+    .expect(404);
+
+  await request(app)
+    .patch(`/api/product/${invalidID}`)
+    .send({
+      "title": makeRandomString(10) 
+    })
+    .expect(400);
+
+  await request(app)
+    .delete(`/api/product/${inexistingID}`) 
+    .send()
+    .expect(404);
+
+  await request(app)
+    .delete(`/api/product/${invalidID}`)
+    .send()
+    .expect(400);
+});
+
+// --------------------
+
+it("returns a 404 status error when using an invalid URL", async () => {
+  await request(app)
+    .get("/api/unknownURL") // <-- using an inexisting URL
+    .send()
+    .expect(404);
+});
 
 // --------------------
 
