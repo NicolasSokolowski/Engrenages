@@ -6,17 +6,17 @@ import { makeRandomString } from "@zencorp/engrenages";
 
 const createProduct = async () => {
   return request(app)
-  .post("/api/product")
-  .send({
-    title: makeRandomString(10),
-    description: "Test Description",
-    ean: makeRandomString(13),
-    length: 12.23,
-    width: 10.12,
-    height: 8.50,
-    product_img: "test_link",
-    price: 23.70
-  });
+    .post("/api/product")
+    .send({
+      title: makeRandomString(10),
+      description: "Test Description",
+      ean: makeRandomString(13),
+      length: 12.23,
+      width: 10.12,
+      height: 8.50,
+      product_img: "test_link",
+      price: 23.70
+    });
 };
 
 // TESTS --------------
