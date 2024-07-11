@@ -2,6 +2,6 @@
 
 BEGIN;
 
-DROP TABLE "product";
+DROP TABLE "product", "product_blockage_code";
 
 COMMIT;

@@ -3,7 +3,6 @@ import { exec } from 'child_process';
 let pool: any;
 
 beforeAll(async () => {
-  
 });
 
 beforeEach(async () => {
@@ -15,7 +14,7 @@ afterAll(async () => {
   }
 
   await new Promise((resolve, reject) => {
-    exec('npm run db:reset', (error, stdout, stderr) => {
+    exec("npm run db:reset", (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing db:reset: ${error}`);
         reject(error);

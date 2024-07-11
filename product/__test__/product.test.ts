@@ -1,21 +1,8 @@
 import request from "supertest";
 import { app } from "../app/index.app";
+import { makeRandomString } from "@zencorp/engrenages";
 
 // Helper functions ---
-
-function makeRandomString(length: number) {
-  let result = "";
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    counter += 1;
-  }
-  return result;
-}
-
-// -------------------
 
 const createProduct = async () => {
   return request(app)
@@ -32,7 +19,7 @@ const createProduct = async () => {
   });
 };
 
-// TESTS -------------
+// TESTS --------------
 
 it("fetches all the existing products", async () => {
   await createProduct();
@@ -47,7 +34,7 @@ it("fetches all the existing products", async () => {
   expect(response.body.length).toEqual(3);
 });
 
-// -------------------
+// --------------------
 
 it("creates a product when given valid inputs", async () => {
   const response = await request(app)
@@ -67,7 +54,7 @@ it("creates a product when given valid inputs", async () => {
   expect(response.body.title).toEqual("TEST Product");
 });
 
-// -------------------
+// --------------------
 
 it("creates and updates a product", async () => {
   const product = await createProduct();
@@ -83,7 +70,7 @@ it("creates and updates a product", async () => {
   expect(response.body.version).toEqual(1);
 });
 
-// -------------------
+// --------------------
 
 it("creates and updates a product several times and checks the version", async () => {
   const product = await createProduct();
@@ -117,7 +104,7 @@ it("creates and updates a product several times and checks the version", async (
   expect(responseThree.body.version).toEqual(3);   
 });
 
-// -------------------
+// --------------------
 
 it("creates and delete a product", async () => {
   const product = await createProduct();
@@ -133,7 +120,7 @@ it("creates and delete a product", async () => {
     .expect(404);
 });
 
-// -------------------
+// --------------------
 
 it("returns an error if given invalid input", async () => {
   const response = await request(app)
@@ -151,6 +138,6 @@ it("returns an error if given invalid input", async () => {
     .expect(400);
 });
 
-// -------------------
+// --------------------
 
 

@@ -3,5 +3,6 @@
 BEGIN;
 
 SELECT * FROM "product" WHERE false;
+SELECT * FROM "product_blockage_code" WHERE false;
 
 ROLLBACK;
