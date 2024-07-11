@@ -1,6 +1,7 @@
-import { controllerWrapper } from "@zencorp/engrenages";
+import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
 import express from "express";
 import { blockageController } from "../../controllers/index.controller";
+import blockageCreateSchema from "../../validation/schemas/blockage.create.schema";
 
 const blockageSpecificRouter = express.Router({ mergeParams: true });
 
@@ -9,6 +10,7 @@ blockageSpecificRouter.route("/")
     controllerWrapper(blockageController.getByPk)
   )
   .patch(
+    validateRequest("body", blockageCreateSchema),
     controllerWrapper(blockageController.update)
   )
   .delete(

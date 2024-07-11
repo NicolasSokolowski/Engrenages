@@ -1,7 +1,8 @@
 import express from "express";
-import { controllerWrapper } from "@zencorp/engrenages";
+import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
 import blockageSpecificRouter from "./blockageSpecific.router";
 import { blockageController } from "../../controllers/index.controller";
+import blockageCreateSchema from "../../validation/schemas/blockage.create.schema";
 
 const blockageRouter = express.Router();
 
@@ -10,6 +11,7 @@ blockageRouter.route("/")
     controllerWrapper(blockageController.getAll)
   )
   .post(
+    validateRequest("body", blockageCreateSchema),
     controllerWrapper(blockageController.create)
   );
 
