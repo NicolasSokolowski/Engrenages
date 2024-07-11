@@ -1,5 +1,5 @@
 import express from "express";
-import apiRouter from "./api/index.api.router";
+import apiRouter from "./api/index.router";
 import { routeNotFound } from "@zencorp/engrenages";
 
 const router = express.Router();
