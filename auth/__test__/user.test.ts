@@ -21,19 +21,6 @@ export const createUser = async () => {
 
 // TESTS --------------
 
-it("fetches all the existing users", async () => {
-  await createUser();
-  await createUser();
-  await createUser();
-
-  const response = await request(app)
-    .get(`/api/user`)
-    .send()
-    .expect(200);
-
-  expect(response.body.length).toEqual(3);
-});
-
 // --------------------
 
 it("fetches a single user when given valid ID", async () => {
@@ -48,6 +35,7 @@ it("fetches a single user when given valid ID", async () => {
 });
 
 // --------------------
+
 
 it("creates a user when given valid inputs", async () => {
   const roleName = await createRole();
@@ -103,7 +91,7 @@ it("returns a 400 error when trying to create a user with already existing email
 
 // --------------------
 
-it("creates and updates a user when given valid inputs", async () => {
+it("creates and updates a user (not the password) when given valid inputs", async () => {
   const user = await createUser();
 
   const response = await request(app)
@@ -120,7 +108,7 @@ it("creates and updates a user when given valid inputs", async () => {
 
 // --------------------
 
-it("returns a 400 error when trying to update a user with invalid inputs", async () => {
+it("returns a 400 error when trying to update a user (no password) with invalid inputs", async () => {
   const user = await createUser();
 
   const response = await request(app)
@@ -158,21 +146,21 @@ it("creates and updates a user several times and checks the version", async () =
     .send({
       "first_name": "Jimmy"
     })
-    .expect("200");
+    .expect(200);
 
   const responseTwo = await request(app)
     .patch(`/api/user/${user.body.id}`)
     .send({
       "last_name": "Neutron"
     })
-    .expect("200");
+    .expect(200);
 
   const responseThree = await request(app)
     .patch(`/api/user/${user.body.id}`)
     .send({
       "email": "Jimmy.neutron@retroville.com"
     })
-    .expect("200");
+    .expect(200);
 
   expect(responseOne.body.first_name).toEqual("Jimmy");
   expect(responseOne.body.version).toEqual(1);
@@ -201,14 +189,14 @@ it("returns appropriate error when given invalid IDs", async () => {
   await request(app)
     .patch(`/api/user/${inexistingID}`) 
     .send({
-      "name": makeRandomString(3) 
+      "first_name": makeRandomString(3) 
     })
     .expect(404);
 
   await request(app)
     .patch(`/api/user/${invalidID}`)
     .send({
-      "name": makeRandomString(3) 
+      "first_name": makeRandomString(3) 
     })
     .expect(400);
 
@@ -267,3 +255,17 @@ test.todo("returns an error when trying to delete a user with no authorization")
 
 // --------------------
 
+it("fetches all the existing users", async () => {
+  await createUser();
+  await createUser();
+  await createUser();
+
+  const response = await request(app)
+    .get(`/api/user`)
+    .send()
+    .expect(200);
+
+  expect(response.body.length).toEqual(3);
+});
+
+// --------------------

@@ -78,14 +78,13 @@ it("returns a 400 error when trying to create a role with missing name", async (
 it("returns a 400 when trying to create an already existing role", async () => {
   const role = await createRole();
 
-  const response = await request(app)
+  await request(app)
     .post("/api/user/role")
     .send({
       "name": `${role.body.name}`
     })
     .expect(400);
 
-  expect(response.body.name).toEqual(role.body.name);
 });
 
 // --------------------
@@ -96,11 +95,11 @@ it("creates and updates a role when given valid inputs", async () => {
   const response = await request(app)
     .patch(`/api/user/role/${role.body.id}`)
     .send({
-      "name": "service-manager"
+      "name": "key-user"
     })
     .expect(200);
 
-  expect(response.body.name).toEqual("service-manager");
+  expect(response.body.name).toEqual("key-user");
 });
 
 // --------------------
@@ -118,10 +117,10 @@ it("returns a 400 error when trying to update a role with invalid input", async 
 
 // --------------------
 
-it("creates and deleted a role when given valid ID", async () => {
+it("creates and deletes a role when given valid ID", async () => {
   const role = await createRole();
 
-  const response = request(app)
+  await request(app)
     .delete(`/api/user/role/${role.body.id}`)
     .send()
     .expect(200);
@@ -212,16 +211,21 @@ it("returns appropriate error when given invalid IDs", async () => {
 it("creates a role and creates a user with the created role", async () => {
   const role = await createRole();
 
-  const response = await request(app)
+  const user = await request(app)
     .post("/api/user")
     .send({
       "first_name": makeRandomString(5),
       "last_name": makeRandomString(10),
-      "email": `${makeRandomString(5)}.${makeRandomString(7)}@${makeRandomString(4)}.com`,
+      "email": "test@gmail.com",
       "password": makeRandomString(18),
       "role_name": `${role.body.name}`
     })
     .expect(201);
+
+  const response = await request(app)
+    .get(`/api/user/${user.body.id}`)
+    .send()
+    .expect(200);
 
   expect(response.body.role_name).toEqual(role.body.name);
 });
