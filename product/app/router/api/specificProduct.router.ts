@@ -1,11 +1,11 @@
 import express from "express";
 import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
-import { productController } from "../../controllers/index.controller";
+import { productController } from "../../controllers/index.controllers";
 import { productUpdateSchema } from "../../validation/index.shemas";
 
-const productSpecificRouter = express.Router({ mergeParams: true });
+const specificProductRouter = express.Router({ mergeParams: true });
 
-productSpecificRouter.route("/")
+specificProductRouter.route("/")
   .get(
     controllerWrapper(productController.getByPk)
   )
@@ -17,4 +17,4 @@ productSpecificRouter.route("/")
     controllerWrapper(productController.delete)
   );
 
-export default productSpecificRouter;
+export default specificProductRouter;

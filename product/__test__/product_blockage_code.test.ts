@@ -58,7 +58,7 @@ it("creates a product blockage type when given valid inputs", async () => {
 
 // --------------------
 
-it("returns an error when trying to create a product blockage type with invalid inputs", async () => {
+it("returns a 400 status error when trying to create a product blockage type with invalid inputs", async () => {
   await request(app)
     .post("/api/product/blockage")
     .send({
@@ -85,20 +85,20 @@ it("creates and updates a product blockage code when given valid inputs", async 
 
 // --------------------
 
-it("returns an error when trying to update a product blockage code with invalid inputs", async () => {
+it("returns a 400 error when trying to update a product blockage code with invalid inputs", async () => {
   const blockageCode = await createBlockageCode();
 
   await request(app)
     .patch(`/api/product/blockage/${blockageCode.body.id}`)
     .send({
-      "description": makeRandomString(111) // <-- sending a 101 characters string instead of a max 100
+      "description": makeRandomString(101) // <-- sending a 101 characters string instead of a max 100
     })
     .expect(400);
 });
 
 // --------------------
 
-it("creates and deletes a product when given valid input", async () => {
+it("creates and deletes a product when given valid ID", async () => {
   const blockageCode = await createBlockageCode();
 
   await request(app)
@@ -190,7 +190,7 @@ it("returns appropriate error when given invalid IDs", async () => {
 // --------------------
 
 it("creates a product blockage code and creates a product with the created code", async () => {
-  await request(app)
+  const blockageName = await request(app)
     .post("/api/product/blockage")
     .send({
       "name": "PNT",
@@ -198,7 +198,7 @@ it("creates a product blockage code and creates a product with the created code"
     })
     .expect(201);
 
-  await request(app)
+  const product = await request(app)
     .post("/api/product")
     .send({
       "title": makeRandomString(10),
@@ -212,6 +212,8 @@ it("creates a product blockage code and creates a product with the created code"
       "product_blockage_name": "PNT"
     })
     .expect(201);
+
+  expect(product.body.product_blockage_name).toEqual(blockageName.body.name);
 });
 
 // --------------------

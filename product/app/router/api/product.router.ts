@@ -1,9 +1,9 @@
 import express from "express";
 import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
-import { productController } from "../../controllers/index.controller";
+import { productController } from "../../controllers/index.controllers";
 import { productCreateSchema } from "../../validation/index.shemas";
-import productSpecificRouter from "./productSpecific.router";
 import blockageRouter from "./blockage.router";
+import specificProductRouter from "./specificProduct.router";
 
 const productRouter = express.Router();
 
@@ -17,6 +17,6 @@ productRouter.route("/")
   );
 
 productRouter.use("/blockage", blockageRouter);
-productRouter.use("/:id", productSpecificRouter);
+productRouter.use("/:id", specificProductRouter);
 
 export default productRouter;

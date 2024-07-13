@@ -1,5 +1,5 @@
 import { ProductController} from "./entityControllers/ProductController";
-import { blockageDatamapper, productDatamapper } from "../datamappers/index.datamapper";
+import { blockageDatamapper, productDatamapper } from "../datamappers/index.datamappers";
 import { BlockageController } from "./entityControllers/BlockageController";
 
 const productController = new ProductController(productDatamapper);

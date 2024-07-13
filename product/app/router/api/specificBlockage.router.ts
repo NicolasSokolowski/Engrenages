@@ -1,11 +1,11 @@
 import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
 import express from "express";
-import { blockageController } from "../../controllers/index.controller";
+import { blockageController } from "../../controllers/index.controllers";
 import { blockageCreateSchema } from "../../validation/index.shemas";
 
-const blockageSpecificRouter = express.Router({ mergeParams: true });
+const specificBlockageRouter = express.Router({ mergeParams: true });
 
-blockageSpecificRouter.route("/")
+specificBlockageRouter.route("/")
   .get(
     controllerWrapper(blockageController.getByPk)
   )
@@ -17,4 +17,4 @@ blockageSpecificRouter.route("/")
     controllerWrapper(blockageController.delete)
   );
 
-export default blockageSpecificRouter;
+export default specificBlockageRouter;
