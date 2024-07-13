@@ -20,7 +20,7 @@ CREATE FUNCTION create_user(json) RETURNS TABLE (
     ($1->>'first_name')::VARCHAR(20),
     ($1->>'last_name')::VARCHAR(50),
     ($1->>'email')::VARCHAR(100),
-    ($1->>'password')::VARCHAR(64),
+    ($1->>'password')::TEXT,
     ($1->>'role_name')::VARCHAR(10)
   )
   RETURNING id, first_name, last_name, email
@@ -49,7 +49,7 @@ CREATE FUNCTION update_user(json, version INT) RETURNS TABLE (
     COALESCE(($1->>'first_name')::VARCHAR(20), "first_name"),
     COALESCE(($1->>'last_name')::VARCHAR(50), "last_name"),
     COALESCE(($1->>'email')::VARCHAR(100), "email"),
-    COALESCE(($1->>'password')::VARCHAR(64), "password"),
+    COALESCE(($1->>'password')::TEXT, "password"),
     COALESCE(($1->>'role_name')::VARCHAR(10), "role_name"),
     ("version")::INT +1,
     NOW()
