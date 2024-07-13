@@ -11,4 +11,5 @@ export interface UserDatamapperRequirements extends EntityDatamapperRequirements
     role_name: string;
     version?: number;
   }
+  findByEmail(email: string): Promise<UserDatamapperRequirements["data"]>
 }
