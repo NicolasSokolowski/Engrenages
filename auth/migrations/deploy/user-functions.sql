@@ -6,7 +6,8 @@ CREATE FUNCTION create_user(json) RETURNS TABLE (
   id INT,
   first_name VARCHAR(20),
   last_name VARCHAR(50),
-  email VARCHAR(100)
+  email VARCHAR(100),
+  role_name VARCHAR(10)
 ) AS $$
 
   INSERT INTO "user"
@@ -23,7 +24,7 @@ CREATE FUNCTION create_user(json) RETURNS TABLE (
     ($1->>'password')::TEXT,
     ($1->>'role_name')::VARCHAR(10)
   )
-  RETURNING id, first_name, last_name, email
+  RETURNING id, first_name, last_name, email, role_name
 
 $$ LANGUAGE SQL STRICT;
 

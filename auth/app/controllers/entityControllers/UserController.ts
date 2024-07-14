@@ -3,6 +3,7 @@ import { BadRequestError, CoreController, DatabaseConnectionError, NotFoundError
 import { UserControllerRequirements } from "../interfaces/UserControllerRequirements";
 import { UserDatamapperRequirements } from "../../datamappers/interfaces/UserDatamapperRequirements";
 import { Password } from "../../helper/Password";
+import { generateToken } from "@zencorp/engrenages";
 
 export class UserController extends CoreController<UserControllerRequirements, UserDatamapperRequirements> {
   constructor(datamapper: UserControllerRequirements["datamapper"]) {
@@ -11,7 +12,7 @@ export class UserController extends CoreController<UserControllerRequirements, U
     this.datamapper = datamapper;
   }
 
-  signup = async (req: Request, res: Response): Promise<void> => {
+  createUser = async (req: Request, res: Response): Promise<void> => {
     const { first_name, last_name, email, password, role_name }: UserDatamapperRequirements["data"] = req.body;
 
     const hashedPassword = await Password.toHash(password);
@@ -33,6 +34,8 @@ export class UserController extends CoreController<UserControllerRequirements, U
     if (!newUser) {
       throw new DatabaseConnectionError();
     }
+
+    const userJwt = generateToken(newUser);
 
     res.status(201).send(newUser);
   }
