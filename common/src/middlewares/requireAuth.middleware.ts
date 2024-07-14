@@ -41,6 +41,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 
     const decodedToken = await verifyToken(accessToken, process.env.ACCESS_TOKEN_SECRET);
     req.user = decodedToken;
+    console.log(req.user);
     next();
 
   } catch (err) {
@@ -61,6 +62,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
         );
 
         req.user = decodedToken;
+        console.log(req.user);
         next();
 
       } catch (err) {

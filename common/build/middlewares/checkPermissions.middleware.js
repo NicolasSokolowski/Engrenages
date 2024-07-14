@@ -6,6 +6,7 @@ const checkPermissions = (permissions) => {
     return (req, res, next) => {
         var _a;
         const userRole = (_a = req.user) === null || _a === void 0 ? void 0 : _a.role;
+        console.log(req.user);
         if (!userRole) {
             throw new NotAuthorizedError_error_1.NotAuthorizedError();
         }
