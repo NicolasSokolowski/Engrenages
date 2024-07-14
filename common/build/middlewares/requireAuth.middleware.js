@@ -14,6 +14,7 @@ const NotAuthorizedError_error_1 = require("../errors/NotAuthorizedError.error")
 const verifyToken_helpers_1 = require("../helpers/verifyToken.helpers");
 const BadRequestError_error_1 = require("../errors/BadRequestError.error");
 const generateToken_1 = require("../helpers/generateToken");
+const AccessDeniedError_error_1 = require("../errors/AccessDeniedError.error");
 const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.headers["authorization"]) {
         throw new NotAuthorizedError_error_1.NotAuthorizedError();
@@ -47,11 +48,11 @@ const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 next();
             }
             catch (err) {
-                throw new BadRequestError_error_1.BadRequestError("The provided refresh token is invalid");
+                throw new NotAuthorizedError_error_1.NotAuthorizedError();
             }
         }
         else {
-            throw new BadRequestError_error_1.BadRequestError("The provided token is invalid");
+            throw new AccessDeniedError_error_1.AccessDeniedError("Not enough permissions");
         }
     }
 });

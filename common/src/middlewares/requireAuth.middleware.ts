@@ -4,6 +4,7 @@ import { verifyToken } from "../helpers/verifyToken.helpers";
 import { BadRequestError } from "../errors/BadRequestError.error";
 import { generateToken } from "../helpers/generateToken";
 import { UserPayload } from "../helpers/UserPayload.helper";
+import { AccessDeniedError } from "../errors/AccessDeniedError.error";
 
 declare global {
   namespace Express {
@@ -63,10 +64,10 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
         next();
 
       } catch (err) {
-        throw new BadRequestError("The provided refresh token is invalid");
+        throw new NotAuthorizedError();
       }
     } else {
-      throw new BadRequestError("The provided token is invalid");
+      throw new AccessDeniedError("Not enough permissions");
     }
   }
 }
