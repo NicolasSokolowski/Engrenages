@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequestValidationError = exports.NotFoundError = exports.NotAuthorizedError = exports.DatabaseConnectionError = exports.CustomError = exports.BadRequestError = void 0;
+exports.RequestValidationError = exports.NotFoundError = exports.NotAuthorizedError = exports.DatabaseConnectionError = exports.CustomError = exports.BadRequestError = exports.AccessDeniedError = void 0;
+const AccessDeniedError_error_1 = require("./AccessDeniedError.error");
+Object.defineProperty(exports, "AccessDeniedError", { enumerable: true, get: function () { return AccessDeniedError_error_1.AccessDeniedError; } });
 const BadRequestError_error_1 = require("./BadRequestError.error");
 Object.defineProperty(exports, "BadRequestError", { enumerable: true, get: function () { return BadRequestError_error_1.BadRequestError; } });
 const CustomError_error_1 = require("./CustomError.error");
