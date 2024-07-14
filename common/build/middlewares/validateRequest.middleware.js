@@ -21,3 +21,4 @@ const validateRequest = (sourceProperty, schema) => (req, res, next) => __awaite
     }
 });
 exports.validateRequest = validateRequest;
+//# sourceMappingURL=validateRequest.middleware.js.map

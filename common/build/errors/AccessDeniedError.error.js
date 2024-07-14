@@ -18,3 +18,4 @@ class AccessDeniedError extends CustomError_error_1.CustomError {
 }
 exports.AccessDeniedError = AccessDeniedError;
 ;
+//# sourceMappingURL=AccessDeniedError.error.js.map

@@ -9,3 +9,4 @@ export interface EntityControllerRequirements {
     delete(): Promise<void>;
 }
 export {};
+//# sourceMappingURL=EntityControllerRequirements.d.ts.map

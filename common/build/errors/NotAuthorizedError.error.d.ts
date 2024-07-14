@@ -6,3 +6,4 @@ export declare class NotAuthorizedError extends CustomError {
         message: string;
     }[];
 }
+//# sourceMappingURL=NotAuthorizedError.error.d.ts.map

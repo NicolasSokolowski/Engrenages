@@ -7,3 +7,4 @@ export declare class DatabaseConnectionError extends CustomError {
         message: string;
     }[];
 }
+//# sourceMappingURL=DatabaseConnectionError.error.d.ts.map

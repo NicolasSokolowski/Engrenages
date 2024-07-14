@@ -11,3 +11,4 @@ var TableNames;
     TableNames["LocationType"] = "location_type";
     TableNames["LocationBlockageType"] = "location_blockage_type";
 })(TableNames || (exports.TableNames = TableNames = {}));
+//# sourceMappingURL=TableNames.js.map

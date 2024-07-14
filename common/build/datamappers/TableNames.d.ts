@@ -7,3 +7,4 @@ export declare enum TableNames {
     LocationType = "location_type",
     LocationBlockageType = "location_blockage_type"
 }
+//# sourceMappingURL=TableNames.d.ts.map

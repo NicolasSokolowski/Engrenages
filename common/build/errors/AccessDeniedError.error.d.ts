@@ -6,3 +6,4 @@ export declare class AccessDeniedError extends CustomError {
         message: string;
     }[];
 }
+//# sourceMappingURL=AccessDeniedError.error.d.ts.map

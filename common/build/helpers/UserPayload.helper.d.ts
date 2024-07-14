@@ -3,3 +3,4 @@ export interface UserPayload {
     email: string;
     role: string;
 }
+//# sourceMappingURL=UserPayload.helper.d.ts.map

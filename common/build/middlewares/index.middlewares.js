@@ -11,3 +11,4 @@ const routeNotFound_middleware_1 = require("./routeNotFound.middleware");
 Object.defineProperty(exports, "routeNotFound", { enumerable: true, get: function () { return routeNotFound_middleware_1.routeNotFound; } });
 const validateRequest_middleware_1 = require("./validateRequest.middleware");
 Object.defineProperty(exports, "validateRequest", { enumerable: true, get: function () { return validateRequest_middleware_1.validateRequest; } });
+//# sourceMappingURL=index.middlewares.js.map

@@ -16,3 +16,4 @@ class NotAuthorizedError extends CustomError_error_1.CustomError {
 }
 exports.NotAuthorizedError = NotAuthorizedError;
 ;
+//# sourceMappingURL=NotAuthorizedError.error.js.map

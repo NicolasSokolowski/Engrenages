@@ -4,3 +4,4 @@ import { requireAuth } from "./requireAuth.middleware";
 import { routeNotFound } from "./routeNotFound.middleware";
 import { validateRequest } from "./validateRequest.middleware";
 export { checkPermissions, errorHandler, requireAuth, routeNotFound, validateRequest };
+//# sourceMappingURL=index.middlewares.d.ts.map

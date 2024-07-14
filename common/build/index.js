@@ -20,3 +20,4 @@ __exportStar(require("./errors/index.errors"), exports);
 __exportStar(require("./helpers/index.helpers"), exports);
 __exportStar(require("./middlewares/index.middlewares"), exports);
 __exportStar(require("./types/global"), exports);
+//# sourceMappingURL=index.js.map

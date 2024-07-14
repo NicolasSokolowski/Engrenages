@@ -18,3 +18,4 @@ const checkPermissions = (permissions) => {
     };
 };
 exports.checkPermissions = checkPermissions;
+//# sourceMappingURL=checkPermissions.middleware.js.map

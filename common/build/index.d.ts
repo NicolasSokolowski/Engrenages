@@ -4,3 +4,4 @@ export * from "./errors/index.errors";
 export * from "./helpers/index.helpers";
 export * from "./middlewares/index.middlewares";
 export * from "./types/global";
+//# sourceMappingURL=index.d.ts.map

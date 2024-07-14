@@ -7,3 +7,4 @@ const routeNotFound = (req, res, next) => {
     next(error);
 };
 exports.routeNotFound = routeNotFound;
+//# sourceMappingURL=routeNotFound.middleware.js.map

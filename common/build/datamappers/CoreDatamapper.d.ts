@@ -8,3 +8,4 @@ export declare abstract class CoreDatamapper<T extends EntityDatamapperRequireme
     update: (entityObject: T["data"], currentVersion: number) => Promise<any>;
     delete: (id: number) => Promise<any>;
 }
+//# sourceMappingURL=CoreDatamapper.d.ts.map
