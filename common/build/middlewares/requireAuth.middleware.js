@@ -35,7 +35,6 @@ const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         const decodedToken = yield (0, verifyToken_helpers_1.verifyToken)(accessToken, process.env.ACCESS_TOKEN_SECRET);
         req.user = decodedToken;
-        console.log(req.user);
         next();
     }
     catch (err) {
@@ -46,7 +45,6 @@ const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
                 res.setHeader("authorization", `Bearer: ${JSON.stringify(newAccessToken)}`);
                 res.setHeader("x-refresh-token", newRefreshToken);
                 req.user = decodedToken;
-                console.log(req.user);
                 next();
             }
             catch (err) {
