@@ -8,4 +8,4 @@ export * from "./helpers/index.helpers";
 
 export * from "./middlewares/index.middlewares";
 
-export * from "./types/global";
+export * from "./types/CustomReq";

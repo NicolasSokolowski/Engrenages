@@ -4,8 +4,13 @@ import { verifyToken } from "../helpers/verifyToken.helpers";
 import { BadRequestError } from "../errors/BadRequestError.error";
 import { generateToken } from "../helpers/generateToken";
 import { AccessDeniedError } from "../errors/AccessDeniedError.error";
+import { UserPayload } from "../helpers/UserPayload.helper";
 
-export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
+export type CustomReq = Request & {
+  user?: UserPayload;
+};
+
+export const requireAuth = async (req: CustomReq, res: Response, next: NextFunction) => {
   if (!req.headers["authorization"]) {
     throw new NotAuthorizedError();
   }
@@ -31,7 +36,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
   try {
 
     const decodedToken = await verifyToken(accessToken, process.env.ACCESS_TOKEN_SECRET);
-    req.user = decodedToken;
+    req.user  = decodedToken;
 
     next();
 

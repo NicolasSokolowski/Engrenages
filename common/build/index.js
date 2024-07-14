@@ -19,4 +19,4 @@ __exportStar(require("./datamappers/index.datamappers"), exports);
 __exportStar(require("./errors/index.errors"), exports);
 __exportStar(require("./helpers/index.helpers"), exports);
 __exportStar(require("./middlewares/index.middlewares"), exports);
-__exportStar(require("./types/global"), exports);
+__exportStar(require("./types/CustomReq"), exports);
