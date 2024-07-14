@@ -10,4 +10,3 @@ export declare abstract class CoreController<T extends EntityControllerRequireme
     create: (req: Request, res: Response) => Promise<void>;
     delete: (req: Request, res: Response) => Promise<void>;
 }
-//# sourceMappingURL=CoreController.d.ts.map

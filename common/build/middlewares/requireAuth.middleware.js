@@ -57,4 +57,3 @@ const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.requireAuth = requireAuth;
-//# sourceMappingURL=requireAuth.middleware.js.map

@@ -3,5 +3,3 @@ export * from "./datamappers/index.datamappers";
 export * from "./errors/index.errors";
 export * from "./helpers/index.helpers";
 export * from "./middlewares/index.middlewares";
-import './types/global';
-//# sourceMappingURL=index.d.ts.map

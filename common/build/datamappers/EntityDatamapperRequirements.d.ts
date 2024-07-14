@@ -10,4 +10,3 @@ export interface EntityDatamapperRequirements {
     update(item: EntityDatamapperRequirements["data"], currentVersion: number): Promise<EntityDatamapperRequirements["data"]>;
     delete(id: number): Promise<EntityDatamapperRequirements["data"]>;
 }
-//# sourceMappingURL=EntityDatamapperRequirements.d.ts.map

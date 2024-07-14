@@ -12,4 +12,3 @@ function makeRandomString(length) {
     }
     return result;
 }
-//# sourceMappingURL=makeRandomString.helper.js.map

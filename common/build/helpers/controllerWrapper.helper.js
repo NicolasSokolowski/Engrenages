@@ -19,4 +19,3 @@ const controllerWrapper = (controller) => (req, res, next) => __awaiter(void 0, 
     }
 });
 exports.controllerWrapper = controllerWrapper;
-//# sourceMappingURL=controllerWrapper.helper.js.map

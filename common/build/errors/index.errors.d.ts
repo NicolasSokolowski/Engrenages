@@ -6,4 +6,3 @@ import { NotAuthorizedError } from "./NotAuthorizedError.error";
 import { NotFoundError } from "./NotFoundError.error";
 import { RequestValidationError } from "./RequestValidationError.error";
 export { AccessDeniedError, BadRequestError, CustomError, DatabaseConnectionError, NotAuthorizedError, NotFoundError, RequestValidationError };
-//# sourceMappingURL=index.errors.d.ts.map

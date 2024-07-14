@@ -6,4 +6,3 @@ export declare class BadRequestError extends CustomError {
         message: string;
     }[];
 }
-//# sourceMappingURL=BadRequestError.error.d.ts.map

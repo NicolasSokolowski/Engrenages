@@ -18,4 +18,3 @@ const verifyToken = (token, secret) => {
     });
 };
 exports.verifyToken = verifyToken;
-//# sourceMappingURL=verifyToken.helpers.js.map

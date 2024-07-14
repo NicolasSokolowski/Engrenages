@@ -15,4 +15,3 @@ const errorHandler = (err, req, res, next) => {
     });
 };
 exports.errorHandler = errorHandler;
-//# sourceMappingURL=errorHandler.middleware.js.map

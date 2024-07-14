@@ -1,1 +1,0 @@
-{"version":3,"file":"AccessDeniedError.error.d.ts","sourceRoot":"","sources":["../../src/errors/AccessDeniedError.error.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,qBAAqB,CAAC;AAElD,qBAAa,iBAAkB,SAAQ,WAAW;IAChD,UAAU,SAAO;gBAEL,OAAO,EAAE,MAAM;IAM3B,eAAe;;;CAKhB"}

@@ -6,4 +6,3 @@ export declare abstract class CustomError extends Error {
         field?: string;
     }[];
 }
-//# sourceMappingURL=CustomError.error.d.ts.map

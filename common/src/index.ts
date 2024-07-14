@@ -7,5 +7,3 @@ export * from "./errors/index.errors";
 export * from "./helpers/index.helpers";
 
 export * from "./middlewares/index.middlewares";
-
-import './types/global';

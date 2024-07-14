@@ -18,4 +18,3 @@ class DatabaseConnectionError extends CustomError_error_1.CustomError {
 }
 exports.DatabaseConnectionError = DatabaseConnectionError;
 ;
-//# sourceMappingURL=DatabaseConnectionError.error.js.map

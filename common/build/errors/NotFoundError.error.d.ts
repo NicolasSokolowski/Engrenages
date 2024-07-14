@@ -6,4 +6,3 @@ export declare class NotFoundError extends CustomError {
         message: string;
     }[];
 }
-//# sourceMappingURL=NotFoundError.error.d.ts.map

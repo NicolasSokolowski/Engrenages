@@ -8,4 +8,3 @@ export declare class RequestValidationError extends CustomError {
         message: string;
     }[];
 }
-//# sourceMappingURL=RequestValidationError.error.d.ts.map

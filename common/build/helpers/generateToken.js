@@ -21,4 +21,3 @@ const generateToken = ({ id, email, role }) => {
     return { accessToken, refreshToken };
 };
 exports.generateToken = generateToken;
-//# sourceMappingURL=generateToken.js.map
