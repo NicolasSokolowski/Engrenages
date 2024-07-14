@@ -1,6 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../errors/CustomError.error";
+import { UserPayload } from "../helpers/UserPayload.helper";
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserPayload;
+    }
+  }
+}
 export const errorHandler = (
   err: Error, 
   req: Request, 
