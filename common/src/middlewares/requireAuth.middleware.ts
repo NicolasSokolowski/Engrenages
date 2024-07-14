@@ -66,7 +66,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
         throw new BadRequestError("The provided refresh token is invalid");
       }
     } else {
-      throw new BadRequestError("The provided token is invalid")
+      throw new BadRequestError("The provided token is invalid");
     }
   }
 }
