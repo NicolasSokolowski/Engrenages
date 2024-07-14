@@ -3,14 +3,18 @@ import { NotAuthorizedError } from "../errors/NotAuthorizedError.error";
 import { verifyToken } from "../helpers/verifyToken.helpers";
 import { BadRequestError } from "../errors/BadRequestError.error";
 import { generateToken } from "../helpers/generateToken";
-import { AccessDeniedError } from "../errors/AccessDeniedError.error";
 import { UserPayload } from "../helpers/UserPayload.helper";
+import { AccessDeniedError } from "../errors/AccessDeniedError.error";
 
-export type CustomReq = Request & {
-  user?: UserPayload;
-};
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserPayload;
+    }
+  }
+}
 
-export const requireAuth = async (req: CustomReq, res: Response, next: NextFunction) => {
+export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.headers["authorization"]) {
     throw new NotAuthorizedError();
   }
@@ -36,7 +40,7 @@ export const requireAuth = async (req: CustomReq, res: Response, next: NextFunct
   try {
 
     const decodedToken = await verifyToken(accessToken, process.env.ACCESS_TOKEN_SECRET);
-    req.user  = decodedToken;
+    req.user = decodedToken;
 
     next();
 
