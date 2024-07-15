@@ -4,9 +4,35 @@ import { makeRandomString } from "@zencorp/engrenages";
 
 // Helper functions ---
 
+export const loggedAdmin = async () => {
+  const response = await request(app)
+    .post("/api/auth/signin")
+    .send({
+    "email": "admin@test.com",
+    "password": "password"
+    });
+  
+  return response;
+}
+
+export const loggedOperator = async () => {
+  const response = await request(app)
+    .post("/api/auth/signin")
+    .send({
+    "email": "operator@test.com",
+    "password": "password"
+    });
+  
+  return response;
+}
+
 export const createRole = async () => {
+  const admin = await loggedAdmin();
+
   return request(app)
     .post("/api/user/role")
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": makeRandomString(5)
     });
@@ -15,25 +41,33 @@ export const createRole = async () => {
 // TESTS --------------
 
 it("fetches all existing roles", async () => {
+  const admin = await loggedAdmin();
+
   await createRole();
   await createRole();
   await createRole();
 
 const response = await request(app)
   .get("/api/user/role")
+  .set("authorization", `${admin.body.tokens.accessToken}`)
+  .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
   .send()
   .expect(200);
 
-  expect(response.body.length).toEqual(3);
+  expect(response.body.length).toEqual(5); // <-- 2 are inserted in the beforeAll
 });
 
 // --------------------
 
 it("fetches a single existing role when given valid ID", async () => {
+  const admin = await loggedAdmin();
+
   const user = await createRole();
 
   const response = await request(app)
     .get(`/api/user/role/${user.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(200);
   
@@ -43,10 +77,14 @@ it("fetches a single existing role when given valid ID", async () => {
 // --------------------
 
 it("creates a role when given valid inputs", async () => {
+  const admin = await loggedAdmin();
+
   await request(app)
     .post("/api/user/role")
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
-      "name": "operator"
+      "name": "director"
     })
     .expect(201);
 });
@@ -54,8 +92,12 @@ it("creates a role when given valid inputs", async () => {
 // --------------------
 
 it("returns a 400 error when trying to create a role with invalid input", async () => {
+  const admin = await loggedAdmin();
+
   await request(app)
     .post("/api/user/role")
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": makeRandomString(11) // <-- sending a 11 characters long instead of 10 max
     })
@@ -65,8 +107,12 @@ it("returns a 400 error when trying to create a role with invalid input", async 
 // --------------------
 
 it("returns a 400 error when trying to create a role with missing name", async () => {
+  const admin = await loggedAdmin();
+
   await request(app)
     .post("/api/user/role")
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       // sending an empty body
     })
@@ -76,10 +122,14 @@ it("returns a 400 error when trying to create a role with missing name", async (
 // --------------------
 
 it("returns a 400 when trying to create an already existing role", async () => {
+  const admin = await loggedAdmin();
+
   const role = await createRole();
 
   await request(app)
     .post("/api/user/role")
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": `${role.body.name}`
     })
@@ -90,10 +140,14 @@ it("returns a 400 when trying to create an already existing role", async () => {
 // --------------------
 
 it("creates and updates a role when given valid inputs", async () => {
+  const admin = await loggedAdmin();
+
   const role = await createRole();
 
   const response = await request(app)
     .patch(`/api/user/role/${role.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": "key-user"
     })
@@ -105,10 +159,14 @@ it("creates and updates a role when given valid inputs", async () => {
 // --------------------
 
 it("returns a 400 error when trying to update a role with invalid input", async () => {
+  const admin = await loggedAdmin();
+
   const role = await createRole();
 
   await request(app)
     .patch(`/api/user/role/${role.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": makeRandomString(11) // <-- sending a 11 characters long name instead of 10 max
     })
@@ -118,15 +176,21 @@ it("returns a 400 error when trying to update a role with invalid input", async 
 // --------------------
 
 it("creates and deletes a role when given valid ID", async () => {
+  const admin = await loggedAdmin();
+
   const role = await createRole();
 
   await request(app)
     .delete(`/api/user/role/${role.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(200);
 
   await request(app)
     .get(`/api/user/role/${role.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(404);
 });
@@ -134,10 +198,14 @@ it("creates and deletes a role when given valid ID", async () => {
 // --------------------
 
 it("creates and updates a role several times and checks the version", async () => {
+  const admin = await loggedAdmin();
+
   const role = await createRole();
 
   const responseOne = await request(app)
     .patch(`/api/user/role/${role.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": "caporal"
     })
@@ -145,6 +213,8 @@ it("creates and updates a role several times and checks the version", async () =
 
   const responseTwo = await request(app)
     .patch(`/api/user/role/${role.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": "sergent"
     })
@@ -152,6 +222,8 @@ it("creates and updates a role several times and checks the version", async () =
 
   const responseThree = await request(app)
     .patch(`/api/user/role/${role.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": "commandant"
     })
@@ -168,21 +240,29 @@ it("creates and updates a role several times and checks the version", async () =
 // --------------------
 
 it("returns appropriate error when given invalid IDs", async () => {
+  const admin = await loggedAdmin();
+
   const inexistingID = "999";
   const invalidID = "notAnID";
 
   await request(app)
     .get(`/api/user/role/${inexistingID}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(404);
 
   await request(app)
     .get(`/api/user/role/${invalidID}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(400);
 
   await request(app)
     .patch(`/api/user/role/${inexistingID}`) 
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": makeRandomString(3) 
     })
@@ -190,18 +270,24 @@ it("returns appropriate error when given invalid IDs", async () => {
 
   await request(app)
     .patch(`/api/user/role/${invalidID}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "name": makeRandomString(3) 
     })
     .expect(400);
 
   await request(app)
-    .delete(`/api/user/role/${inexistingID}`) 
+    .delete(`/api/user/role/${inexistingID}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(404);
 
   await request(app)
     .delete(`/api/user/role/${invalidID}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(400);
 });
@@ -209,10 +295,14 @@ it("returns appropriate error when given invalid IDs", async () => {
 // --------------------
 
 it("creates a role and creates a user with the created role", async () => {
+  const admin = await loggedAdmin();
+
   const role = await createRole();
 
   const user = await request(app)
     .post("/api/user")
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "first_name": makeRandomString(5),
       "last_name": makeRandomString(10),
@@ -223,7 +313,9 @@ it("creates a role and creates a user with the created role", async () => {
     .expect(201);
 
   const response = await request(app)
-    .get(`/api/user/${user.body.id}`)
+    .get(`/api/user/${user.body.user.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(200);
 
@@ -233,10 +325,14 @@ it("creates a role and creates a user with the created role", async () => {
 // --------------------
 
 it("returns an error when trying to delete a role affected to a user", async () => {
+  const admin = await loggedAdmin();
+
   const role = await createRole();
 
   await request(app)
     .post("/api/user")
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send({
       "first_name": makeRandomString(5),
       "last_name": makeRandomString(10),
@@ -248,20 +344,60 @@ it("returns an error when trying to delete a role affected to a user", async () 
   
   await request(app)
     .delete(`/api/user/role/${role.body.id}`)
+    .set("authorization", `${admin.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${admin.body.tokens.refreshToken}`)
     .send()
     .expect(400);
 });
 
 // --------------------
 
-test.todo("returns an error when trying to create a role with no authorization");
+it("returns a 403 error when trying to create a role with no authorization", async () => {
+  const operator = await loggedOperator();
+
+  await request(app)
+    .post("/api/user/role")
+    .set("authorization", `${operator.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${operator.body.tokens.refreshToken}`)
+    .send({
+      "name": "preparator"
+    })
+    .expect(403);
+});
 
 // --------------------
 
-test.todo("returns an error when trying to update a role with no authorization");
+it("returns an error when trying to update a role with no authorization", async () => {
+  const operator = await loggedOperator();
+
+  const roleToUpdate = await createRole();
+
+  await request(app)
+    .patch(`/api/user/role/${roleToUpdate.body.id}`)
+    .set("authorization", `${operator.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${operator.body.tokens.refreshToken}`)
+    .send({
+      "name": "buyer"
+    })
+    .expect(403);
+
+});
 
 // --------------------
 
-test.todo("returns an error when trying to delete a role with no authorization");
+it("returns an error when trying to delete a role with no authorization", async () => {
+  const operator = await loggedOperator();
+
+  const roleToUpdate = await createRole();
+
+  await request(app)
+    .delete(`/api/user/role/${roleToUpdate.body.id}`)
+    .set("authorization", `${operator.body.tokens.accessToken}`)
+    .set("x-refresh-token", `${operator.body.tokens.refreshToken}`)
+    .send({
+      "name": "buyer"
+    })
+    .expect(403);  
+});
 
 // --------------------
