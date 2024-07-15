@@ -1,24 +1,23 @@
-import { checkPermissions, controllerWrapper, validateRequest } from "@zencorp/engrenages";
+import { checkPermissions, errorCatcher, requireAuth, validateRequest } from "@zencorp/engrenages";
 import express from "express";
 import { userController } from "../../controllers/index.controllers";
 import { userCreateSchema } from "../../validation/index.schemas";
 import roleRouter from "./role.router";
 import specificUserRouter from "./specificUser.router";
-import { requireAuth } from "@zencorp/engrenages";
 
 const userRouter = express.Router();
 
 userRouter.route("/")
   .get(
-    requireAuth,
-    checkPermissions(["operator", "admin"]),
-    controllerWrapper(userController.getAll)
+    errorCatcher(requireAuth),
+    errorCatcher(checkPermissions(["operator", "admin"])),
+    errorCatcher(userController.getAll)
   )
   .post(
-    requireAuth,
-    checkPermissions(["admin"]),
+    errorCatcher(requireAuth),
+    errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", userCreateSchema),
-    controllerWrapper(userController.createUser)
+    errorCatcher(userController.createUser)
   );
 
 userRouter.use("/role", roleRouter);

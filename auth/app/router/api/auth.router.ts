@@ -1,18 +1,15 @@
-import { controllerWrapper, requireAuth } from "@zencorp/engrenages";
+import { errorCatcher } from "@zencorp/engrenages";
 import express from "express";
-import { authController, userController } from "../../controllers/index.controllers";
+import { authController } from "../../controllers/index.controllers";
+import currentUserRouter from "./currentUser.router";
 
 const authRouter = express.Router();
 
 authRouter.route("/signin")
   .post(
-    controllerWrapper(authController.signin)
+    errorCatcher(authController.signin)
   );
 
-authRouter.route("/signout")
-  .post(
-    requireAuth,
-    controllerWrapper(authController.signout)
-  );
+authRouter.use("/currentuser", currentUserRouter);
 
 export default authRouter;

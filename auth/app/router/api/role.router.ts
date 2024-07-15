@@ -1,5 +1,5 @@
 import express from "express";
-import { checkPermissions, controllerWrapper, requireAuth, validateRequest } from "@zencorp/engrenages";
+import { checkPermissions, errorCatcher, requireAuth, validateRequest } from "@zencorp/engrenages";
 import { roleCreateSchema } from "../../validation/index.schemas";
 import { roleController } from "../../controllers/index.controllers";
 import specificRoleRouter from "./specificRole.router";
@@ -8,15 +8,15 @@ const roleRouter = express.Router();
 
 roleRouter.route("/")
   .get(
-    requireAuth,
-    checkPermissions(["admin"]),
-    controllerWrapper(roleController.getAll)
+    errorCatcher(requireAuth),
+    errorCatcher(checkPermissions(["admin"])),
+    errorCatcher(roleController.getAll)
   )
   .post(
-    requireAuth,
-    checkPermissions(["admin"]),
+    errorCatcher(requireAuth),
+    errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", roleCreateSchema),
-    controllerWrapper(roleController.create)    
+    errorCatcher(roleController.create)    
   );
 
 roleRouter.use("/:id", specificRoleRouter);
