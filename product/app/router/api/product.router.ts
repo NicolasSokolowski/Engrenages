@@ -1,5 +1,5 @@
 import express from "express";
-import { controllerWrapper, validateRequest } from "@zencorp/engrenages";
+import { checkPermissions, errorCatcher, requireAuth, validateRequest } from "@zencorp/engrenages";
 import { productController } from "../../controllers/index.controllers";
 import { productCreateSchema } from "../../validation/index.shemas";
 import blockageRouter from "./blockage.router";
@@ -9,11 +9,15 @@ const productRouter = express.Router();
 
 productRouter.route("/")
   .get(
-    controllerWrapper(productController.getAll)
+    errorCatcher(requireAuth),
+    errorCatcher(checkPermissions(["operator", "admin"])),
+    errorCatcher(productController.getAll)
   )
   .post(
+    errorCatcher(requireAuth),
+    errorCatcher(checkPermissions(["operator", "admin"])),
     validateRequest("body", productCreateSchema),
-    controllerWrapper(productController.create)
+    errorCatcher(productController.create)
   );
 
 productRouter.use("/blockage", blockageRouter);
