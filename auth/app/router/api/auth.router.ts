@@ -1,7 +1,7 @@
-import { errorCatcher } from "@zencorp/engrenages";
 import express from "express";
 import { authController } from "../../controllers/index.controllers";
 import currentUserRouter from "./currentUser.router";
+import { errorCatcher } from "@zencorp/engrenages";
 
 const authRouter = express.Router();
 
