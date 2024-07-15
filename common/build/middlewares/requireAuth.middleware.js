@@ -23,9 +23,8 @@ const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         throw new NotAuthorizedError_error_1.NotAuthorizedError();
     }
     const authorizationHeader = req.headers["Authorization"];
-    const xRefreshHeader = req.headers["X-Refresh-Token"];
     const accessToken = authorizationHeader.split(" ")[1];
-    const refreshToken = xRefreshHeader.split(" ")[1];
+    const refreshToken = req.headers["X-Refresh-Token"];
     if (!accessToken && !refreshToken) {
         throw new NotAuthorizedError_error_1.NotAuthorizedError();
     }

@@ -10,7 +10,7 @@
     "pg": "^8.12.0"
   },
   "name": "@zencorp/engrenages",
-  "version": "1.0.43",
+  "version": "1.0.44",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "files": [

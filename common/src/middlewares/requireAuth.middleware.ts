@@ -24,10 +24,9 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
   }
 
   const authorizationHeader = req.headers["Authorization"] as string;
-  const xRefreshHeader = req.headers["X-Refresh-Token"] as string;
-
+  
   const accessToken = authorizationHeader.split(" ")[1];
-  const refreshToken = xRefreshHeader.split(" ")[1];
+  const refreshToken = req.headers["X-Refresh-Token"] as string;
 
   if (!accessToken && !refreshToken) {
     throw new NotAuthorizedError();
