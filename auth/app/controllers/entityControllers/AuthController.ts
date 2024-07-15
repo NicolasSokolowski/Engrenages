@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserDatamapperRequirements } from "../../datamappers/interfaces/UserDatamapperRequirements";
 import { UserControllerRequirements } from "../interfaces/UserControllerRequirements";
-import { BadRequestError, CoreController, generateToken, NotFoundError, TableNames } from "@zencorp/engrenages";
+import { BadRequestError, CoreController, generateToken, NotFoundError } from "@zencorp/engrenages";
 import { Password } from "../../helper/Password";
 
 
@@ -44,12 +44,6 @@ export class AuthController extends CoreController<UserControllerRequirements, U
 
     const { password: _, ...userWithoutPassword } = user;
 
-    res.status(200).send({ userWithoutPassword, userJwt })
-  }
-
-  signout = async (req: Request, res: Response): Promise<void> => {
-    delete req.user;
-
-    res.status(200).send("Disconnected")
+    res.status(200).send({ user: userWithoutPassword, tokens: userJwt })
   }
 }

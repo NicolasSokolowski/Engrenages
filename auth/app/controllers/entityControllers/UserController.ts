@@ -37,7 +37,7 @@ export class UserController extends CoreController<UserControllerRequirements, U
 
     const userJwt = generateToken(newUser);
 
-    res.status(201).send(newUser);
+    res.status(201).send({ user: newUser, tokens: userJwt});
   }
 
   update = async (req: Request, res: Response): Promise<void> => {
