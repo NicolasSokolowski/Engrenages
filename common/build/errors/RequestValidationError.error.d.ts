@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { CustomError } from "./index.errors";
+import { CustomError } from "./CustomError.error";
 export declare class RequestValidationError extends CustomError {
     errors: Joi.ValidationErrorItem[];
     statusCode: number;

@@ -1,4 +1,4 @@
-import { CustomError } from "./index.errors";
+import { CustomError } from "./CustomError.error";
 export declare class NotAuthorizedError extends CustomError {
     statusCode: number;
     constructor();

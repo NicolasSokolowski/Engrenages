@@ -1,4 +1,4 @@
-import { CustomError } from "./index.errors";
+import { CustomError } from "./CustomError.error";
 
 export class AccessDeniedError extends CustomError {
   statusCode = 403;

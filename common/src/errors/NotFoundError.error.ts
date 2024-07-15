@@ -1,4 +1,4 @@
-import { CustomError } from "./index.errors";
+import { CustomError } from "./CustomError.error";
 
 export class NotFoundError extends CustomError {
   statusCode = 404;

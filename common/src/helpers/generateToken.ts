@@ -1,7 +1,7 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
-import { BadRequestError } from "../errors/index.errors";
-import { UserPayload } from "./index.helpers";
+import { BadRequestError } from "../errors/BadRequestError.error";
+import { UserPayload } from "./UserPayload.helper";
 
 
 export const generateToken = ({ id, email, role }: UserPayload) => {

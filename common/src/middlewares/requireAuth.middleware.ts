@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { generateToken, UserPayload, verifyToken } from "../helpers/index.helpers";
-import { AccessDeniedError, BadRequestError, NotAuthorizedError } from "../errors/index.errors";
+import { UserPayload } from "../helpers/UserPayload.helper";
+import { NotAuthorizedError } from "../errors/NotAuthorizedError.error";
+import { BadRequestError } from "../errors/BadRequestError.error";
+import { verifyToken } from "../helpers/verifyToken.helpers";
+import { generateToken } from "../helpers/generateToken";
+import { AccessDeniedError } from "../errors/AccessDeniedError.error";
 
 declare global {
   namespace Express {

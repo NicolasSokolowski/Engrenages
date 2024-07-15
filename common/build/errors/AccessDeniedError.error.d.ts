@@ -1,4 +1,4 @@
-import { CustomError } from "./index.errors";
+import { CustomError } from "./CustomError.error";
 export declare class AccessDeniedError extends CustomError {
     statusCode: number;
     constructor(message: string);
