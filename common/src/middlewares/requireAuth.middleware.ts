@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { NotAuthorizedError } from "../errors/NotAuthorizedError.error";
-import { verifyToken } from "../helpers/verifyToken.helpers";
-import { BadRequestError } from "../errors/BadRequestError.error";
-import { generateToken } from "../helpers/generateToken";
 import { UserPayload } from "../helpers/UserPayload.helper";
+import { NotAuthorizedError } from "../errors/NotAuthorizedError.error";
+import { BadRequestError } from "../errors/BadRequestError.error";
+import { verifyToken } from "../helpers/verifyToken.helpers";
+import { generateToken } from "../helpers/generateToken";
 import { AccessDeniedError } from "../errors/AccessDeniedError.error";
 
 declare global {
@@ -23,8 +23,8 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
     throw new NotAuthorizedError();
   }
 
-  const authorizationHeader = req.headers["authorization"] as string;
-  const xRefreshHeader = req.headers["x-refresh-token"] as string;
+  const authorizationHeader = req.headers["Authorization"] as string;
+  const xRefreshHeader = req.headers["X-Refresh-Token"] as string;
 
   const accessToken = authorizationHeader.split(" ")[1];
   const refreshToken = xRefreshHeader.split(" ")[1];
@@ -67,6 +67,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 
       } catch (err) {
         throw new NotAuthorizedError();
+  
       }
     } else {
       throw new AccessDeniedError("Not enough permissions");

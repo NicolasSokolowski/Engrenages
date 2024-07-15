@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.controllerWrapper = void 0;
-const controllerWrapper = (controller) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.errorCatcher = void 0;
+const errorCatcher = (x) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield controller(req, res, next);
+        yield x(req, res, next);
     }
     catch (err) {
         next(err);
     }
 });
-exports.controllerWrapper = controllerWrapper;
+exports.errorCatcher = errorCatcher;

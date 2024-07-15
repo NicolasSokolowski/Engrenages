@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requireAuth = void 0;
 const NotAuthorizedError_error_1 = require("../errors/NotAuthorizedError.error");
-const verifyToken_helpers_1 = require("../helpers/verifyToken.helpers");
 const BadRequestError_error_1 = require("../errors/BadRequestError.error");
+const verifyToken_helpers_1 = require("../helpers/verifyToken.helpers");
 const generateToken_1 = require("../helpers/generateToken");
 const AccessDeniedError_error_1 = require("../errors/AccessDeniedError.error");
 const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -22,8 +22,8 @@ const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     if (!req.headers["x-refresh-token"]) {
         throw new NotAuthorizedError_error_1.NotAuthorizedError();
     }
-    const authorizationHeader = req.headers["authorization"];
-    const xRefreshHeader = req.headers["x-refresh-token"];
+    const authorizationHeader = req.headers["Authorization"];
+    const xRefreshHeader = req.headers["X-Refresh-Token"];
     const accessToken = authorizationHeader.split(" ")[1];
     const refreshToken = xRefreshHeader.split(" ")[1];
     if (!accessToken && !refreshToken) {

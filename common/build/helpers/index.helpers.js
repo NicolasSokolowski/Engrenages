@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyToken = exports.makeRandomString = exports.generateToken = exports.controllerWrapper = void 0;
-const controllerWrapper_helper_1 = require("./controllerWrapper.helper");
-Object.defineProperty(exports, "controllerWrapper", { enumerable: true, get: function () { return controllerWrapper_helper_1.controllerWrapper; } });
+exports.verifyToken = exports.makeRandomString = exports.generateToken = exports.errorCatcher = void 0;
+const errorCatcher_helper_1 = require("./errorCatcher.helper");
+Object.defineProperty(exports, "errorCatcher", { enumerable: true, get: function () { return errorCatcher_helper_1.errorCatcher; } });
 const generateToken_1 = require("./generateToken");
 Object.defineProperty(exports, "generateToken", { enumerable: true, get: function () { return generateToken_1.generateToken; } });
 const makeRandomString_helper_1 = require("./makeRandomString.helper");
