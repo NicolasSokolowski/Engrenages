@@ -15,11 +15,11 @@ declare global {
 }
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.headers["authorization"]) {
+  if (!req.headers["Authorization"]) {
     throw new NotAuthorizedError();
   }
 
-  if (!req.headers["x-refresh-token"]) {
+  if (!req.headers["X-Refresh-Token"]) {
     throw new NotAuthorizedError();
   }
 
