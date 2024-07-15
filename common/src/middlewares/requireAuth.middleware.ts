@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { UserPayload } from "../helpers/UserPayload.helper";
-import { NotAuthorizedError } from "../errors/NotAuthorizedError.error";
-import { BadRequestError } from "../errors/BadRequestError.error";
-import { verifyToken } from "../helpers/verifyToken.helpers";
-import { generateToken } from "../helpers/generateToken";
-import { AccessDeniedError } from "../errors/AccessDeniedError.error";
+import { generateToken, UserPayload, verifyToken } from "../helpers/index.helpers";
+import { AccessDeniedError, BadRequestError, NotAuthorizedError } from "../errors/index.errors";
 
 declare global {
   namespace Express {
@@ -15,18 +11,18 @@ declare global {
 }
 
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.headers["Authorization"]) {
+  if (!req.headers["authorization"]) {
     throw new NotAuthorizedError();
   }
 
-  if (!req.headers["X-Refresh-Token"]) {
+  if (!req.headers["x-refresh-token"]) {
     throw new NotAuthorizedError();
   }
 
-  const authorizationHeader = req.headers["Authorization"] as string;
+  const authorizationHeader = req.headers["authorization"] as string;
   
   const accessToken = authorizationHeader.split(" ")[1];
-  const refreshToken = req.headers["X-Refresh-Token"] as string;
+  const refreshToken = req.headers["x-refresh-token"] as string;
 
   if (!accessToken && !refreshToken) {
     throw new NotAuthorizedError();
@@ -51,12 +47,12 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } = generateToken(decodedToken);
 
         res.setHeader(
-          "authorization",
+          "Authorization",
           `Bearer: ${JSON.stringify(newAccessToken)}`
         );
 
         res.setHeader(
-          "x-refresh-token",
+          "X-Refresh-Token",
           newRefreshToken
         );
 

@@ -1,4 +1,4 @@
-import { EntityDatamapperRequirements } from "../datamappers/EntityDatamapperRequirements";
+import { EntityDatamapperRequirements } from "../datamappers/index.datamappers";
 
 type EntityDatamapperRequirementsWithoutData = Omit<EntityDatamapperRequirements, "data">;
 

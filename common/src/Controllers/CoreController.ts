@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
-import { BadRequestError } from "../errors/BadRequestError.error";
-import { NotFoundError } from "../errors/NotFoundError.error";
-import { DatabaseConnectionError } from "../errors/DatabaseConnectionError.error";
-import { EntityControllerRequirements } from "./EntityControllerRequirements";
-import { EntityDatamapperRequirements } from "../datamappers/EntityDatamapperRequirements";
+import { BadRequestError, DatabaseConnectionError, NotFoundError } from "../errors/index.errors";
+import { EntityControllerRequirements } from "../controllers/index.controllers";
+import { EntityDatamapperRequirements } from "../datamappers/index.datamappers";
 
 export abstract class CoreController<T extends EntityControllerRequirements, Y extends EntityDatamapperRequirements> {
   abstract update(req: Request, res: Response): Promise<void>;

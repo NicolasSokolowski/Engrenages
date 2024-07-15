@@ -16,15 +16,15 @@ const verifyToken_helpers_1 = require("../helpers/verifyToken.helpers");
 const generateToken_1 = require("../helpers/generateToken");
 const AccessDeniedError_error_1 = require("../errors/AccessDeniedError.error");
 const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.headers["Authorization"]) {
+    if (!req.headers["authorization"]) {
         throw new NotAuthorizedError_error_1.NotAuthorizedError();
     }
-    if (!req.headers["X-Refresh-Token"]) {
+    if (!req.headers["x-refresh-token"]) {
         throw new NotAuthorizedError_error_1.NotAuthorizedError();
     }
-    const authorizationHeader = req.headers["Authorization"];
+    const authorizationHeader = req.headers["authorization"];
     const accessToken = authorizationHeader.split(" ")[1];
-    const refreshToken = req.headers["X-Refresh-Token"];
+    const refreshToken = req.headers["x-refresh-token"];
     if (!accessToken && !refreshToken) {
         throw new NotAuthorizedError_error_1.NotAuthorizedError();
     }
@@ -41,8 +41,8 @@ const requireAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             try {
                 const decodedToken = yield (0, verifyToken_helpers_1.verifyToken)(refreshToken, process.env.REFRESH_TOKEN_SECRET);
                 const { accessToken: newAccessToken, refreshToken: newRefreshToken } = (0, generateToken_1.generateToken)(decodedToken);
-                res.setHeader("authorization", `Bearer: ${JSON.stringify(newAccessToken)}`);
-                res.setHeader("x-refresh-token", newRefreshToken);
+                res.setHeader("Authorization", `Bearer: ${JSON.stringify(newAccessToken)}`);
+                res.setHeader("X-Refresh-Token", newRefreshToken);
                 req.user = decodedToken;
                 next();
             }

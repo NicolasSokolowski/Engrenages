@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { CustomError } from "../errors/CustomError.error";
-import { UserPayload } from "../helpers/UserPayload.helper";
+import { CustomError } from "../errors/index.errors";
+import { UserPayload } from "../helpers/index.helpers";
 
 declare global {
   namespace Express {

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { UserPayload } from "../helpers/UserPayload.helper";
+import { UserPayload } from "../helpers/index.helpers";
 
 export const verifyToken = (token: string, secret: string):Promise<UserPayload> => {
   return new Promise((resolve, reject) => {

@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { NotAuthorizedError } from "../errors/NotAuthorizedError.error";
-import { AccessDeniedError } from "../errors/AccessDeniedError.error";
+import { AccessDeniedError } from "../errors/index.errors";
 
 export const checkPermissions = (permissions: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {

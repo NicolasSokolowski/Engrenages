@@ -1,4 +1,4 @@
-import { CustomError } from "./CustomError.error";
+import { CustomError } from "./index.errors";
 
 export class DatabaseConnectionError extends CustomError {
   reason= "Error connecting to database";

@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { TableNames } from "./TableNames";
+import { TableNames } from "./index.datamappers";
 
 export interface EntityDatamapperRequirements {
   tableName: TableNames;
