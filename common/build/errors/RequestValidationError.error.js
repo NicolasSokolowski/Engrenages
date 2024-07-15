@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RequestValidationError = void 0;
-const CustomError_error_1 = require("./CustomError.error");
-class RequestValidationError extends CustomError_error_1.CustomError {
+const index_errors_1 = require("./index.errors");
+class RequestValidationError extends index_errors_1.CustomError {
     constructor(errors) {
         super("Invalid request parameters");
         this.errors = errors;

@@ -10,19 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkPermissions = void 0;
-const AccessDeniedError_error_1 = require("../errors/AccessDeniedError.error");
+const index_errors_1 = require("../errors/index.errors");
 const checkPermissions = (permissions) => {
     return (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         var _a;
         const userRole = (_a = req.user) === null || _a === void 0 ? void 0 : _a.role;
         if (!userRole) {
-            throw new AccessDeniedError_error_1.AccessDeniedError("Not enough permissions");
+            throw new index_errors_1.AccessDeniedError("Not enough permissions");
         }
         if (permissions.includes(userRole)) {
             next();
         }
         else {
-            throw new AccessDeniedError_error_1.AccessDeniedError("Not enough permissions");
+            throw new index_errors_1.AccessDeniedError("Not enough permissions");
         }
     });
 };

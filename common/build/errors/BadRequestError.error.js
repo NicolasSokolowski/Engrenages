@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BadRequestError = void 0;
-const CustomError_error_1 = require("./CustomError.error");
-class BadRequestError extends CustomError_error_1.CustomError {
+const index_errors_1 = require("./index.errors");
+class BadRequestError extends index_errors_1.CustomError {
     constructor(message) {
         super(message);
         this.statusCode = 400;

@@ -10,14 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateRequest = void 0;
-const RequestValidationError_error_1 = require("../errors/RequestValidationError.error");
+const index_errors_1 = require("../errors/index.errors");
 const validateRequest = (sourceProperty, schema) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield schema.validateAsync(req[sourceProperty]);
         next();
     }
     catch (err) {
-        next(new RequestValidationError_error_1.RequestValidationError(err.details));
+        next(new index_errors_1.RequestValidationError(err.details));
     }
 });
 exports.validateRequest = validateRequest;

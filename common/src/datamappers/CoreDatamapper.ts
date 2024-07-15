@@ -1,4 +1,4 @@
-import { EntityDatamapperRequirements } from "./index.datamappers";
+import { EntityDatamapperRequirements } from "./EntityDatamapperRequirements";
 
 export abstract class CoreDatamapper<T extends EntityDatamapperRequirements> {
   abstract tableName: T["tableName"];

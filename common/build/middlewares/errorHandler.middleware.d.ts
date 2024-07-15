@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { UserPayload } from "../helpers/UserPayload.helper";
+import { UserPayload } from "../helpers/index.helpers";
 declare global {
     namespace Express {
         interface Request {
