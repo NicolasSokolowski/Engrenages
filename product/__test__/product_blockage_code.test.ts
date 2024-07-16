@@ -1,12 +1,46 @@
 import request from "supertest";
 import { app } from "../app/index.app";
-import { makeRandomString } from "@zencorp/engrenages";
+import { BadRequestError, makeRandomString } from "@zencorp/engrenages";
+import jwt from "jsonwebtoken";
 
 // Helper functions ---
 
+export const generateAccessToken = async () => {
+  if(!process.env.ACCESS_TOKEN_SECRET) {
+    throw new BadRequestError("Access token secret must be set");
+  }
+  const secret = process.env.ACCESS_TOKEN_SECRET;
+
+  const userPayload = {
+    id: 1,
+    email: "admin@test.com",
+    role: "admin"
+  };
+
+  return jwt.sign(userPayload, secret);
+}
+
+export const generateRefreshToken = async () => {
+  if(!process.env.REFRESH_TOKEN_SECRET) {
+    throw new BadRequestError("Refresh token secret must be set");
+  }
+  const secret = process.env.REFRESH_TOKEN_SECRET;
+  
+  const userPayload = {
+    id: 1,
+    email: "admin@test.com",
+    role: "admin"
+  };
+
+  return jwt.sign(userPayload, secret);
+}
+
 export const createBlockageCode = async () => {
+
   return request(app)
     .post("/api/product/blockage")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": makeRandomString(3),
       "description": makeRandomString(50)
@@ -16,12 +50,15 @@ export const createBlockageCode = async () => {
 // TESTS --------------
 
 it("fetches all the existing product blockage code", async () => {
+
   await createBlockageCode();
   await createBlockageCode();
   await createBlockageCode();
 
   const response = await request(app)
     .get("/api/product/blockage")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(200);
 
@@ -35,6 +72,8 @@ it("fetches a single product blockage type if given valid ID", async () => {
 
   const response = await request(app)
     .get(`/api/product/blockage/${blockageCode.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(200);
 
@@ -46,6 +85,8 @@ it("fetches a single product blockage type if given valid ID", async () => {
 it("creates a product blockage type when given valid inputs", async () => {
   const response = await request(app)
     .post("/api/product/blockage")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": "RIA",
       "description": "Blockage test description"
@@ -61,6 +102,8 @@ it("creates a product blockage type when given valid inputs", async () => {
 it("returns a 400 status error when trying to create a product blockage type with invalid inputs", async () => {
   await request(app)
     .post("/api/product/blockage")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": 6666, // <-- sending 4 characters ("name" is VARCHAR(3))
       "description": "Blockage test description"
@@ -75,6 +118,8 @@ it("creates and updates a product blockage code when given valid inputs", async 
 
   const response = await request(app)
     .patch(`/api/product/blockage/${blockageCode.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": "FIR"
     })
@@ -90,6 +135,8 @@ it("returns a 400 error when trying to update a product blockage code with inval
 
   await request(app)
     .patch(`/api/product/blockage/${blockageCode.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "description": makeRandomString(101) // <-- sending a 101 characters string instead of a max 100
     })
@@ -103,11 +150,15 @@ it("creates and deletes a product when given valid ID", async () => {
 
   await request(app)
     .delete(`/api/product/blockage/${blockageCode.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(200);
 
   await request(app)
     .get(`/api/product/blockage/${blockageCode.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(404);
 });
@@ -119,6 +170,8 @@ it("creates and updates a product blockage type several type and checks the vers
 
   const responseOne = await request(app)
     .patch(`/api/product/blockage/${blockageCode.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": "DMG"
     })
@@ -126,6 +179,8 @@ it("creates and updates a product blockage type several type and checks the vers
 
   const responseTwo = await request(app)
     .patch(`/api/product/blockage/${blockageCode.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "description": "A new test description"
     })
@@ -133,6 +188,8 @@ it("creates and updates a product blockage type several type and checks the vers
 
   const responseThree = await request(app)
     .patch(`/api/product/blockage/${blockageCode.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": "TEM"
     })
@@ -154,16 +211,22 @@ it("returns appropriate error when given invalid IDs", async () => {
 
   await request(app)
     .get(`/api/product/blockage/${inexistingID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(404);
 
   await request(app)
     .get(`/api/product/blockage/${invalidID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(400);
 
   await request(app)
-    .patch(`/api/product/blockage/${inexistingID}`) 
+    .patch(`/api/product/blockage/${inexistingID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": makeRandomString(3) 
     })
@@ -171,18 +234,24 @@ it("returns appropriate error when given invalid IDs", async () => {
 
   await request(app)
     .patch(`/api/product/blockage/${invalidID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": makeRandomString(3) 
     })
     .expect(400);
 
   await request(app)
-    .delete(`/api/product/blockage/${inexistingID}`) 
+    .delete(`/api/product/blockage/${inexistingID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(404);
 
   await request(app)
     .delete(`/api/product/blockage/${invalidID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(400);
 });
@@ -192,6 +261,8 @@ it("returns appropriate error when given invalid IDs", async () => {
 it("creates a product blockage code and creates a product with the created code", async () => {
   const blockageName = await request(app)
     .post("/api/product/blockage")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "name": "PNT",
       "description": "Pont"
@@ -200,6 +271,8 @@ it("creates a product blockage code and creates a product with the created code"
 
   const product = await request(app)
     .post("/api/product")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": makeRandomString(10),
       "description": "Test Description",
@@ -223,6 +296,8 @@ it("returns an error when trying to delete a product blockage code used by a pro
 
   await request(app)
     .post("/api/product")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": makeRandomString(10),
       "description": "Test Description",
@@ -238,6 +313,8 @@ it("returns an error when trying to delete a product blockage code used by a pro
 
   await request(app)
     .delete(`/api/product/blockage/${blockageName.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(400);
 });

@@ -1,12 +1,15 @@
 import request from "supertest";
 import { app } from "../app/index.app";
 import { makeRandomString } from "@zencorp/engrenages";
+import { generateAccessToken, generateRefreshToken } from "./product_blockage_code.test";
 
 // Helper functions ---
 
 export const createProduct = async () => {
   return request(app)
     .post("/api/product")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       title: makeRandomString(10),
       description: "Test Description",
@@ -28,6 +31,8 @@ it("fetches all the existing products", async () => {
 
   const response = await request(app)
     .get("/api/product")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(200);
 
@@ -41,6 +46,8 @@ it("fetches a single product when given valid ID", async () => {
 
   const response = await request(app)
     .get(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(200);
 
@@ -52,6 +59,8 @@ it("fetches a single product when given valid ID", async () => {
 it("creates a product when given valid inputs", async () => {
   const response = await request(app)
     .post("/api/product")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": "TEST Product",
       "description": "Test Description",
@@ -72,6 +81,8 @@ it("creates a product when given valid inputs", async () => {
 it("returns a 400 status error when trying to create a product if given invalid input", async () => {
   await request(app)
     .post("/api/product")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": 13, // <-- sending a number instead of a string
       "description": "Test Description",
@@ -92,6 +103,8 @@ it("creates and updates a product", async () => {
 
   const response = await request(app)
     .patch(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": "product's title"
     })
@@ -108,6 +121,8 @@ it("returns a 400 status error when trying to update a product with invalid inpu
 
   await request(app)
     .patch(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": 123 // <-- sending a number instead of a string
     })
@@ -121,6 +136,8 @@ it("creates and updates a product several times and checks the version", async (
 
   const response = await request(app)
     .patch(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": "Updated title"
     })
@@ -128,6 +145,8 @@ it("creates and updates a product several times and checks the version", async (
 
   const responseTwo = await request(app)
     .patch(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "description": "Updated description"
     })
@@ -135,6 +154,8 @@ it("creates and updates a product several times and checks the version", async (
 
   const responseThree = await request(app)
     .patch(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "ean": "2334532123454"
     })
@@ -155,11 +176,15 @@ it("creates and delete a product", async () => {
 
   await request(app)
     .delete(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(200);
 
   await request(app)
     .get(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(404);
 });
@@ -172,16 +197,22 @@ it("returns appropriate status error when given invalid IDs", async () => {
 
   await request(app)
     .get(`/api/product/${inexistingID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(404);
 
   await request(app)
     .get(`/api/product/${invalidID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(400);
 
   await request(app)
-    .patch(`/api/product/${inexistingID}`) 
+    .patch(`/api/product/${inexistingID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": makeRandomString(10) 
     })
@@ -189,18 +220,24 @@ it("returns appropriate status error when given invalid IDs", async () => {
 
   await request(app)
     .patch(`/api/product/${invalidID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": makeRandomString(10) 
     })
     .expect(400);
 
   await request(app)
-    .delete(`/api/product/${inexistingID}`) 
+    .delete(`/api/product/${inexistingID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`) 
     .send()
     .expect(404);
 
   await request(app)
     .delete(`/api/product/${invalidID}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(400);
 });
@@ -210,6 +247,8 @@ it("returns appropriate status error when given invalid IDs", async () => {
 it("returns a 404 status error when using an invalid URL", async () => {
   await request(app)
     .get("/api/unknownURL") // <-- using an inexisting URL
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send()
     .expect(404);
 });
@@ -219,6 +258,8 @@ it("returns a 404 status error when using an invalid URL", async () => {
 it("returns an error when specifying an unexisting product blockage name", async () => {
   await request(app)
     .post("/api/product")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "title": makeRandomString(10),
       "description": "Test Description",
@@ -238,6 +279,8 @@ it("returns an error when specifying an unexisting product blockage name", async
 it("creates a product and updates it with an existing blockage name", async () => {
     await request(app)
       .post("/api/product/blockage")
+      .set("authorization", `${await generateAccessToken()}`)
+      .set("x-refresh-token", `${await generateRefreshToken()}`)
       .send({
         "name": "ZZZ",
         "description": "Sleeping"
@@ -248,6 +291,8 @@ it("creates a product and updates it with an existing blockage name", async () =
 
   await request(app)
     .patch(`/api/product/${product.body.id}`)
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
     .send({
       "product_blockage_name": "ZZZ"
     })
