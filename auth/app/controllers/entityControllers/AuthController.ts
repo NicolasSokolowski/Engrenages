@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import { UserDatamapperRequirements } from "../../datamappers/interfaces/UserDatamapperRequirements";
 import { UserControllerRequirements } from "../interfaces/UserControllerRequirements";
-import { BadRequestError, CoreController, generateToken, NotFoundError } from "@zencorp/engrenages";
-import { Password } from "../../helper/Password";
+import { BadRequestError, CoreController, generateToken, NotFoundError, Password } from "@zencorp/engrenages";
 
 
 export class AuthController extends CoreController<UserControllerRequirements, UserDatamapperRequirements> {

@@ -1,8 +1,7 @@
 import "dotenv/config";
 import { Pool } from 'pg';
-import { Password } from "../app/helper/Password";
 import { exec } from "child_process";
-import jwt from "jsonwebtoken";
+import { Password } from "@zencorp/engrenages";
 
 
 const poolConfig = {
@@ -11,23 +10,6 @@ const poolConfig = {
 };
 
 const pool = new Pool(poolConfig);
-
-declare global {
-  var signin: (id: number, email: string, role: string) => { accessToken: string; refreshToken: string };
-};
-
-global.signin = (id: number, email: string, role: string) => {
-  const payload = {
-    id,
-    email,
-    role
-  };
-
-  const accessToken = jwt.sign(payload, process.env.JWT_KEY!, { expiresIn: '15m' });
-  const refreshToken = jwt.sign(payload, process.env.JWT_KEY!, { expiresIn: '7d' });
-
-  return { accessToken, refreshToken };
-};
 
 async function databaseInsertsForTests() {
   const operatorRoleCreationQuery = 
