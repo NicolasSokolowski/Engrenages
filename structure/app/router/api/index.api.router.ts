@@ -1,8 +1,8 @@
 import express from "express";
-import structureRouter from "./structure.api.router";
+import locationRouter from "./location.api.router";
 
 const apiRouter = express.Router();
 
-apiRouter.use("/structure", structureRouter);
+apiRouter.use("/location", locationRouter);
 
 export default apiRouter;
