@@ -9,7 +9,7 @@ CREATE FUNCTION create_location(json) RETURNS TABLE (
   "position" CHAR(4),
   lvl CHAR(1),
   lvl_position CHAR(2),
-  location CHAR(11),
+  location CHAR(15),
   location_type_name CHAR(5),
   location_blockage_name CHAR(3)
 ) AS $$
@@ -30,7 +30,7 @@ CREATE FUNCTION create_location(json) RETURNS TABLE (
     ($1->>'position')::CHAR(4),
     ($1->>'lvl')::CHAR(1),
     ($1->>'lvl_position')::CHAR(2),
-    ($1->>'location')::CHAR(11),
+    ($1->>'zone')::CHAR(1) || '-' || ($1->>'alley')::CHAR(3) || '-' || ($1->>'position')::CHAR(4) || '-' || ($1->>'lvl')::CHAR(1) || '-' || ($1->>'lvl_position')::CHAR(2),
     ($1->>'location_type_name')::CHAR(5),
     ($1->>'location_blockage_name')::CHAR(3)
   )
