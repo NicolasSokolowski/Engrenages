@@ -2,6 +2,8 @@
 
 BEGIN;
 
--- XXX Add verifications here.
+SELECT * FROM "location_type" WHERE FALSE;
+SELECT * FROM "location_blockage_type" WHERE FALSE;
+SELECT * FROM "location" WHERE FALSE;
 
 ROLLBACK;
