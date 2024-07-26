@@ -1,7 +1,8 @@
 import express from "express";
 import { locationBlockageController } from "../../controllers/index.controllers";
-import { checkPermissions, errorCatcher, requireAuth } from "@zencorp/engrenages";
+import { checkPermissions, errorCatcher, requireAuth, validateRequest } from "@zencorp/engrenages";
 import specificLocationBlockageRouter from "./specificLocationBlockage.api.router";
+import { blockageCreateSchema } from "../../validation/index.schemas";
 
 const locationBlockageRouter = express.Router();
 
@@ -14,6 +15,7 @@ locationBlockageRouter.route("/")
   .post(
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
+    validateRequest("body", blockageCreateSchema),
     errorCatcher(locationBlockageController.create)
   );
 

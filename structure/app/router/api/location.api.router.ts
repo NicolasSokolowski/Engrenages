@@ -1,9 +1,10 @@
-import { checkPermissions, errorCatcher, requireAuth } from "@zencorp/engrenages";
+import { checkPermissions, errorCatcher, requireAuth, validateRequest } from "@zencorp/engrenages";
 import express from "express";
-import locationTypeRouter from "./location-type.api.router";
+import locationTypeRouter from "./locationType.api.router";
 import { locationController } from "../../controllers/index.controllers";
 import specificLocationRouter from "./specificLocation.api.router";
 import locationBlockageRouter from "./locationBlockage.api.router";
+import { locationCreateSchema } from "../../validation/index.schemas";
 
 const locationRouter = express.Router();
 
@@ -16,6 +17,7 @@ locationRouter.route("/")
   .post(
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
+    validateRequest("body", locationCreateSchema),
     errorCatcher(locationController.create)    
   );
 

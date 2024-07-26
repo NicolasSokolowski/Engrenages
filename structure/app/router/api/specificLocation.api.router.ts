@@ -1,6 +1,7 @@
 import express from "express";
 import { locationController } from "../../controllers/index.controllers";
-import { checkPermissions, errorCatcher, requireAuth } from "@zencorp/engrenages";
+import { checkPermissions, errorCatcher, requireAuth, validateRequest } from "@zencorp/engrenages";
+import { locationUpdateSchema } from "../../validation/index.schemas";
 
 const specificLocationRouter = express.Router({ mergeParams: true });
 
@@ -13,6 +14,7 @@ specificLocationRouter.route("/")
   .patch(
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
+    validateRequest("body", locationUpdateSchema),
     errorCatcher(locationController.update)    
   )
   .delete(

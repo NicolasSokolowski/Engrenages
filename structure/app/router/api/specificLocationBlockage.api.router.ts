@@ -1,6 +1,7 @@
-import { checkPermissions, errorCatcher, requireAuth } from "@zencorp/engrenages";
+import { checkPermissions, errorCatcher, requireAuth, validateRequest } from "@zencorp/engrenages";
 import express from "express";
 import { locationBlockageController } from "../../controllers/index.controllers";
+import { blockageUpdateSchema } from "../../validation/index.schemas";
 
 const specificLocationBlockageRouter = express.Router({ mergeParams: true });
 
@@ -13,6 +14,7 @@ specificLocationBlockageRouter.route("/")
   .patch(
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
+    validateRequest("body", blockageUpdateSchema),
     errorCatcher(locationBlockageController.update)
   )
   .delete(
