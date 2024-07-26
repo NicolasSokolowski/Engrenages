@@ -22,7 +22,6 @@ export class LocationController extends CoreController<LocationControllerRequire
     const locationToUpdate = await this.datamapper.findByPk(id);
 
     if (!locationToUpdate) {
-      console.log("Salut poto")
       throw new NotFoundError();
     }
 
