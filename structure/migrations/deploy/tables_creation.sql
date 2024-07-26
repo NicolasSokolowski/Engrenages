@@ -25,7 +25,7 @@ CREATE TABLE "location_blockage_type" (
 
 CREATE TABLE "location" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "zone" CHAR(1) NOT NULL UNIQUE,
+  "zone" CHAR(1) NOT NULL,
   "alley" CHAR(3) NOT NULL,
   "position" CHAR(4) NOT NULL,
   "lvl" CHAR(1) NOT NULL,
