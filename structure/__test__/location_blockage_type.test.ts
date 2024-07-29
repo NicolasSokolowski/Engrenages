@@ -1,7 +1,7 @@
 import request from "supertest";
 import { app } from "../app/index.app";
 import { makeRandomString } from "@zencorp/engrenages";
-import { generateAccessToken, generateRefreshToken } from "./location_type.test";
+import { createLocationType, generateAccessToken, generateRefreshToken } from "./location_type.test";
 
 // Helper functions ---
 
@@ -203,6 +203,36 @@ it("returns an error when trying to create an already existing blockage type (na
       "description": `${blockage.body.description}`
     })
     .expect(400);
+});
+
+// --------------------
+
+it("creates a location and updates it with a blockage type", async () => {
+  const locationType = await createLocationType();
+
+  const locationBlockageType = await request(app)
+    .post("/api/location/blockage")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)
+    .send({
+      "name": "PNT",
+      "description": "Pont"
+    })
+    .expect(201);
+
+  await request(app)
+    .post("/api/location")
+    .set("authorization", `${await generateAccessToken()}`)
+    .set("x-refresh-token", `${await generateRefreshToken()}`)  
+    .send({
+      "zone": makeRandomString(1),
+      "alley": makeRandomString(3),
+      "position": makeRandomString(4),
+      "lvl": makeRandomString(1),
+      "lvl_position": makeRandomString(2),
+      "location_type_name": `${locationType.body.name}`,
+      "location_blockage_type": `${locationBlockageType.body.name}`
+    });
 });
 
 // --------------------
