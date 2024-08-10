@@ -9,6 +9,7 @@ declare global {
     }
   }
 }
+
 export const errorHandler = (
   err: Error, 
   req: Request, 
