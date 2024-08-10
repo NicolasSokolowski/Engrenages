@@ -1,12 +1,5 @@
-import { Channel, ConsumeMessage } from "amqplib";
-import { RoutingKeys } from "./RoutingKeys";
-
-export interface ConsumerReq {
-  exchangeName: string;
-  routingKey: RoutingKeys;
-  queueName: string;
-  data: any;
-}
+import { Channel } from "amqplib";
+import { ConsumerReq } from "./ConsumerReq";
 
 export abstract class CoreConsumer<T extends ConsumerReq> {
   protected exchange: T["exchangeName"];

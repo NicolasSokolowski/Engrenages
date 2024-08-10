@@ -1,11 +1,5 @@
 import { Channel } from "amqplib";
-import { RoutingKeys } from "./RoutingKeys";
-
-export interface PublisherReq {
-  exchangeName: string;
-  routingKey: RoutingKeys;
-  data: any;
-}
+import { PublisherReq } from "./PublisherReq";
 
 export abstract class CorePublisher<T extends PublisherReq> {
   abstract routingKey: T["routingKey"];
