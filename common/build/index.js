@@ -17,5 +17,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./controllers/index.controllers"), exports);
 __exportStar(require("./datamappers/index.datamappers"), exports);
 __exportStar(require("./errors/index.errors"), exports);
+__exportStar(require("./events/index.events"), exports);
 __exportStar(require("./helpers/index.helpers"), exports);
 __exportStar(require("./middlewares/index.middlewares"), exports);
