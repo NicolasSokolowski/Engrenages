@@ -30,9 +30,13 @@ class CoreController {
         this.getAll = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const itemsList = yield this.datamapper.findAll();
             if (!itemsList) {
-                throw new DatabaseConnectionError_error_1.DatabaseConnectionError();
+                throw new NotFoundError_error_1.NotFoundError();
             }
             res.status(200).send(itemsList);
+        });
+        this.getBySpecificField = (field, value) => __awaiter(this, void 0, void 0, function* () {
+            const item = yield this.datamapper.findBySpecificField(field, value);
+            return item;
         });
         this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const item = req.body;

@@ -19,6 +19,12 @@ export abstract class CoreDatamapper<T extends EntityDatamapperRequirements> {
     return result.rows;
   }
 
+  findBySpecificField = async (field: string, value: string) => {
+    const result = await this.pool.query(`SELECT * FROM "${this.tableName} WHERE "$1" = $2`,
+      [field, value])
+    return result.rows[0];
+  }
+
   insert = async (entityObject: T["data"]) => {
     const result = await this.pool.query(
       `SELECT * FROM create_${this.tableName}($1)`,

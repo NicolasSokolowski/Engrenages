@@ -7,6 +7,7 @@ export declare abstract class CoreController<T extends EntityControllerRequireme
     constructor(datamapper: T["datamapper"]);
     getByPk: (req: Request, res: Response) => Promise<void>;
     getAll: (req: Request, res: Response) => Promise<void>;
+    getBySpecificField: (field: string, value: string) => Promise<void>;
     create: (req: Request, res: Response) => Promise<void>;
     delete: (req: Request, res: Response) => Promise<void>;
 }

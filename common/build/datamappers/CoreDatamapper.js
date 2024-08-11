@@ -20,6 +20,10 @@ class CoreDatamapper {
             const result = yield this.pool.query(`SELECT * FROM "${this.tableName}";`);
             return result.rows;
         });
+        this.findBySpecificField = (field, value) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.pool.query(`SELECT * FROM "${this.tableName} WHERE "$1" = $2`, [field, value]);
+            return result.rows[0];
+        });
         this.insert = (entityObject) => __awaiter(this, void 0, void 0, function* () {
             const result = yield this.pool.query(`SELECT * FROM create_${this.tableName}($1)`, [entityObject]);
             return result.rows[0];

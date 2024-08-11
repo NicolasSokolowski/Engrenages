@@ -30,10 +30,15 @@ export abstract class CoreController<T extends EntityControllerRequirements, Y e
     const itemsList = await this.datamapper.findAll();
 
     if (!itemsList) {
-      throw new DatabaseConnectionError()
+      throw new NotFoundError();
     }
 
     res.status(200).send(itemsList);
+  }
+
+  getBySpecificField = async (field: string, value:string): Promise<void> => {
+    const item = await this.datamapper.findBySpecificField(field, value);
+    return item;
   }
 
   create = async (req: Request, res: Response): Promise<void> => {
