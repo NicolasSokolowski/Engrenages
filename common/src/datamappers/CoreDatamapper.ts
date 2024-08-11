@@ -20,8 +20,8 @@ export abstract class CoreDatamapper<T extends EntityDatamapperRequirements> {
   }
 
   findBySpecificField = async (field: string, value: string) => {
-    const result = await this.pool.query(`SELECT * FROM "${this.tableName} WHERE "$1" = $2`,
-      [field, value])
+    const result = await this.pool.query(`SELECT * FROM "${this.tableName} WHERE "${field}" = $1`,
+      [value])
     return result.rows[0];
   }
 

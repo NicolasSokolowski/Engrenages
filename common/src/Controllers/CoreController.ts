@@ -36,7 +36,7 @@ export abstract class CoreController<T extends EntityControllerRequirements, Y e
     res.status(200).send(itemsList);
   }
 
-  getBySpecificField = async (field: string, value:string): Promise<void> => {
+  getBySpecificField = async (field: string, value:string) => {
     const item = await this.datamapper.findBySpecificField(field, value);
     return item;
   }
