@@ -5,13 +5,4 @@ import { RoutingKeys } from "./RoutingKeys";
 import { PublisherReq } from "./PublisherReq";
 import { ConsumerReq } from "./ConsumerReq";
 import { RedisManager } from "./RedisManager";
-
-export {
-  CoreConsumer,
-  CorePublisher,
-  RabbitmqManager,
-  RoutingKeys,
-  PublisherReq,
-  ConsumerReq,
-  RedisManager
-}
+export { CoreConsumer, CorePublisher, RabbitmqManager, RoutingKeys, PublisherReq, ConsumerReq, RedisManager };

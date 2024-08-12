@@ -1,0 +1,26 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RoutingKeys = void 0;
+var RoutingKeys;
+(function (RoutingKeys) {
+    RoutingKeys["ProductCheck"] = "product:check";
+    RoutingKeys["ProductCreated"] = "product:created";
+    RoutingKeys["ProductUpdated"] = "product:updated";
+    RoutingKeys["ProductDeleted"] = "product:deleted";
+    RoutingKeys["ProductBlockageCheck"] = "productblockage:check";
+    RoutingKeys["ProductBlockageCreated"] = "productblockage:created";
+    RoutingKeys["ProductBlockageUpdated"] = "productblockage:updated";
+    RoutingKeys["ProductBlockageDeleted"] = "productblockage:deleted";
+    RoutingKeys["LocationCheck"] = "location:check";
+    RoutingKeys["LocationCreated"] = "location:created";
+    RoutingKeys["LocationUpdated"] = "location:updated";
+    RoutingKeys["LocationDeleted"] = "location:deleted";
+    RoutingKeys["LocationTypeCheck"] = "locationtype:check";
+    RoutingKeys["LocationTypeCreated"] = "locationtype:created";
+    RoutingKeys["LocationTypeUpdated"] = "locationtype:updated";
+    RoutingKeys["LocationTypeDeleted"] = "locationtype:deleted";
+    RoutingKeys["LocationBlockageCheck"] = "locationblockage:check";
+    RoutingKeys["LocationBlockageCreated"] = "locationblockage:created";
+    RoutingKeys["LocationBlockageUpdated"] = "locationblockage:updated";
+    RoutingKeys["LocationBlockageDeleted"] = "locationblockage:deleted";
+})(RoutingKeys || (exports.RoutingKeys = RoutingKeys = {}));
