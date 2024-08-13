@@ -18,45 +18,104 @@ class RabbitmqManager {
     constructor(uri) {
         this.uri = uri;
         this.connection = null;
+        this.pubChannel = null;
+        this.subChannel = null;
+        this.isReconnecting = false;
     }
     static getInstance(uri) {
-        if (!RabbitmqManager.instance) {
-            RabbitmqManager.instance = new RabbitmqManager(uri);
-        }
-        return RabbitmqManager.instance;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!RabbitmqManager.instance) {
+                RabbitmqManager.instance = new RabbitmqManager(uri);
+                yield RabbitmqManager.instance.init();
+            }
+            return RabbitmqManager.instance;
+        });
+    }
+    init() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.connect();
+        });
     }
     connect() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.connection) {
-                return;
-            }
             try {
                 this.connection = yield amqplib_1.default.connect(this.uri);
+                this.pubChannel = yield this.connection.createChannel();
+                this.subChannel = yield this.connection.createChannel();
+                this.connection.on("close", () => __awaiter(this, void 0, void 0, function* () {
+                    console.error("RabbitMQ connection closed. Reconnecting...");
+                    yield this.handleReconnect();
+                }));
+                this.connection.on("error", (err) => __awaiter(this, void 0, void 0, function* () {
+                    console.error("RabbitMQ connection error:", err);
+                    if (this.connection) {
+                        yield this.connection.close();
+                    }
+                    yield this.handleReconnect();
+                }));
             }
             catch (err) {
                 console.error("Failed to connect to RabbitMQ", err);
-                this.connection = null;
-                throw err;
+                yield this.handleReconnect();
             }
         });
     }
-    createChannel() {
+    handleReconnect() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.connection === null) {
-                throw new Error("Connect to RabbitMQ first before creating a channel");
+            if (this.isReconnecting)
+                return;
+            this.isReconnecting = true;
+            const reconnectDelay = 5000;
+            const maxRetries = 10;
+            let attempt = 0;
+            while (attempt < maxRetries) {
+                attempt++;
+                console.log(`Reconnection attempt ${attempt}/${maxRetries}...`);
+                try {
+                    yield this.connect();
+                    console.log("Reconnected to RabbitMQ successfully.");
+                    this.isReconnecting = false;
+                }
+                catch (err) {
+                    console.error("Reconnection attempt failed:", err);
+                    yield new Promise((resolve) => setTimeout(resolve, reconnectDelay));
+                }
             }
-            return yield this.connection.createChannel();
+            console.error("Max reconnection attempts reached. Could not reconnect to RabbitMQ.");
+            this.isReconnecting = false;
         });
+    }
+    getPubChannel() {
+        if (!this.pubChannel) {
+            throw new Error("Publish channel is not initialized");
+        }
+        return this.pubChannel;
+    }
+    getSubChannel() {
+        if (!this.subChannel) {
+            throw new Error("Sub channel is not initialized");
+        }
+        return this.subChannel;
     }
     close() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.connection) {
-                yield this.connection.close();
-                this.connection = null;
-                console.log("Connection to RabbitMQ closed.");
+            try {
+                if (this.pubChannel) {
+                    yield this.pubChannel.close();
+                    this.pubChannel = null;
+                }
+                if (this.subChannel) {
+                    yield this.subChannel.close();
+                    this.subChannel = null;
+                }
+                if (this.connection) {
+                    yield this.connection.close();
+                    this.connection = null;
+                }
             }
-            else {
-                throw new Error("No RabbitMQ connection is open.");
+            catch (err) {
+                console.error("RabbitMQ disconnection error", err);
+                throw err;
             }
         });
     }

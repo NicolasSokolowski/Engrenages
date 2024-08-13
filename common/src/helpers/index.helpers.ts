@@ -5,7 +5,6 @@ import { UserPayload } from "./UserPayload.helper";
 import { verifyToken } from "./verifyToken.helpers";
 import { Password } from "./Password";
 import { redisConnection } from "./redisConnection";
-import { rabbitmqConnection } from "./rabbitmqConnection";
 
 export {
   errorCatcher,
@@ -14,6 +13,5 @@ export {
   UserPayload,
   verifyToken,
   Password,
-  redisConnection,
-  rabbitmqConnection
+  redisConnection
 };

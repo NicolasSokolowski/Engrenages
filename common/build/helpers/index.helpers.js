@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.rabbitmqConnection = exports.redisConnection = exports.Password = exports.verifyToken = exports.makeRandomString = exports.generateToken = exports.errorCatcher = void 0;
+exports.redisConnection = exports.Password = exports.verifyToken = exports.makeRandomString = exports.generateToken = exports.errorCatcher = void 0;
 const errorCatcher_helper_1 = require("./errorCatcher.helper");
 Object.defineProperty(exports, "errorCatcher", { enumerable: true, get: function () { return errorCatcher_helper_1.errorCatcher; } });
 const generateToken_1 = require("./generateToken");
@@ -13,5 +13,3 @@ const Password_1 = require("./Password");
 Object.defineProperty(exports, "Password", { enumerable: true, get: function () { return Password_1.Password; } });
 const redisConnection_1 = require("./redisConnection");
 Object.defineProperty(exports, "redisConnection", { enumerable: true, get: function () { return redisConnection_1.redisConnection; } });
-const rabbitmqConnection_1 = require("./rabbitmqConnection");
-Object.defineProperty(exports, "rabbitmqConnection", { enumerable: true, get: function () { return rabbitmqConnection_1.rabbitmqConnection; } });
