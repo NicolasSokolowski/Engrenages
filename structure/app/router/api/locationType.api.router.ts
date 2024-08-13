@@ -16,7 +16,7 @@ locationTypeRouter.route("/")
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", typeCreateSchema),
-    errorCatcher(locationTypeController.create)    
+    errorCatcher(locationTypeController.requestCreation)    
   );
 
 locationTypeRouter.use("/:id", specificLocationTypeRouter);

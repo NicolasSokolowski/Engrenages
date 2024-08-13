@@ -16,7 +16,7 @@ locationBlockageRouter.route("/")
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", blockageCreateSchema),
-    errorCatcher(locationBlockageController.create)
+    errorCatcher(locationBlockageController.requestCreation)
   );
 
 locationBlockageRouter.use("/:id", specificLocationBlockageRouter);

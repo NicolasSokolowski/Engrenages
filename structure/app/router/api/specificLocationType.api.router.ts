@@ -15,12 +15,12 @@ specificLocationTypeRouter.route("/")
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", typeUpdateSchema),
-    errorCatcher(locationTypeController.update)    
+    errorCatcher(locationTypeController.requestUpdate)    
   )
   .delete(
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
-    errorCatcher(locationTypeController.delete)    
+    errorCatcher(locationTypeController.requestDeletion)    
   );
 
 export default specificLocationTypeRouter;
