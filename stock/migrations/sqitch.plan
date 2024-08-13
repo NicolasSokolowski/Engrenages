@@ -1,0 +1,7 @@
+%syntax-version=1.0.0
+%project=engrenages_stock
+
+tables-creation 2024-08-01T13:16:12Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Tables creation
+product-functions 2024-08-10T20:43:38Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # functions creation for product related tables
+structure-functions 2024-08-10T20:44:11Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # functions creation for structure related tables
+location-triggers 2024-08-13T13:33:56Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Triggers to modify location field
