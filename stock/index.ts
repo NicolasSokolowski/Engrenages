@@ -7,6 +7,8 @@ import { LocationTypeUpdatedConsumer } from "./events/location_type/LocationType
 import { LocationTypeDeletedConsumer } from "./events/location_type/LocationTypeDeletedConsumer";
 import { LocationBlockageCheckConsumer } from "./events/location_blockage/LocationBlockageCheckConsumer";
 import { LocationBlockageCreatedConsumer } from "./events/location_blockage/LocationBlockageCreatedConsumer";
+import { LocationBlockageUpdatedConsumer } from "./events/location_blockage/LocationBlockageUpdatedConsumer";
+import { LocationBlockageDeletedConsumer } from "./events/location_blockage/LocationBlockageDeletedConsumer";
 
 const start = async () => {
   pool.query('SELECT 1;', (err: Error, res: any) => {
@@ -23,13 +25,16 @@ const start = async () => {
     const rabbitmqSubChan = rabbitMQ.getSubChannel();
     console.log("Connected to RabbitMQ");
 
-    new LocationTypeCheckConsumer(rabbitmqSubChan, "logisticExchange").consume();
-    new LocationTypeCreatedConsumer(rabbitmqSubChan, "logisticExchange").consume();
-    new LocationTypeUpdatedConsumer(rabbitmqSubChan, "logisticExchange").consume();
-    new LocationTypeDeletedConsumer(rabbitmqSubChan, "logisticExchange").consume();
-    new LocationBlockageCreatedConsumer(rabbitmqSubChan, "logisticExchange").consume();
-    new LocationBlockageCheckConsumer(rabbitmqSubChan, "logisticExchange").consume();
+    const exchange = "logisticExchange";
 
+    new LocationTypeCheckConsumer(rabbitmqSubChan, exchange).consume();
+    new LocationTypeCreatedConsumer(rabbitmqSubChan, exchange).consume();
+    new LocationTypeUpdatedConsumer(rabbitmqSubChan, exchange).consume();
+    new LocationTypeDeletedConsumer(rabbitmqSubChan, exchange).consume();
+    new LocationBlockageCreatedConsumer(rabbitmqSubChan, exchange).consume();
+    new LocationBlockageCheckConsumer(rabbitmqSubChan, exchange).consume();
+    new LocationBlockageUpdatedConsumer(rabbitmqSubChan, exchange).consume();
+    new LocationBlockageDeletedConsumer(rabbitmqSubChan, exchange).consume();
 
     if (!process.env.REDIS_HOST) {
       throw new Error("Redis host must be set");
