@@ -15,12 +15,12 @@ specificLocationBlockageRouter.route("/")
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", blockageUpdateSchema),
-    errorCatcher(locationBlockageController.update)
+    errorCatcher(locationBlockageController.requestUpdate)
   )
   .delete(
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
-    errorCatcher(locationBlockageController.delete)
+    errorCatcher(locationBlockageController.requestDeletion)
   );
 
 export default specificLocationBlockageRouter;
