@@ -18,7 +18,7 @@ locationRouter.route("/")
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", locationCreateSchema),
-    errorCatcher(locationController.create)    
+    errorCatcher(locationController.requestCreation)    
   );
 
 locationRouter.use("/type", locationTypeRouter);
