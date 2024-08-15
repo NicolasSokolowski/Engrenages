@@ -1,11 +1,22 @@
-### Create a product
-POST http://localhost:3000/api/product
+### Create a blockage code
+POST http://localhost:3000/api/product/blockage
 Content-Type: application/json
 
 {
-  "title": "New product 126",
+  "name": "PNT",
+  "description": "Blockage description"
+}
+
+### Create a product
+POST http://localhost:3000/api/product
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMxMjU0NTUsImV4cCI6MTcyMzIxMTg1NX0.A7uu6_iSnz2iR46w-xeVFsyvR6WaaTk9oyHeLjBFrdY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMxMjU0NTUsImV4cCI6MTcyMzczMDI1NX0.zhWPi6QMEG1e5i126aRZcT37dXcTOurbJ2gwJ5gg7vQ
+Content-Type: application/json
+
+{
+  "title": "New product 122",
   "description": "product description",
-  "ean": "1235689256223",
+  "ean": "1235689256323",
   "length": 12.23,
   "width": 10.12,
   "height": 8.50,
@@ -29,18 +40,18 @@ Content-Type: application/json
 }
 
 ### Update a product with only one entree
-PATCH http://localhost:3000/api/product/1
+PATCH http://localhost:3000/api/product/2
 Content-Type: application/json
 
 {
-  "title": " one single product"
+  "title": "one product"
 }
 
 ### Delete a product
 DELETE http://localhost:3000/api/product/1
 
 ### Find a product by ID
-GET http://localhost:3000/api/product/4
+GET http://localhost:3000/api/product/2
 
 ### Find all products
 GET http://localhost:3000/api/product
@@ -52,3 +63,162 @@ Content-Type: application/json
 {
   "title": 4
 }
+
+### Create a new role
+POST http://engrenages.com/api/user/role
+Content-Type: application/json
+
+{
+  "name": "manager"
+}
+
+### Create a new user
+POST http://engrenages.com/api/user
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg2OTgsImV4cCI6MTcyMzMyNTA5OH0.vAQTKClgUstiO-tyCkxhrtZcq9C8meDnTUi29f5J27s
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg2OTgsImV4cCI6MTcyMzg0MzQ5OH0.zzrlFfBcm6VgZjtvarxaI7vEj6VvTgDROkgUXEJnJAM
+Content-Type: application/json
+
+{
+  "first_name": "Zanghief",
+  "last_name": "Brutal",
+  "email": "admin@love.com",
+  "password": "password",
+  "role_name": "admin"
+}
+
+### Updates a user's password
+PATCH http://localhost:3000/api/user/1/updatepassword
+Content-Type: application/json
+
+{
+  "currentPassword": "gfridfhgoer434",
+  "newPassword": "dfgdfgreg"
+}
+
+### Sign in with an existing user
+POST http://engrenages.com/api/auth/signin
+Content-Type: application/json
+
+{
+  "email": "admin@test.com",
+  "password": "password"
+}
+
+### Get current user
+GET http://engrenages.com/api/auth/currentuser
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjA5OTQ0MzcsImV4cCI6MTcyMTA4MDgzN30.aGJXB6PLkK1JygSQBsYAXRxmoZ7NsEVTohEE0Z12lRc
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjA5OTQ0MzcsImV4cCI6MTcyMTU5OTIzN30.U4oNNOYrGw7x0AUmF6RweZWDbfyYadRZm59Q0Px3mJA
+
+
+### Create a location type
+POST http://engrenages.com/api/location/type
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
+Content-Type: application/json
+
+{
+  "name": "R01",
+  "description": "80*120*190 STD",
+  "length": 120,
+  "width": 80,
+  "height": 190
+}
+
+### Get location types
+GET http://localhost:3000/api/location/type
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjAyODI5MX0.Ompv3SvikpFKX5gY_XdpZ5ozGu2Z_O9W9kGdCJ5RZb0
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjU0NjY5MX0.QikQw7DGAU6uFML7KwD2ZaBk2Pe_ro2Mm0m9LUWxFGk
+
+### Update a location type
+PATCH http://engrenages.com/api/location/type/1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
+Content-Type: application/json
+
+{
+  "name": "LIA"
+}
+
+### Delete a location type
+DELETE http://engrenages.com/api/location/type/1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
+
+### Get a single location type
+GET http://localhost:3000/api/location/type/1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjAyODI5MX0.Ompv3SvikpFKX5gY_XdpZ5ozGu2Z_O9W9kGdCJ5RZb0
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjU0NjY5MX0.QikQw7DGAU6uFML7KwD2ZaBk2Pe_ro2Mm0m9LUWxFGk
+
+### Create a location
+POST http://engrenages.com/api/location
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
+Content-Type: application/json
+
+{
+  "zone": "E",
+  "alley": "002",
+  "position": "0001",
+  "lvl": "A",
+  "lvl_position": "01",
+  "location_type_name": "R01"
+}
+
+### Update a location
+PATCH http://engrenages.com/api/location/2
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
+Content-Type: application/json
+
+{
+  "alley": "XAX",
+  "lvl": "X",
+  "position": "1337"
+}
+
+### Get a location
+GET http://localhost:3000/api/location/1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjAyODI5MX0.Ompv3SvikpFKX5gY_XdpZ5ozGu2Z_O9W9kGdCJ5RZb0
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjU0NjY5MX0.QikQw7DGAU6uFML7KwD2ZaBk2Pe_ro2Mm0m9LUWxFGk
+
+### Delete a location
+DELETE http://engrenages.com/api/location/1
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
+
+### Create a location blockage
+POST http://engrenages.com/api/location/blockage
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
+Content-Type: application/json
+
+{
+  "name": "ABT",
+  "description": "Lisse abîmée"
+}
+
+### Get location blockages
+GET http://localhost:3000/api/location/blockage
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjAyODI5MX0.Ompv3SvikpFKX5gY_XdpZ5ozGu2Z_O9W9kGdCJ5RZb0
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjU0NjY5MX0.QikQw7DGAU6uFML7KwD2ZaBk2Pe_ro2Mm0m9LUWxFGk
+
+### Update a location blockage
+PATCH http://engrenages.com/api/location/blockage/3
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
+Content-Type: application/json
+
+{
+  "name": "BLO",
+  "description": "Bloqué"
+}
+
+### Get a location blockage
+GET http://localhost:3000/api/location/blockage/2
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjAyODI5MX0.Ompv3SvikpFKX5gY_XdpZ5ozGu2Z_O9W9kGdCJ5RZb0
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjE5NDE4OTEsImV4cCI6MTcyMjU0NjY5MX0.QikQw7DGAU6uFML7KwD2ZaBk2Pe_ro2Mm0m9LUWxFGk
+
+### Delete a location blockage
+DELETE http://engrenages.com/api/location/blockage/2
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzMyNTIwOX0.bbPnaitytbEjXle8G1ve1rvS6-QdnTCjWsKEjg3SNFY
+x-refresh-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MjMyMzg4MDksImV4cCI6MTcyMzg0MzYwOX0.zykgkNVuAIXvnJYR7Wxzc6IUh4vJWbQo5XfL59FKUJ4
