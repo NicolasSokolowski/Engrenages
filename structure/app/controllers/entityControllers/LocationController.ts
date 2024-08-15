@@ -5,6 +5,7 @@ import { LocationDatamapperRequirements } from "../../datamappers/interfaces/Loc
 import { LocationCheckPublisher } from "../../../events/location/LocationCheckPublisher";
 import { LocationCreatedPublisher } from "../../../events/location/LocationCreatedPublisher";
 import { LocationUpdatedPublisher } from "../../../events/location/LocationUpdatedPublisher";
+import { LocationDeletedPublisher } from "../../../events/location/LocationDeletedPublisher";
 
 export class LocationController extends CoreController<LocationControllerRequirements, LocationDatamapperRequirements> {
   constructor(datamapper: LocationControllerRequirements["datamapper"]) {
@@ -136,7 +137,7 @@ export class LocationController extends CoreController<LocationControllerRequire
     if (!locationToUpdate) {
       throw new NotFoundError();
     }
-    
+
     zone ? zone : zone = locationToUpdate.zone;
     alley ? alley : alley = locationToUpdate.alley;
     position ? position : position = locationToUpdate.position;
@@ -206,5 +207,61 @@ export class LocationController extends CoreController<LocationControllerRequire
         throw new Error("The check failed, please contact an administrator.");
       }
     });
+  }
+
+  requestDeletion = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id, 10);
+
+    const itemToDelete = await this.datamapper.findByPk(id);
+
+    if (!itemToDelete) {
+      throw new NotFoundError();
+    }
+
+    if (!process.env.REDIS_HOST) {
+      throw new Error("Redis host must be set");
+    }
+    
+    const { redis, redisSub } = await redisConnection();
+    const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
+    const rabbitmqPubChan = rabbitMQ.getPubChannel();
+    
+    let eventID = makeRandomString(10) + `${itemToDelete.name}`;
+    await redis.createTransaction({ eventID, expectedResponses: 1 });
+
+    const data = {
+      ...itemToDelete,
+      eventID
+    }
+
+    new LocationCheckPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
+
+    await redisSub.subscribe(eventID, async (successful) => {
+      if (successful) {
+        console.log("Data checked successfuly, proceeding to location type deletion");
+        const deletedItem = await this.datamapper.delete(id);
+        eventID = makeRandomString(10) + `${id}`;
+
+        const data = {
+          ...deletedItem,
+          eventID
+        }
+
+        await redis.createTransaction({ eventID, expectedResponses: 1 });
+
+        new LocationDeletedPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
+
+        await redisSub.subscribe(eventID, async (isSuccessful) => {
+          if (isSuccessful) {
+            console.log("Location deleted successfully");
+            res.status(200).send(deletedItem);
+          } else {
+            throw new Error("A service failed location deletion");
+          }
+        })
+      } else {
+        throw new Error("The check failed, please contact an administrator.");
+      }
+    })
   }
 }

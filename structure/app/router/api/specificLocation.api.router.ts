@@ -20,7 +20,7 @@ specificLocationRouter.route("/")
   .delete(
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
-    errorCatcher(locationController.delete)    
+    errorCatcher(locationController.requestDeletion)    
   );
 
 export default specificLocationRouter;
