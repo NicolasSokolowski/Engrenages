@@ -8,6 +8,5 @@ export interface EntityControllerRequirements {
   getAll(): Promise<void>;
   getBySpecificField(): Promise<EntityDatamapperRequirements["data"]>;
   create(): Promise<void>;
-  update(): Promise<void>;
   delete(): Promise<void>;
 }

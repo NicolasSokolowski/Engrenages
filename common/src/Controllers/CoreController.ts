@@ -6,7 +6,6 @@ import { EntityControllerRequirements } from "./EntityControllerRequirements";
 import { EntityDatamapperRequirements } from "../datamappers/EntityDatamapperRequirements";
 
 export abstract class CoreController<T extends EntityControllerRequirements, Y extends EntityDatamapperRequirements> {
-  abstract update(req: Request, res: Response): Promise<void>;
 
   constructor(public datamapper: T["datamapper"]) {}
 

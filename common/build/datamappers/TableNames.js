@@ -6,7 +6,7 @@ var TableNames;
     TableNames["User"] = "user";
     TableNames["Role"] = "role";
     TableNames["Product"] = "product";
-    TableNames["ProductBlockage"] = "product_blockage_code";
+    TableNames["ProductBlockage"] = "product_blockage_type";
     TableNames["Location"] = "location";
     TableNames["LocationType"] = "location_type";
     TableNames["LocationBlockageType"] = "location_blockage_type";
