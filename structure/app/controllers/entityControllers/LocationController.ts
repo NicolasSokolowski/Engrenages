@@ -4,6 +4,7 @@ import { LocationControllerRequirements } from "../interfaces/LocationController
 import { LocationDatamapperRequirements } from "../../datamappers/interfaces/LocationDatamapperRequirements";
 import { LocationCheckPublisher } from "../../../events/location/LocationCheckPublisher";
 import { LocationCreatedPublisher } from "../../../events/location/LocationCreatedPublisher";
+import { LocationUpdatedPublisher } from "../../../events/location/LocationUpdatedPublisher";
 
 export class LocationController extends CoreController<LocationControllerRequirements, LocationDatamapperRequirements> {
   constructor(datamapper: LocationControllerRequirements["datamapper"]) {
@@ -112,6 +113,93 @@ export class LocationController extends CoreController<LocationControllerRequire
             res.send(createdItem);
           } else {
             throw new Error("A service failed location creation");
+          }
+        })
+      } else {
+        throw new Error("The check failed, please contact an administrator.");
+      }
+    });
+  }
+
+  requestUpdate = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id, 10);
+    let data = req.body;
+
+    if (!id) {
+      throw new BadRequestError("This id doesn't exist");
+    }
+
+    let { zone, alley, position, lvl, lvl_position, location_type_name, location_blockage_name }: Partial<LocationDatamapperRequirements["data"]> = data;
+
+    const locationToUpdate = await this.datamapper.findByPk(id);
+
+    if (!locationToUpdate) {
+      throw new NotFoundError();
+    }
+    
+    zone ? zone : zone = locationToUpdate.zone;
+    alley ? alley : alley = locationToUpdate.alley;
+    position ? position : position = locationToUpdate.position;
+    lvl ? lvl : lvl = locationToUpdate.lvl;
+    lvl_position ? lvl_position : lvl_position = locationToUpdate.lvl_position;
+    location_type_name ? location_type_name : location_type_name = locationToUpdate.location_type_name;
+    location_blockage_name ? location_blockage_name : location_blockage_name = locationToUpdate.location_blockage_name;
+
+    const newLocation = `${zone}-${alley}-${position}-${lvl}-${lvl_position}`;
+
+    const checkIfItemExists = await this.datamapper.findBySpecificField("location", newLocation);
+
+    if (checkIfItemExists) {
+      throw new BadRequestError(`Location type ${newLocation} already exists.`)
+    }
+
+    if (!process.env.REDIS_HOST) {
+      throw new Error("Redis host must be set");
+    }
+    
+    const { redis, redisSub } = await redisConnection();
+    const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
+    const rabbitmqPubChan = rabbitMQ.getPubChannel();
+    
+    let eventID = makeRandomString(10) + `${newLocation}`;
+    await redis.createTransaction({ eventID, expectedResponses: 1 });
+
+    data = {
+      id,
+      eventID,
+      zone,
+      alley,
+      position,
+      lvl,
+      lvl_position,
+      newLocation,
+      location_blockage_name,
+      location_type_name
+    }
+
+    new LocationCheckPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
+
+    await redisSub.subscribe(eventID, async (isSuccessful) => {
+      if (isSuccessful) {
+        console.log("Data checked successfuly, proceeding to location update");
+        let updatedItem = await this.datamapper.update(data, locationToUpdate.version);
+        eventID = makeRandomString(10) + `${newLocation}`;
+
+        await redis.createTransaction({ eventID, expectedResponses: 1 });
+        
+        data = {
+          ...updatedItem,
+          eventID
+        }
+
+        new LocationUpdatedPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
+
+        await redisSub.subscribe(eventID, async (isSuccessful) => {
+          if (isSuccessful) {
+            console.log("Location updated successfully");
+            res.send(updatedItem);
+          } else {
+            throw new Error("A service failed location update");
           }
         })
       } else {

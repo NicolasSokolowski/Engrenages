@@ -15,7 +15,7 @@ specificLocationRouter.route("/")
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", locationUpdateSchema),
-    errorCatcher(locationController.update)    
+    errorCatcher(locationController.requestUpdate)    
   )
   .delete(
     errorCatcher(requireAuth),
