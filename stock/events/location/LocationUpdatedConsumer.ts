@@ -1,11 +1,11 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
-import { LocationTypeConsumerReq } from "../interfaces/LocationTypeConsumerReq";
+import { LocationConsumerReq } from "../interfaces/LocationConsumerReq";
 import { Channel, ConsumeMessage } from "amqplib";
-import { locationTypeController } from "../../app/controllers/index.controllers";
+import { locationController } from "../../app/controllers/index.controllers";
 
-export class LocationTypeUpdatedConsumer extends CoreConsumer<LocationTypeConsumerReq> {
-  readonly routingKey = RoutingKeys.LocationTypeUpdated;
-  queue = "updateQueue";
+export class LocationUpdatedConsumer extends CoreConsumer<LocationConsumerReq> {
+  readonly routingKey = RoutingKeys.LocationUpdated;
+  queue = "locationUpdatedQueue";
 
   constructor(channel: Channel, exchange: string) {
     super(channel, exchange);
@@ -21,13 +21,13 @@ export class LocationTypeUpdatedConsumer extends CoreConsumer<LocationTypeConsum
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
           const currentVersion = data.version -1;
 
-          const updatedItem = await locationTypeController.datamapper.update(data, currentVersion);
+          const updatedItem = await locationController.datamapper.update(data, currentVersion);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
 
-          console.log("Location type updated successfully");
+          console.log("Location updated successfully");
 
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();

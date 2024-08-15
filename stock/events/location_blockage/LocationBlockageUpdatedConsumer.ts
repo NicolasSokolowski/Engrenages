@@ -34,7 +34,7 @@ export class LocationBlockageUpdatedConsumer extends CoreConsumer<LocationBlocka
 
           if (updatedItem) {
             await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (!updatedItem ) {
+          } else if (updatedItem === undefined) {
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 
