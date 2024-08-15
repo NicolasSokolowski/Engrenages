@@ -2,8 +2,8 @@
 
 BEGIN;
 
-DROP FUNCTION create_product_blockage_code(json);
-DROP FUNCTION update_product_blockage_code(json, version INT);
-DROP FUNCTION delete_product_blockage_code(INT);
+DROP FUNCTION create_product_blockage_type(json);
+DROP FUNCTION update_product_blockage_type(json, version INT);
+DROP FUNCTION delete_product_blockage_type(INT);
 
 COMMIT;

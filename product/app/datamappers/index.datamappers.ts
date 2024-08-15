@@ -1,4 +1,4 @@
-import { BlockageDatamapper } from "./entityDatamappers/BlockageDatamapper";
+import { BlockageDatamapper } from "./entityDatamappers/ProductBlockageDatamapper";
 import { ProductDatamapper } from "./entityDatamappers/ProductDatamapper";
 
 const productDatamapper = new ProductDatamapper();

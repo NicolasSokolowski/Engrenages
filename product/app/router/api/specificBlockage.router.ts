@@ -1,6 +1,6 @@
 import { checkPermissions, errorCatcher, requireAuth, validateRequest } from "@zencorp/engrenages";
 import express from "express";
-import { blockageController } from "../../controllers/index.controllers";
+import { productBlockageController } from "../../controllers/index.controllers";
 import { blockageCreateSchema } from "../../validation/index.shemas";
 
 const specificBlockageRouter = express.Router({ mergeParams: true });
@@ -8,19 +8,19 @@ const specificBlockageRouter = express.Router({ mergeParams: true });
 specificBlockageRouter.route("/")
   .get(
     errorCatcher(requireAuth),
-    errorCatcher(checkPermissions(["operator", "admin"])),
-    errorCatcher(blockageController.getByPk)
+    errorCatcher(checkPermissions(["admin"])),
+    errorCatcher(productBlockageController.getByPk)
   )
   .patch(
     errorCatcher(requireAuth),
-    errorCatcher(checkPermissions(["operator", "admin"])),
+    errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", blockageCreateSchema),
-    errorCatcher(blockageController.update)
+    errorCatcher(productBlockageController.requestUpdate)
   )
   .delete(
     errorCatcher(requireAuth),
-    errorCatcher(checkPermissions(["operator", "admin"])),
-    errorCatcher(blockageController.delete)
+    errorCatcher(checkPermissions(["admin"])),
+    errorCatcher(productBlockageController.requestDeletion)
   );
 
 export default specificBlockageRouter;

@@ -1,8 +1,8 @@
 import { ProductController} from "./entityControllers/ProductController";
 import { blockageDatamapper, productDatamapper } from "../datamappers/index.datamappers";
-import { BlockageController } from "./entityControllers/BlockageController";
+import { ProductBlockageController } from "./entityControllers/ProductBlockageController";
 
 const productController = new ProductController(productDatamapper);
-const blockageController = new BlockageController(blockageDatamapper);
+const productBlockageController = new ProductBlockageController(blockageDatamapper);
 
-export { productController, blockageController };
+export { productController, productBlockageController };

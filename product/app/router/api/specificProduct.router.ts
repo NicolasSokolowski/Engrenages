@@ -8,18 +8,18 @@ const specificProductRouter = express.Router({ mergeParams: true });
 specificProductRouter.route("/")
   .get(
     errorCatcher(requireAuth),
-    errorCatcher(checkPermissions(["operator", "admin"])),
+    errorCatcher(checkPermissions(["admin"])),
     errorCatcher(productController.getByPk)
   )
   .patch(
     errorCatcher(requireAuth),
-    errorCatcher(checkPermissions(["operator", "admin"])),
+    errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", productUpdateSchema),
     errorCatcher(productController.update)
   )
   .delete(
     errorCatcher(requireAuth),
-    errorCatcher(checkPermissions(["operator", "admin"])),
+    errorCatcher(checkPermissions(["admin"])),
     errorCatcher(productController.delete)
   );
 

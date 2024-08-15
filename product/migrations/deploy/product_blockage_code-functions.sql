@@ -2,13 +2,13 @@
 
 BEGIN;
 
-CREATE FUNCTION create_product_blockage_code(json) RETURNS TABLE (
+CREATE FUNCTION create_product_blockage_type(json) RETURNS TABLE (
   id INT,
   name VARCHAR(3),
   description VARCHAR(100)
 ) AS $$
 
-  INSERT INTO "product_blockage_code"
+  INSERT INTO "product_blockage_type"
   (
     "name",
     "description"
@@ -20,7 +20,7 @@ CREATE FUNCTION create_product_blockage_code(json) RETURNS TABLE (
 
 $$ LANGUAGE SQL STRICT;
 
-CREATE FUNCTION update_product_blockage_code(json, version INT) RETURNS TABLE (
+CREATE FUNCTION update_product_blockage_type(json, version INT) RETURNS TABLE (
     id INT,
     name VARCHAR(3),
     description VARCHAR(100),
@@ -28,7 +28,7 @@ CREATE FUNCTION update_product_blockage_code(json, version INT) RETURNS TABLE (
     updated_at TIMESTAMPTZ
 ) AS $$
 
-  UPDATE "product_blockage_code" SET (
+  UPDATE "product_blockage_type" SET (
     "name",
     "description",
     "version",
@@ -44,9 +44,9 @@ CREATE FUNCTION update_product_blockage_code(json, version INT) RETURNS TABLE (
 
 $$ LANGUAGE SQL STRICT;
 
-CREATE FUNCTION delete_product_blockage_code(INT) RETURNS "product_blockage_code" AS $$
+CREATE FUNCTION delete_product_blockage_type(INT) RETURNS "product_blockage_type" AS $$
 
-  DELETE FROM "product_blockage_code" WHERE "id" = $1
+  DELETE FROM "product_blockage_type" WHERE "id" = $1
   RETURNING *;
 
 $$ LANGUAGE SQL STRICT;
