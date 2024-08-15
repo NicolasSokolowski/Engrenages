@@ -2,21 +2,6 @@
 
 BEGIN;
 
-CREATE OR REPLACE FUNCTION insert_location_stock()
-RETURNS TRIGGER AS $$
-BEGIN
-    INSERT INTO stock(location)
-    VALUES (NEW.location);
-
-    RETURN NEW;
-END;
-$$ LANGUAGE PLPGSQL STRICT;
-
-CREATE TRIGGER trigger_insert_location
-AFTER INSERT ON location
-FOR EACH ROW
-EXECUTE FUNCTION insert_location_stock();
-
 CREATE FUNCTION update_location_field()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -35,22 +20,20 @@ WHEN (OLD.zone IS DISTINCT FROM NEW.zone OR
       OLD.lvl_position IS DISTINCT FROM NEW.lvl_position)
 EXECUTE FUNCTION update_location_field();
 
-CREATE OR REPLACE FUNCTION delete_location_stock()
+CREATE OR REPLACE FUNCTION delete_location_check()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF OLD.ean IS NULL THEN
-        DELETE FROM stock WHERE location = OLD.location;
-        RETURN OLD;
-    ELSE
-        RAISE EXCEPTION 'Suppression annulée : emplacement occupé par %', OLD.ean;
+    IF EXISTS (SELECT 1 FROM location WHERE location = OLD.location AND ean IS NOT NULL) THEN
+        RAISE EXCEPTION 'Suppression annulée : emplacement occupé';
     END IF;
+    RETURN OLD;
 END;
-$$ LANGUAGE PLPGSQL STRICT;
+$$ LANGUAGE PLPGSQL;
 
 CREATE TRIGGER trigger_delete_location
 BEFORE DELETE ON location
 FOR EACH ROW
-EXECUTE FUNCTION delete_location_stock();
+EXECUTE FUNCTION delete_location_check();
 
 ----------------
 

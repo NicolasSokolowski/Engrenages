@@ -5,7 +5,7 @@ import { locationTypeController } from "../../app/controllers/index.controllers"
 
 export class LocationTypeDeletedConsumer extends CoreConsumer<LocationTypeConsumerReq> {
   readonly routingKey = RoutingKeys.LocationTypeDeleted;
-  queue = "deleteQueue";
+  queue = "typeDeleteQueue";
 
   constructor(channel: Channel, exchange: string) {
     super(channel, exchange);

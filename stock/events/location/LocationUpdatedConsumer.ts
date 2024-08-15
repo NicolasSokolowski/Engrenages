@@ -5,7 +5,7 @@ import { locationController } from "../../app/controllers/index.controllers";
 
 export class LocationUpdatedConsumer extends CoreConsumer<LocationConsumerReq> {
   readonly routingKey = RoutingKeys.LocationUpdated;
-  queue = "locationUpdatedQueue";
+  queue = "locationUpdateQueue";
 
   constructor(channel: Channel, exchange: string) {
     super(channel, exchange);

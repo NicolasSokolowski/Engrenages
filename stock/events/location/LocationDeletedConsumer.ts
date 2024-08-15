@@ -1,15 +1,11 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
-import { LocationTypeConsumerReq } from "../interfaces/LocationTypeConsumerReq";
-import { Channel, ConsumeMessage } from "amqplib";
-import { locationTypeController } from "../../app/controllers/index.controllers";
+import { LocationConsumerReq } from "../interfaces/LocationConsumerReq";
+import { locationController } from "../../app/controllers/index.controllers";
+import { ConsumeMessage } from "amqplib";
 
-export class LocationTypeUpdatedConsumer extends CoreConsumer<LocationTypeConsumerReq> {
-  readonly routingKey = RoutingKeys.LocationTypeUpdated;
-  queue = "typeUpdateQueue";
-
-  constructor(channel: Channel, exchange: string) {
-    super(channel, exchange);
-  }
+export class LocationDeletedConsumer extends CoreConsumer<LocationConsumerReq> {
+  readonly routingKey = RoutingKeys.LocationDeleted;
+  queue = "locationDeleteQueue";
 
   async consume(): Promise<void> {
     const queue = await this.setupQueue();
@@ -19,22 +15,21 @@ export class LocationTypeUpdatedConsumer extends CoreConsumer<LocationTypeConsum
         try {
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
-          const currentVersion = data.version -1;
 
-          const updatedItem = await locationTypeController.datamapper.update(data, currentVersion);
+          const deletedItem = await locationController.datamapper.delete(data.id);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
 
-          console.log("Location type updated successfully");
+          console.log("Location blockage deleted successfully");
 
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();
 
-          if (updatedItem) {
+          if (deletedItem) {
             await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (updatedItem === undefined) {
+          } else if (!deletedItem ) {
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 

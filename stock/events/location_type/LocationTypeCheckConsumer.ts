@@ -5,7 +5,7 @@ import { LocationTypeConsumerReq } from "../interfaces/LocationTypeConsumerReq";
 
 export class LocationTypeCheckConsumer extends CoreConsumer<LocationTypeConsumerReq> {
   readonly routingKey = RoutingKeys.LocationTypeCheck;
-  queue = "checkQueue";
+  queue = "typeCheckQueue";
 
   constructor(channel: Channel, exchange: string) {
     super(channel, exchange);
