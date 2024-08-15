@@ -59,7 +59,7 @@ export class LocationBlockageController extends CoreController<LocationBlockageC
     const checkIfItemExists = await this.datamapper.findBySpecificField("name", data.name);
 
     if (checkIfItemExists) {
-      throw new BadRequestError(`Location type ${data.name} already exists.`)
+      throw new BadRequestError(`Location blockage ${data.name} already exists.`)
     }
 
     if (!process.env.REDIS_HOST) {
