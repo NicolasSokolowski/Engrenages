@@ -3,17 +3,32 @@ kind: Ingress
 metadata:
   name: ingress-srv
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
-  - http:
-      paths:
-      - path: /api/product/?(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: product-srv
-            port:
-              number: 80
+    - host: engrenages.com
+      http:
+        paths:
+          - path: /api/(user|auth)/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth-srv
+                port:
+                  number: 3000
+          - path: /api/product/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: product-srv
+                port:
+                  number: 3000
+          - path: /api/location/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: structure-srv
+                port:
+                  number: 3000
+                  

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product-depl
+  name: structure-depl
   labels:
-    app: product
+    app: structure
 spec:
   replicas: 1
   selector: 
     matchLabels:
-      app: product
+      app: structure
   template:
     metadata:
       labels:
-        app: product
+        app: structure
     spec:
       containers:
-        - name: product
-          image: sokolozen/product
+        - name: structure
+          image: sokolozen/structure
           ports:
           - containerPort: 3000
           env:
@@ -34,12 +34,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
-                  key: postgres-productdb
+                  key: postgres-structuredb
             - name: POSTGRES_TEST_DATABASE
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
-                  key: postgres-test-productdb
+                  key: postgres-test-structuredb
             - name: POSTGRES_PORT
               value: "5432"
             - name: POSTGRES_HOST
@@ -67,10 +67,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: product-srv
+  name: structure-srv
 spec:
   selector:
-    app: product
+    app: structure
   ports:
     - protocol: TCP
       port: 3000
