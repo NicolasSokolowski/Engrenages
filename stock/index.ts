@@ -13,6 +13,10 @@ import { LocationCheckConsumer } from "./events/location/LocationCheckConsumer";
 import { LocationCreatedConsumer } from "./events/location/LocationCreatedConsumer";
 import { LocationUpdatedConsumer } from "./events/location/LocationUpdatedConsumer";
 import { LocationDeletedConsumer } from "./events/location/LocationDeletedConsumer";
+import { ProductBlockageCheckConsumer } from "./events/product_blockage/ProductBlockageCheckConsumer";
+import { ProductBlockageCreatedConsumer } from "./events/product_blockage/ProductBlockageCreatedConsumer";
+import { ProductBlockageUpdatedConsumer } from "./events/product_blockage/ProductBlockageUpdatedConsumer";
+import { ProductBlockageDeletedConsumer } from "./events/product_blockage/ProductBlockageDeletedConsumer";
 
 const start = async () => {
   pool.query('SELECT 1;', (err: Error, res: any) => {
@@ -43,6 +47,10 @@ const start = async () => {
     new LocationCreatedConsumer(rabbitmqSubChan, exchange).consume();
     new LocationUpdatedConsumer(rabbitmqSubChan, exchange).consume();
     new LocationDeletedConsumer(rabbitmqSubChan, exchange).consume();
+    new ProductBlockageCheckConsumer(rabbitmqSubChan, exchange).consume();
+    new ProductBlockageCreatedConsumer(rabbitmqSubChan, exchange).consume();
+    new ProductBlockageUpdatedConsumer(rabbitmqSubChan, exchange).consume();
+    new ProductBlockageDeletedConsumer(rabbitmqSubChan, exchange).consume();
 
     if (!process.env.REDIS_HOST) {
       throw new Error("Redis host must be set");

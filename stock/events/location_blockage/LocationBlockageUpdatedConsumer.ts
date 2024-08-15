@@ -1,5 +1,5 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
-import { LocationBlockageConsumerReq } from "../interfaces/LocationBlockageConsumerReq";
+import { LocationBlockageConsumerReq } from "../interfaces/location/LocationBlockageConsumerReq";
 import { Channel, ConsumeMessage } from "amqplib";
 import { locationBlockageController } from "../../app/controllers/index.controllers";
 

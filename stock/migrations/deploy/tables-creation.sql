@@ -52,7 +52,7 @@ CREATE TABLE "location" (
   "lvl_position" CHAR(2) NOT NULL,
   "location" CHAR(15) NOT NULL UNIQUE,
   "location_type_name" VARCHAR(5) NOT NULL REFERENCES location_type("name") ON UPDATE CASCADE ON DELETE CASCADE,
-  "location_blockage_name" CHAR(3) DEFAULT NULL REFERENCES location_blockage_type("name"),
+  "location_blockage_name" CHAR(3) DEFAULT NULL REFERENCES location_blockage_type("name") ON UPDATE CASCADE ON DELETE CASCADE,
   "ean" CHAR(13) DEFAULT NULL REFERENCES product("ean"),
   "quantity" INT DEFAULT NULL,
   "version" INT DEFAULT 0,

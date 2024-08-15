@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { BadRequestError, CoreController, DatabaseConnectionError, NotFoundError } from "@zencorp/engrenages";
-import { BlockageControllerRequirements } from "../interfaces/BlockageControllerRequirements";
-import { BlockageDatamapperRequirements } from "../../datamappers/interfaces/BlockageDatamapperRequirements";
+import { ProductBlockageControllerRequirements } from "../interfaces/ProductBlockageControllerRequirements";
+import { ProductBlockageDatamapperRequirements } from "../../datamappers/interfaces/ProductBlockageDatamapperRequirements";
 
-export class BlockageController extends CoreController<BlockageControllerRequirements, BlockageDatamapperRequirements> {
-  constructor(datamapper: BlockageControllerRequirements["datamapper"]) {
+export class ProductBlockageController extends CoreController<ProductBlockageControllerRequirements, ProductBlockageDatamapperRequirements> {
+  constructor(datamapper: ProductBlockageControllerRequirements["datamapper"]) {
     super(datamapper);
 
     this.datamapper = datamapper;
@@ -17,7 +17,7 @@ export class BlockageController extends CoreController<BlockageControllerRequire
       throw new BadRequestError("This id doesn't exist");
     }
 
-    let { name }: Partial<BlockageDatamapperRequirements["data"]> = req.body;
+    let { name }: Partial<ProductBlockageDatamapperRequirements["data"]> = req.body;
 
     const productToUpdate = await this.datamapper.findByPk(id);
 

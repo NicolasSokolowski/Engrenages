@@ -1,12 +1,12 @@
 import { ProductController} from "./entityControllers/ProductController";
-import { blockageDatamapper, locationBlockageDatamapper, locationDatamapper, locationTypeDatamapper, productDatamapper } from "../datamappers/index.datamappers";
-import { BlockageController } from "./entityControllers/BlockageController";
+import { productBlockageDatamapper, locationBlockageDatamapper, locationDatamapper, locationTypeDatamapper, productDatamapper } from "../datamappers/index.datamappers";
 import { LocationTypeController } from "./entityControllers/LocationTypeController";
 import { LocationController } from "./entityControllers/LocationController";
 import { LocationBlockageController } from "./entityControllers/LocationBlockageController";
+import { ProductBlockageController } from "./entityControllers/ProductBlockageController";
 
 const productController = new ProductController(productDatamapper);
-const blockageController = new BlockageController(blockageDatamapper);
+const productBlockageController = new ProductBlockageController(productBlockageDatamapper);
 
 const locationTypeController = new LocationTypeController(locationTypeDatamapper);
 const locationController = new LocationController(locationDatamapper);
@@ -14,7 +14,7 @@ const locationBlockageController = new LocationBlockageController(locationBlocka
 
 export { 
   productController, 
-  blockageController,
+  productBlockageController,
   locationTypeController,
   locationController,
   locationBlockageController

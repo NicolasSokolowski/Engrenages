@@ -1,6 +1,6 @@
 import { EntityDatamapperRequirements, TableNames } from "@zencorp/engrenages";
 
-export interface BlockageDatamapperRequirements extends EntityDatamapperRequirements {
+export interface ProductBlockageDatamapperRequirements extends EntityDatamapperRequirements {
   tableName: TableNames.ProductBlockage;
   data: {
     id?: number;
