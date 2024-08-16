@@ -17,7 +17,7 @@ productRouter.route("/")
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", productCreateSchema),
-    errorCatcher(productController.create)
+    errorCatcher(productController.requestCreation)
   );
 
 productRouter.use("/blockage", ProductBlockageRouter);

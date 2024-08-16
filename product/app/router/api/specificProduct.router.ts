@@ -15,12 +15,12 @@ specificProductRouter.route("/")
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
     validateRequest("body", productUpdateSchema),
-    errorCatcher(productController.update)
+    errorCatcher(productController.requestUpdate)
   )
   .delete(
     errorCatcher(requireAuth),
     errorCatcher(checkPermissions(["admin"])),
-    errorCatcher(productController.delete)
+    errorCatcher(productController.requestDeletion)
   );
 
 export default specificProductRouter;

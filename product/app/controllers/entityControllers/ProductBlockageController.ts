@@ -31,7 +31,7 @@ export class ProductBlockageController extends CoreController<BlockageController
     const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
     const rabbitmqPubChan = rabbitMQ.getPubChannel();
     
-    let eventID = makeRandomString(10) + `${data.name}`;
+    let eventID = makeRandomString(10);
     await redis.createTransaction({ eventID, expectedResponses: 1 });
 
     data = {
@@ -45,7 +45,7 @@ export class ProductBlockageController extends CoreController<BlockageController
       if (isSuccessful) {
         console.log("Data checked successfuly, proceeding to product blockage type creation");
         const createdItem = await this.datamapper.insert(data);
-        eventID = makeRandomString(10) + `${data.name}`;
+        eventID = makeRandomString(10);
 
         await redis.createTransaction({ eventID, expectedResponses: 1 });
         
@@ -96,7 +96,7 @@ export class ProductBlockageController extends CoreController<BlockageController
     const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
     const rabbitmqPubChan = rabbitMQ.getPubChannel();
     
-    let eventID = makeRandomString(10) + data[0];
+    let eventID = makeRandomString(10);
     await redis.createTransaction({ eventID, expectedResponses: 1 });
 
     data = {
@@ -111,7 +111,7 @@ export class ProductBlockageController extends CoreController<BlockageController
       if (isSuccessful) {
         console.log("Data checked successfuly, proceeding to product blockage type update");
         let updatedItem = await this.datamapper.update(data, itemToUpdate.version);
-        eventID = makeRandomString(10) + data[0];
+        eventID = makeRandomString(10);
 
         await redis.createTransaction({ eventID, expectedResponses: 1 });
         
@@ -153,7 +153,7 @@ export class ProductBlockageController extends CoreController<BlockageController
     const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
     const rabbitmqPubChan = rabbitMQ.getPubChannel();
     
-    let eventID = makeRandomString(10) + `${itemToDelete.name}`;
+    let eventID = makeRandomString(10);
     await redis.createTransaction({ eventID, expectedResponses: 1 });
 
     const data = {
@@ -167,7 +167,7 @@ export class ProductBlockageController extends CoreController<BlockageController
       if (successful) {
         console.log("Data checked successfuly, proceeding to location type deletion");
         const deletedItem = await this.datamapper.delete(id);
-        eventID = makeRandomString(10) + `${id}`;
+        eventID = makeRandomString(10);
 
         const data = {
           ...deletedItem,
