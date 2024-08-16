@@ -14,45 +14,6 @@ export class LocationBlockageController extends CoreController<LocationBlockageC
     this.datamapper = datamapper;
   }
 
-  update = async (req: Request, res: Response): Promise<void> => {
-    const id: number = parseInt(req.params.id);
-
-    if (!id) {
-      throw new BadRequestError("This id doesn't exist");
-    }
-
-    let { name, description }: Partial<LocationBlockageDatamapperRequirements["data"]> = req.body;
-
-    const locationBlockageToUpdate = await this.datamapper.findByPk(id);
-
-    if (!locationBlockageToUpdate) {
-      throw new NotFoundError();
-    }
-
-    if (locationBlockageToUpdate.version === undefined) {
-      throw new BadRequestError("Version information is missing for the product");
-    }
-    
-    const currentVersion: number = locationBlockageToUpdate.version;
-
-    name ? name : name = locationBlockageToUpdate.name;
-    description ? description : description = locationBlockageToUpdate.description;
-
-    const newDataLocationBlockage = { 
-      ...locationBlockageToUpdate, 
-      name,
-      description
-    };
-
-    const updatedLocationBlockage = await this.datamapper.update(newDataLocationBlockage, currentVersion);
-
-    if (!updatedLocationBlockage) {
-      throw new DatabaseConnectionError();
-    }
-
-    res.status(200).send(updatedLocationBlockage);    
-  }
-
   requestCreation = async (req: Request, res: Response): Promise<void> => {
     let data = req.body;
 
@@ -113,10 +74,12 @@ export class LocationBlockageController extends CoreController<LocationBlockageC
     const id = parseInt(req.params.id, 10);
     let data = req.body;
 
-    const checkIfItemExists = await this.datamapper.findBySpecificField("name", data.name);
+    if (data.name) {
+      const checkIfItemExists = await this.datamapper.findBySpecificField("name", data.name);
 
-    if (checkIfItemExists) {
-      throw new BadRequestError(`Location type ${data.name} already exists.`)
+      if (checkIfItemExists) {
+        throw new BadRequestError(`Location type ${data.name} already exists.`)
+      }
     }
     
     const itemToUpdate = await this.datamapper.findByPk(id);
@@ -133,7 +96,7 @@ export class LocationBlockageController extends CoreController<LocationBlockageC
     const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
     const rabbitmqPubChan = rabbitMQ.getPubChannel();
     
-    let eventID = makeRandomString(10) + `${data.name}`;
+    let eventID = makeRandomString(10);
     await redis.createTransaction({ eventID, expectedResponses: 1 });
 
     data = {
@@ -148,7 +111,7 @@ export class LocationBlockageController extends CoreController<LocationBlockageC
       if (isSuccessful) {
         console.log("Data checked successfuly, proceeding to location type update");
         let updatedItem = await this.datamapper.update(data, itemToUpdate.version);
-        eventID = makeRandomString(10) + `${data.name}`;
+        eventID = makeRandomString(10);
 
         await redis.createTransaction({ eventID, expectedResponses: 1 });
         
