@@ -1,7 +1,7 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
 import { productBlockageController } from "../../app/controllers/index.controllers";
 import { Channel, ConsumeMessage } from "amqplib";
-import { ProductBlockageConsumerReq } from "../interfaces/product/ProductBlockageConsumer";
+import { ProductBlockageConsumerReq } from "../interfaces/product/ProductBlockageConsumerReq";
 
 export class ProductBlockageCheckConsumer extends CoreConsumer<ProductBlockageConsumerReq> {
   readonly routingKey = RoutingKeys.ProductBlockageCheck;

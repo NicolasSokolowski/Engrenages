@@ -1,5 +1,5 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
-import { ProductBlockageConsumerReq } from "../interfaces/product/ProductBlockageConsumer";
+import { ProductBlockageConsumerReq } from "../interfaces/product/ProductBlockageConsumerReq";
 import { productBlockageController } from "../../app/controllers/index.controllers";
 import { Channel, ConsumeMessage } from "amqplib";
 

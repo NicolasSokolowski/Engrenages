@@ -1,11 +1,11 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
-import { ProductBlockageConsumerReq } from "../interfaces/product/ProductBlockageConsumerReq";
-import { productBlockageController } from "../../app/controllers/index.controllers";
+import { ProductConsumerReq } from "../interfaces/product/ProductConsumerConsumerReq";
 import { Channel, ConsumeMessage } from "amqplib";
+import { productController } from "../../app/controllers/index.controllers";
 
-export class ProductBlockageCreatedConsumer extends CoreConsumer<ProductBlockageConsumerReq> {
-  readonly routingKey = RoutingKeys.ProductBlockageCreated;
-  queue = "productBlockageCreateQueue";
+export class ProductCheckConsumer extends CoreConsumer<ProductConsumerReq> {
+  readonly routingKey = RoutingKeys.ProductCheck;
+  queue = "productCheckQueue";
 
   constructor(channel: Channel, exchange: string) {
     super(channel, exchange);
@@ -20,21 +20,19 @@ export class ProductBlockageCreatedConsumer extends CoreConsumer<ProductBlockage
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
 
-          const createdItem = await productBlockageController.datamapper.insert(data);
+          const checkIfExists = await productController.datamapper.findBySpecificField("ean", data.ean);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
 
-          console.log("Product blockage type created successfully");
-
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();
 
-          if (createdItem) {
-            await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (createdItem === undefined) {
+          if (checkIfExists) {
             await redis.addResponse({ eventID: data.eventID, success: false });
+          } else if (checkIfExists === undefined) {
+            await redis.addResponse({ eventID: data.eventID, success: true });
           }
 
           this.channel.ack(msg);

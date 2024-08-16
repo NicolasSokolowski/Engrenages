@@ -1,11 +1,11 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
-import { ProductBlockageConsumerReq } from "../interfaces/product/ProductBlockageConsumerReq";
-import { productBlockageController } from "../../app/controllers/index.controllers";
+import { ProductConsumerReq } from "../interfaces/product/ProductConsumerConsumerReq";
 import { Channel, ConsumeMessage } from "amqplib";
+import { productController } from "../../app/controllers/index.controllers";
 
-export class ProductBlockageCreatedConsumer extends CoreConsumer<ProductBlockageConsumerReq> {
-  readonly routingKey = RoutingKeys.ProductBlockageCreated;
-  queue = "productBlockageCreateQueue";
+export class ProductCreatedConsumer extends CoreConsumer<ProductConsumerReq> {
+  readonly routingKey = RoutingKeys.ProductCreated
+  queue = "productCreateQueue";
 
   constructor(channel: Channel, exchange: string) {
     super(channel, exchange);
@@ -20,13 +20,13 @@ export class ProductBlockageCreatedConsumer extends CoreConsumer<ProductBlockage
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
 
-          const createdItem = await productBlockageController.datamapper.insert(data);
+          const createdItem = await productController.datamapper.insert(data);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
 
-          console.log("Product blockage type created successfully");
+          console.log("Product created successfully");
 
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();

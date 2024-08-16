@@ -17,6 +17,10 @@ import { ProductBlockageCheckConsumer } from "./events/product_blockage/ProductB
 import { ProductBlockageCreatedConsumer } from "./events/product_blockage/ProductBlockageCreatedConsumer";
 import { ProductBlockageUpdatedConsumer } from "./events/product_blockage/ProductBlockageUpdatedConsumer";
 import { ProductBlockageDeletedConsumer } from "./events/product_blockage/ProductBlockageDeletedConsumer";
+import { ProductCheckConsumer } from "./events/product/ProductCheckConsumer";
+import { ProductCreatedConsumer } from "./events/product/ProductCreatedConsumer";
+import { ProductUpdateConsumer } from "./events/product/ProductUpdatedConsumer";
+import { ProductDeletedConsumer } from "./events/product/ProductDeletedConsumer";
 
 const start = async () => {
   pool.query('SELECT 1;', (err: Error, res: any) => {
@@ -51,6 +55,10 @@ const start = async () => {
     new ProductBlockageCreatedConsumer(rabbitmqSubChan, exchange).consume();
     new ProductBlockageUpdatedConsumer(rabbitmqSubChan, exchange).consume();
     new ProductBlockageDeletedConsumer(rabbitmqSubChan, exchange).consume();
+    new ProductCheckConsumer(rabbitmqSubChan, exchange).consume();
+    new ProductCreatedConsumer(rabbitmqSubChan, exchange).consume();
+    new ProductUpdateConsumer(rabbitmqSubChan, exchange).consume();
+    new ProductDeletedConsumer(rabbitmqSubChan, exchange).consume();
 
     if (!process.env.REDIS_HOST) {
       throw new Error("Redis host must be set");
