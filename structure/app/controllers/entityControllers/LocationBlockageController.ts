@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import { BadRequestError, CoreController, DatabaseConnectionError, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
 import { LocationBlockageControllerRequirements } from "../interfaces/LocationBlockageControllerRequirements";
 import { LocationBlockageDatamapperRequirements } from "../../datamappers/interfaces/LocationBlockageDatamapperRequirements";
-import { LocationBlockageCheckPublisher } from "../../../events/location_blockage/LocationBlockageCheckPublisher";
-import { LocationBlockageCreatedPublisher } from "../../../events/location_blockage/LocationBlockageCreatedPublisher";
-import { LocationBlockageUpdatedPublisher } from "../../../events/location_blockage/LocationBlockageUpdatedPublisher";
-import { LocationBlockageDeletedPublisher } from "../../../events/location_blockage/LocationBlockageDeletedPublisher";
+import { LocationBlockageCheckPublisher, LocationBlockageCreatedPublisher, LocationBlockageDeletedPublisher, LocationBlockageUpdatedPublisher } from "../../../events/index.events";
 
 export class LocationBlockageController extends CoreController<LocationBlockageControllerRequirements, LocationBlockageDatamapperRequirements> {
   constructor(datamapper: LocationBlockageControllerRequirements["datamapper"]) {

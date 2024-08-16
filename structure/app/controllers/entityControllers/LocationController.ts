@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import { BadRequestError, CoreController, DatabaseConnectionError, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
 import { LocationControllerRequirements } from "../interfaces/LocationControllerRequirements";
 import { LocationDatamapperRequirements } from "../../datamappers/interfaces/LocationDatamapperRequirements";
-import { LocationCheckPublisher } from "../../../events/location/LocationCheckPublisher";
-import { LocationCreatedPublisher } from "../../../events/location/LocationCreatedPublisher";
-import { LocationUpdatedPublisher } from "../../../events/location/LocationUpdatedPublisher";
-import { LocationDeletedPublisher } from "../../../events/location/LocationDeletedPublisher";
+import { LocationCheckPublisher, LocationCreatedPublisher, LocationDeletedPublisher, LocationUpdatedPublisher } from "../../../events/index.events";
 
 export class LocationController extends CoreController<LocationControllerRequirements, LocationDatamapperRequirements> {
   constructor(datamapper: LocationControllerRequirements["datamapper"]) {
