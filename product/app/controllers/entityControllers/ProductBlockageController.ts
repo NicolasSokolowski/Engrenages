@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import { BadRequestError, CoreController, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
 import { BlockageControllerRequirements } from "../interfaces/BlockageControllerRequirements";
 import { BlockageDatamapperRequirements } from "../../datamappers/interfaces/BlockageDatamapperRequirements";
-import { ProductBlockageCheckPublisher } from "../../../events/product_blockage/ProductBlockageCheckPublisher";
-import { ProductBlockageCreatedPublisher } from "../../../events/product_blockage/ProductBlockageCreatedPublisher";
-import { ProductBlockageUpdatedPublisher } from "../../../events/product_blockage/ProductBlockageUpdatedPublisher";
-import { ProductBlockageDeletedPublisher } from "../../../events/product_blockage/ProductBlockageDeletedPublisher";
+import { ProductBlockageCheckPublisher, ProductBlockageCreatedPublisher, ProductBlockageDeletedPublisher, ProductBlockageUpdatedPublisher } from "../../../events/index.events";
 
 export class ProductBlockageController extends CoreController<BlockageControllerRequirements, BlockageDatamapperRequirements> {
   constructor(datamapper: BlockageControllerRequirements["datamapper"]) {

@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import { BadRequestError, CoreController, DatabaseConnectionError, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
 import { ProductControllerRequirements } from "../interfaces/ProductControllerRequirements";
 import { ProductDatamapperRequirements } from "../../datamappers/interfaces/ProductDatamapperRequirements";
-import { ProductCheckPublisher } from "../../../events/product/ProductCheckPublisher";
-import { ProductCreatedPublisher } from "../../../events/product/ProductCreatedPublisher";
-import { ProductUpdatedPublisher } from "../../../events/product/ProductUpdatedPublisher";
-import { ProductDeletedPublisher } from "../../../events/product/ProductDeletedPublisher";
+import { ProductCheckPublisher, ProductCreatedPublisher, ProductDeletedPublisher, ProductUpdatedPublisher } from "../../../events/index.events";
 
 
 export class ProductController extends CoreController<ProductControllerRequirements, ProductDatamapperRequirements> {
