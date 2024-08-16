@@ -28,9 +28,7 @@ export default Joi.object({
   price: Joi.number().optional().messages({
     "string.base": "The price must be of type number"
   }),
-  product_blockage_name: Joi.string().min(3).max(3).optional().messages({
-    "string.base": "The product blockage code name must be of type string",
-    "string.min": "The product blockage code name must be 3 characters long",
-    "string.max": "The product blockage code name must be 3 characters long",
+  product_blockage_name: Joi.forbidden().messages({
+    "any.unknown": "The product blockage type name can't be updated with the product",
   })
 }).min(1);
