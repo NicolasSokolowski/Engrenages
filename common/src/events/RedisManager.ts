@@ -94,8 +94,9 @@ export class RedisManager {
       local success = tonumber(ARGV[1])
       
       local received = redis.call('HINCRBY', transactionKey, 'receivedResponses', 1)
+      local successful = 0
       if success == 1 then
-        redis.call('HINCRBY', transactionKey, 'successfulResponses', 1)
+        successful = redis.call('HINCRBY', transactionKey, 'successfulResponses', 1)
       end
       
       local expected = tonumber(redis.call('HGET', transactionKey, 'expectedResponses'))
