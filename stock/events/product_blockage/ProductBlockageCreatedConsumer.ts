@@ -20,20 +20,26 @@ export class ProductBlockageCreatedConsumer extends CoreConsumer<ProductBlockage
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
 
-          const createdItem = await productBlockageController.datamapper.insert(data);
+          const checkIfItemExists = await productBlockageController.datamapper.findBySpecificField("name", data.name);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
 
-          console.log("Product blockage type created successfully");
-
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();
 
-          if (createdItem) {
-            await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (createdItem === undefined) {
+          if (!checkIfItemExists) {
+            const createdItem = await productBlockageController.datamapper.insert(data);
+            if (createdItem) {
+              console.log("Product blockage created successfully");
+              await redis.addResponse({ eventID: data.eventID, success: true });
+            } else {
+              console.log("Product blockage creation failed.");
+              await redis.addResponse({ eventID: data.eventID, success: false });
+            }
+          } else {
+            console.log("Product blockage creation failed.");
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 

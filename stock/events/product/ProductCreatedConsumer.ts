@@ -1,5 +1,5 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
-import { ProductConsumerReq } from "../interfaces/product/ProductConsumerConsumerReq";
+import { ProductConsumerReq } from "../interfaces/product/ProductConsumerReq";
 import { Channel, ConsumeMessage } from "amqplib";
 import { productController } from "../../app/controllers/index.controllers";
 
@@ -20,20 +20,27 @@ export class ProductCreatedConsumer extends CoreConsumer<ProductConsumerReq> {
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
 
-          const createdItem = await productController.datamapper.insert(data);
-
+          const checkIfEanExists = await productController.datamapper.findBySpecificField("ean", data.ean);
+          const checkIfTitleExists = await productController.datamapper.findBySpecificField("title", data.title);
+          
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
 
-          console.log("Product created successfully");
-
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();
 
-          if (createdItem) {
-            await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (createdItem === undefined) {
+          if (!checkIfEanExists && !checkIfTitleExists) {
+            const createdItem = await productController.datamapper.insert(data);
+            if (createdItem) {
+              console.log("Product created successfully");
+              await redis.addResponse({ eventID: data.eventID, success: true });
+            } else {
+              console.log("Product creation failed.");
+              await redis.addResponse({ eventID: data.eventID, success: false });
+            }
+          } else {
+            console.log("Product creation failed.");
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 

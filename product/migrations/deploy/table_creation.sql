@@ -21,7 +21,7 @@ CREATE TABLE "product" (
   "height" DECIMAL(15,2) NOT NULL,
   "product_img" TEXT,
   "price" DECIMAL(15,2) NOT NULL,
-  "product_blockage_name" CHAR(3) DEFAULT NULL REFERENCES "product_blockage_type"("name"),
+  "product_blockage_name" CHAR(3) DEFAULT NULL REFERENCES "product_blockage_type"("name") ON UPDATE CASCADE,
   "version" INT DEFAULT 0,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   "updated_at" TIMESTAMPTZ

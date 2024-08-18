@@ -19,22 +19,29 @@ export class LocationBlockageUpdatedConsumer extends CoreConsumer<LocationBlocka
         try {
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
-          const currentVersion = data.version -1;
 
-          const updatedItem = await locationBlockageController.datamapper.update(data, currentVersion);
+          const checkIfExists = await locationBlockageController.datamapper.findByPk(data.id);
+          const checkIfNameIsUsed = await locationBlockageController.datamapper.findBySpecificField("name", data.name);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
-
-          console.log("Location blockage updated successfully");
-
+          
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();
 
-          if (updatedItem) {
-            await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (updatedItem === undefined) {
+          if (checkIfExists && !checkIfNameIsUsed) {
+            const updatedItem = await locationBlockageController.datamapper.update(data, data.version);
+
+            if (updatedItem) {
+              console.log("Location blockage updated successfully");
+              await redis.addResponse({ eventID: data.eventID, success: true });
+            } else {
+              console.log("Location blockage update failed.");
+              await redis.addResponse({ eventID: data.eventID, success: false });
+            }
+          } else {
+            console.log("Location blockage update failed.");
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 

@@ -1,5 +1,5 @@
 import { CoreConsumer, RedisManager, RoutingKeys } from "@zencorp/engrenages";
-import { ProductConsumerReq } from "../interfaces/product/ProductConsumerConsumerReq";
+import { ProductConsumerReq } from "../interfaces/product/ProductConsumerReq";
 import { Channel, ConsumeMessage } from "amqplib";
 import { productController } from "../../app/controllers/index.controllers";
 
@@ -19,22 +19,30 @@ export class ProductUpdateConsumer extends CoreConsumer<ProductConsumerReq> {
         try {
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
-          const currentVersion = data.version -1;
 
-          const updatedItem = await productController.datamapper.update(data, currentVersion);
+          const checkIfExists = await productController.datamapper.findByPk(data.id);
+          const checkIfEanExists = await productController.datamapper.findBySpecificField("ean", data.ean);
+          const checkIfTitleExists = await productController.datamapper.findBySpecificField("title", data.title);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
-
-          console.log("Product updated successfully");
-
+          
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();
 
-          if (updatedItem) {
-            await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (updatedItem === undefined) {
+          if (checkIfExists && !checkIfEanExists && !checkIfTitleExists) {
+            const updatedItem = await productController.datamapper.update(data, data.version);
+
+            if (updatedItem) {
+              console.log("Product updated successfully");
+              await redis.addResponse({ eventID: data.eventID, success: true });
+            } else {
+              console.log("Product update failed.");
+              await redis.addResponse({ eventID: data.eventID, success: false });
+            }
+          } else {
+            console.log("Product update failed.");
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 

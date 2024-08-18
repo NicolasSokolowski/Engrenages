@@ -19,22 +19,29 @@ export class LocationUpdatedConsumer extends CoreConsumer<LocationConsumerReq> {
         try {
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
-          const currentVersion = data.version -1;
 
-          const updatedItem = await locationController.datamapper.update(data, currentVersion);
+          const checkIfExists = await locationController.datamapper.findByPk(data.id);
+          const checkIfLocationExists = await locationController.datamapper.findBySpecificField("location", data.newLocation);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
-
-          console.log("Location updated successfully");
-
+          
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();
 
-          if (updatedItem) {
-            await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (updatedItem === undefined) {
+          if (checkIfExists && !checkIfLocationExists) {
+            const updatedItem = await locationController.datamapper.update(data, data.version);
+
+            if (updatedItem) {
+              console.log("Location updated successfully");
+              await redis.addResponse({ eventID: data.eventID, success: true });
+            } else {
+              console.log("Location update failed.");
+              await redis.addResponse({ eventID: data.eventID, success: false });
+            }
+          } else {
+            console.log("Location update failed.");
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 

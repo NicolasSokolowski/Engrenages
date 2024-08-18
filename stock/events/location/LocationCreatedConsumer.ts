@@ -20,20 +20,26 @@ export class LocationCreatedConsumer extends CoreConsumer<LocationConsumerReq> {
           const data = JSON.parse(msg.content.toString());
           console.log(`Received message from ${this.exchange} using routing key: ${this.routingKey}`);
 
-          const createdItem = await locationController.datamapper.insert(data);
+          const checkIfItemExists = await locationController.datamapper.findBySpecificField("location", data.newLocation);
 
           if (!process.env.REDIS_HOST) {
             throw new Error("Redis host must be set")
           }
 
-          console.log("Location created successfully");
-
           const redis = RedisManager.getCmdInstance(process.env.REDIS_HOST, 6379);
           await redis.connect();
 
-          if (createdItem) {
-            await redis.addResponse({ eventID: data.eventID, success: true });
-          } else if (createdItem === undefined) {
+          if (!checkIfItemExists) {
+            const createdItem = await locationController.datamapper.insert(data);
+            if (createdItem) {
+              console.log("Location created successfully");
+              await redis.addResponse({ eventID: data.eventID, success: true });
+            } else {
+              console.log("Location creation failed.");
+              await redis.addResponse({ eventID: data.eventID, success: false });
+            }
+          } else {
+            console.log("Location creation failed.");
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 

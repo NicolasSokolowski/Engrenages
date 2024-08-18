@@ -45,8 +45,6 @@ CREATE FUNCTION update_location(json, version INT) RETURNS TABLE (
     "position" CHAR(4),
     lvl CHAR(1),
     lvl_position CHAR(2),
-    location_type_name CHAR(5),
-    location_blockage_name CHAR(3),
     version INT,
     updated_at TIMESTAMPTZ
 ) AS $$
@@ -57,8 +55,6 @@ CREATE FUNCTION update_location(json, version INT) RETURNS TABLE (
     "position",
     "lvl",
     "lvl_position",
-    "location_type_name",
-    "location_blockage_name",
     "version",
     "updated_at"
   ) = (
@@ -67,13 +63,11 @@ CREATE FUNCTION update_location(json, version INT) RETURNS TABLE (
     COALESCE(($1->>'position')::CHAR(4), "position"),
     COALESCE(($1->>'lvl')::CHAR(1), "lvl"),
     COALESCE(($1->>'lvl_position')::CHAR(2), "lvl_position"),
-    COALESCE(($1->>'location_type_name')::CHAR(5), "location_type_name"),
-    COALESCE(($1->>'location_blockage_name')::CHAR(3), "location_blockage_name"),
     ("version")::INT +1,
     NOW()
   )
   WHERE "id" = ($1->>'id')::INT AND "version" = ($2)
-  RETURNING id, zone, alley, "position", lvl, lvl_position, location_type_name, location_blockage_name, version, "updated_at"
+  RETURNING id, zone, alley, "position", lvl, lvl_position, version, "updated_at"
 
 $$ LANGUAGE SQL STRICT;
 

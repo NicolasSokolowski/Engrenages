@@ -31,8 +31,8 @@ CREATE TABLE "location" (
   "lvl" CHAR(1) NOT NULL,
   "lvl_position" CHAR(2) NOT NULL,
   "location" CHAR(15) NOT NULL UNIQUE,
-  "location_type_name" VARCHAR(5) NOT NULL REFERENCES location_type("name") ON UPDATE CASCADE ON DELETE CASCADE,
-  "location_blockage_name" CHAR(3) DEFAULT NULL REFERENCES location_blockage_type("name"),
+  "location_type_name" VARCHAR(5) NOT NULL REFERENCES location_type("name") ON UPDATE CASCADE,
+  "location_blockage_name" CHAR(3) DEFAULT NULL REFERENCES location_blockage_type("name") ON UPDATE CASCADE,
   "version" INT DEFAULT 0,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   "updated_at" TIMESTAMPTZ

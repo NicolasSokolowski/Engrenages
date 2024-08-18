@@ -4,8 +4,13 @@ export interface LocationDatamapperRequirements extends EntityDatamapperRequirem
   readonly tableName: TableNames;
   data: {
     id?: number;
-    location: string;
-    location_type_name: string;
+    zone: string;
+    alley: string;
+    position: string;
+    lvl: string;
+    lvl_position: string;
+    location?: string;
+    location_type_name?: string;
     location_blockage_name?: string;
     version?: number;
   }
