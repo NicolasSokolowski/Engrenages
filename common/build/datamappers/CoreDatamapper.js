@@ -36,6 +36,14 @@ class CoreDatamapper {
             const result = yield this.pool.query(`SELECT * FROM delete_${this.tableName}($1)`, [id]);
             return result.rows[0];
         });
+        this.checkIfUsed = (fieldName, value) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.pool.query(`SELECT 1 FROM ${this.tableName} WHERE ${fieldName} = $1`, [value]);
+            return result.rows;
+        });
+        this.checkIfNotNull = (fieldName, id) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.pool.query(`SELECT 1 FROM ${this.tableName} WHERE ${fieldName} IS NOT NULL AND "id" = $1`, [id]);
+            return result.rows;
+        });
     }
 }
 exports.CoreDatamapper = CoreDatamapper;

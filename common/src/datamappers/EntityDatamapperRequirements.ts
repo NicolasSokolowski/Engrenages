@@ -11,4 +11,6 @@ export interface EntityDatamapperRequirements {
   insert(item: EntityDatamapperRequirements["data"]): Promise<EntityDatamapperRequirements["data"]>;
   update(item: EntityDatamapperRequirements["data"], currentVersion: number): Promise<EntityDatamapperRequirements["data"]>;
   delete(id: number): Promise<EntityDatamapperRequirements["data"]>;
+  checkIfUsed(fieldName: string, value: string): Promise<any>;
+  checkIfNotNull(fieldName: string, id: number): Promise<any>;
 }

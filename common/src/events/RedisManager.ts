@@ -47,6 +47,7 @@ export class RedisManager {
     if (this.redis) {
       return;
     }
+    
     try {
       this.redis = new Redis({
         host: this.host,
@@ -91,16 +92,15 @@ export class RedisManager {
       local transactionKey = KEYS[1]
       local channel = KEYS[2]
       local success = tonumber(ARGV[1])
-
+      
       local received = redis.call('HINCRBY', transactionKey, 'receivedResponses', 1)
-      local successful = received
       if success == 1 then
-        successful = redis.call('HINCRBY', transactionKey, 'successfulResponses', 1)
+        redis.call('HINCRBY', transactionKey, 'successfulResponses', 1)
       end
-
+      
       local expected = tonumber(redis.call('HGET', transactionKey, 'expectedResponses'))
       if received >= expected then
-        local status = (successful == expected) and 'success' or 'partial_success'
+        local status = (successful == expected) and 'success' or 'fail'
         redis.call('PUBLISH', channel, status)
       end
 

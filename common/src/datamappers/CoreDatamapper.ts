@@ -49,5 +49,21 @@ export abstract class CoreDatamapper<T extends EntityDatamapperRequirements> {
       [id]
     );
     return result.rows[0];
-  }  
+  }
+
+  checkIfUsed = async(fieldName: string, value: string) => {
+    const result = await this.pool.query(
+      `SELECT 1 FROM ${this.tableName} WHERE ${fieldName} = $1`,
+      [value]
+    );
+    return result.rows;
+  }
+
+  checkIfNotNull = async (fieldName: string, id: number) => {
+    const result = await this.pool.query(
+      `SELECT 1 FROM ${this.tableName} WHERE ${fieldName} IS NOT NULL AND "id" = $1`,
+      [id]
+    );
+    return result.rows;
+  }
 }

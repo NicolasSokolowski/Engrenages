@@ -8,4 +8,6 @@ export declare abstract class CoreDatamapper<T extends EntityDatamapperRequireme
     insert: (entityObject: T["data"]) => Promise<any>;
     update: (entityObject: T["data"], currentVersion: number) => Promise<any>;
     delete: (id: number) => Promise<any>;
+    checkIfUsed: (fieldName: string, value: string) => Promise<any[]>;
+    checkIfNotNull: (fieldName: string, id: number) => Promise<any[]>;
 }
