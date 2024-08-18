@@ -1,0 +1,6 @@
+%syntax-version=1.0.0
+%project=engrenages_auth
+
+tables_creation 2024-07-13T11:16:06Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Tables creation for auth database
+role-functions 2024-07-13T11:25:11Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Functions for table role
+user-functions 2024-07-13T11:31:52Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Functions for table user

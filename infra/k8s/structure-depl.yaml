@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: structure-depl
+  labels:
+    app: structure
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: structure
+  template:
+    metadata:
+      labels:
+        app: structure
+    spec:
+      containers:
+        - name: structure
+          image: sokolozen/structure
+          ports:
+          - containerPort: 3000
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-structuredb
+            - name: POSTGRES_TEST_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-test-structuredb
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_HOST
+              value: "host.docker.internal"
+            - name: RABBITMQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-user
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-password
+            - name: RABBITMQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret
+                  key: rabbitmq-host
+            - name: REDIS_HOST
+              value: redis-srv
+            - name: REDIS_PORT
+              value: "6379"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: structure-srv
+spec:
+  selector:
+    app: structure
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

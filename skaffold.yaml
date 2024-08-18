@@ -1,0 +1,50 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: sokolozen/auth
+      context: auth
+      sync:
+        manual:
+          - src: "index.ts"
+            dest: .
+          - src: "app/**/*.ts"
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: sokolozen/product
+      context: product
+      sync:
+        manual:
+          - src: "index.ts"
+            dest: .
+          - src: "app/**/*.ts"
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: sokolozen/structure
+      context: structure
+      sync:
+        manual:
+          - src: "index.ts"
+            dest: .
+          - src: "app/**/*.ts"
+            dest: .
+      docker:
+        dockerfile: Dockerfile
+    - image: sokolozen/stock
+      context: stock
+      sync:
+        manual:
+          - src: "index.ts"
+            dest: .
+          - src: "app/**/*.ts"
+            dest: .
+      docker:
+        dockerfile: Dockerfile

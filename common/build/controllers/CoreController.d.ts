@@ -1,0 +1,12 @@
+import { Request, Response } from "express";
+import { EntityControllerRequirements } from "./EntityControllerRequirements";
+import { EntityDatamapperRequirements } from "../datamappers/EntityDatamapperRequirements";
+export declare abstract class CoreController<T extends EntityControllerRequirements, Y extends EntityDatamapperRequirements> {
+    datamapper: T["datamapper"];
+    constructor(datamapper: T["datamapper"]);
+    getByPk: (req: Request, res: Response) => Promise<void>;
+    getAll: (req: Request, res: Response) => Promise<void>;
+    getBySpecificField: (field: string, value: string) => Promise<any>;
+    create: (req: Request, res: Response) => Promise<void>;
+    delete: (req: Request, res: Response) => Promise<void>;
+}

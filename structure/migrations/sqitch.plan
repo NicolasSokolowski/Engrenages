@@ -1,0 +1,8 @@
+%syntax-version=1.0.0
+%project=engrenages_structure
+
+tables_creation 2024-07-09T22:16:19Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # tables creation
+location-functions 2024-07-09T22:22:55Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Functions creation for table location
+location_type-functions 2024-07-09T22:23:37Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Functions creation for table location_type
+location_blockage_code-functions 2024-07-09T22:26:34Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Functions creation for table location_blockage_code
+location-trigger 2024-07-25T19:48:47Z Nicolas Sokolowski <sokolowski.nicolas@gmail.com> # Creating trigger for location update

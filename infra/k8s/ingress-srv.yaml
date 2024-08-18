@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: engrenages.com
+      http:
+        paths:
+          - path: /api/(user|auth)/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth-srv
+                port:
+                  number: 3000
+          - path: /api/product/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: product-srv
+                port:
+                  number: 3000
+          - path: /api/location/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: structure-srv
+                port:
+                  number: 3000
+                  
