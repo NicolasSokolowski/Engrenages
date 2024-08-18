@@ -11,9 +11,6 @@ export class AuthController extends CoreController<UserControllerRequirements, U
     this.datamapper = datamapper;
   }
 
-  update = async (): Promise<void> => {
-  }
-
   signin = async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
@@ -21,7 +18,7 @@ export class AuthController extends CoreController<UserControllerRequirements, U
       throw new BadRequestError("Please provide an email and a password");
     }
 
-    const user = await this.datamapper.findByEmail(email);
+    const user = await this.datamapper.findBySpecificField("email", email);
 
     if (!user) {
       throw new NotFoundError();
