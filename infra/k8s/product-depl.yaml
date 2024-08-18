@@ -14,6 +14,10 @@ spec:
       labels:
         app: product
     spec:
+      initContainers:
+        - name: wait-for-redis
+          image: busybox
+          command: ['sh', '-c', 'until nc -z redis-srv 6379; do echo waiting for redis; sleep 10; done']
       containers:
         - name: product
           image: sokolozen/product
