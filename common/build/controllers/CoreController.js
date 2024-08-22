@@ -71,7 +71,7 @@ class CoreController {
                     try {
                         if (isSuccessful) {
                             const createdItem = await this.datamapper.insert(data);
-                            console.log("Creation success.");
+                            console.log("Creation successful.");
                             res.status(201).send(createdItem);
                         }
                         else {
@@ -85,6 +85,94 @@ class CoreController {
             }
             else {
                 throw new BadRequestError_error_1.BadRequestError("Item already exists.");
+            }
+        };
+        this.requestUpdate = async (req, res, next) => {
+            const id = parseInt(req.params.id, 10);
+            let data = req.body;
+            const { fields, Publisher, expectedResponses, exchangeName } = this.getConfig("update");
+            const checkIfExists = await Promise.any(fields.map((field) => this.datamapper.findBySpecificField(field, data[field])));
+            if (checkIfExists) {
+                throw new BadRequestError_error_1.BadRequestError(`Provided item already exists.`);
+            }
+            if (!process.env.REDIS_HOST) {
+                throw new BadRequestError_error_1.BadRequestError("Redis host must be set");
+            }
+            const itemToUpdate = await this.datamapper.findByPk(id);
+            if (!process.env.REDIS_HOST) {
+                throw new Error("Redis host must be set");
+            }
+            if (itemToUpdate) {
+                const { redis, redisSub } = await (0, redisConnection_1.redisConnection)();
+                const rabbitMQ = await RabbitmqManager_1.RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
+                const rabbitmqPubChan = rabbitMQ.getPubChannel();
+                let eventID = (0, makeRandomString_helper_1.makeRandomString)(10);
+                await redis.createTransaction({ eventID, expectedResponses });
+                data = {
+                    ...data,
+                    version: itemToUpdate.version,
+                    eventID,
+                    id
+                };
+                new Publisher(rabbitmqPubChan, exchangeName).publish(data);
+                await redisSub.subscribe(eventID, async (isSuccessful) => {
+                    try {
+                        if (isSuccessful) {
+                            const updatedItem = await this.datamapper.update(data, itemToUpdate.version);
+                            console.log("Update successful.");
+                            res.status(200).send(updatedItem);
+                        }
+                        else {
+                            throw new BadRequestError_error_1.BadRequestError("A service failed during update.");
+                        }
+                    }
+                    catch (err) {
+                        next(err);
+                    }
+                });
+            }
+            else {
+                throw new NotFoundError_error_1.NotFoundError();
+            }
+        };
+        this.preDeletionCheck = async (fields, value) => { };
+        this.requestDeletion = async (req, res, next) => {
+            const id = parseInt(req.params.id, 10);
+            const itemToDelete = await this.datamapper.findByPk(id);
+            const { fields, Publisher, expectedResponses, exchangeName } = this.getConfig("delete");
+            await this.preDeletionCheck(fields, itemToDelete);
+            if (!process.env.REDIS_HOST) {
+                throw new Error("Redis host must be set");
+            }
+            if (itemToDelete) {
+                const { redis, redisSub } = await (0, redisConnection_1.redisConnection)();
+                const rabbitMQ = await RabbitmqManager_1.RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
+                const rabbitmqPubChan = rabbitMQ.getPubChannel();
+                let eventID = (0, makeRandomString_helper_1.makeRandomString)(10);
+                await redis.createTransaction({ eventID, expectedResponses });
+                const data = {
+                    ...itemToDelete,
+                    eventID
+                };
+                new Publisher(rabbitmqPubChan, exchangeName).publish(data);
+                await redisSub.subscribe(eventID, async (isSuccessful) => {
+                    try {
+                        if (isSuccessful) {
+                            const deletedItem = await this.datamapper.delete(id);
+                            console.log("Deletion successful");
+                            res.status(200).send(deletedItem);
+                        }
+                        else {
+                            throw new BadRequestError_error_1.BadRequestError("A service failed at product deletion.");
+                        }
+                    }
+                    catch (err) {
+                        next(err);
+                    }
+                });
+            }
+            else {
+                throw new NotFoundError_error_1.NotFoundError();
             }
         };
         this.configs = configs;

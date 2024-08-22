@@ -22,4 +22,7 @@ export declare abstract class CoreController<T extends EntityControllerRequireme
     create: (req: Request, res: Response) => Promise<void>;
     delete: (req: Request, res: Response) => Promise<void>;
     requestCreation: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    requestUpdate: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    preDeletionCheck: (fields: string[], value: any) => Promise<void>;
+    requestDeletion: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 }
