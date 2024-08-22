@@ -5,53 +5,21 @@ import { BlockageDatamapperRequirements } from "../../datamappers/interfaces/Blo
 import { ProductBlockageCreatedPublisher, ProductBlockageDeletedPublisher, ProductBlockageUpdatedPublisher } from "../../../events/index.events";
 import { productController } from "../index.controllers";
 
+
 export class ProductBlockageController extends CoreController<BlockageControllerRequirements, BlockageDatamapperRequirements> {
+
   constructor(datamapper: BlockageControllerRequirements["datamapper"]) {
-    super(datamapper);
+    const configs = {
+      "create": {
+        fields: ["name"],
+        Publisher: ProductBlockageCreatedPublisher,
+        exchangeName: "logisticExchange",
+        expectedResponses: 1
+      }
+    }
+    super(datamapper, configs);
 
     this.datamapper = datamapper;
-  }
-
-  requestCreation = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    let data = req.body;
-
-    const checkIfItemExists = await this.datamapper.findBySpecificField("name", data.name);
-
-    if (!process.env.REDIS_HOST) {
-      throw new Error("Redis host must be set");
-    }
-    
-    const { redis, redisSub } = await redisConnection();
-    const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
-    const rabbitmqPubChan = rabbitMQ.getPubChannel();
-    
-    if (!checkIfItemExists) {
-      let eventID = makeRandomString(10);
-      await redis.createTransaction({ eventID, expectedResponses: 1 });
-  
-      data = {
-        ...data,
-        eventID
-      }
-      
-      new ProductBlockageCreatedPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
-  
-      await redisSub.subscribe(eventID, async (isSuccessful) => {
-        try {
-          if (isSuccessful) {
-            const createdItem = await this.datamapper.insert(data);
-            console.log("Product blockage created successfully");
-            res.send(createdItem);
-          } else {
-            throw new BadRequestError("A service failed product blockage creation");
-          }   
-        } catch (err) {
-          next(err);
-        }
-      })
-    } else {
-      throw new BadRequestError(`Product blockage ${data.name} already exists.`)
-    }
   }
 
   requestUpdate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {

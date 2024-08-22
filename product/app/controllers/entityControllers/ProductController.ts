@@ -7,52 +7,17 @@ import { ProductCreatedPublisher, ProductDeletedPublisher, ProductUpdatedPublish
 
 export class ProductController extends CoreController<ProductControllerRequirements, ProductDatamapperRequirements> {
   constructor(datamapper: ProductControllerRequirements["datamapper"]) {
-    super(datamapper);
+    const configs = {
+      "create": {
+        fields: ["title", "ean"],
+        Publisher: ProductCreatedPublisher,
+        exchangeName: "logisticExchange",
+        expectedResponses: 1
+      }
+    }
+    super(datamapper, configs);
 
     this.datamapper = datamapper;
-  }
-
-  requestCreation = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    let data = req.body;
-
-    const checkIfEanExists = await this.datamapper.findBySpecificField("ean", data.ean);
-    const checkIfTitleExists = await this.datamapper.findBySpecificField("title", data.title);
-    
-    if (!process.env.REDIS_HOST) {
-      throw new Error("Redis host must be set");
-    }
-    
-    const { redis, redisSub } = await redisConnection();
-    const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
-    const rabbitmqPubChan = rabbitMQ.getPubChannel();
-    
-    if (!checkIfEanExists && !checkIfTitleExists) {
-      let eventID = makeRandomString(10);
-      await redis.createTransaction({ eventID, expectedResponses: 1 });
-  
-      data = {
-        ...data,
-        eventID
-      }
-      
-      new ProductCreatedPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
-  
-      await redisSub.subscribe(eventID, async (isSuccessful) => {
-        try {
-          if (isSuccessful) {
-            const createdItem = await this.datamapper.insert(data);
-            console.log("Product created successfully");
-            res.send(createdItem);
-          } else {
-            throw new BadRequestError("A service failed at product creation");
-          }
-        } catch (err) {
-          next(err);
-        }
-      })
-    } else {
-      throw new BadRequestError(`Product title or EAN ${data.ean} already exists.`)
-    }
   }
 
   requestUpdate = async (req: Request, res: Response, next: NextFunction) => {
