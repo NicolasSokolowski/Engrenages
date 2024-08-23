@@ -1,5 +1,4 @@
-import { Request, Response } from "express";
-import { BadRequestError, CoreController, DatabaseConnectionError, NotFoundError, RabbitmqManager } from "@zencorp/engrenages";
+import { CoreController } from "@zencorp/engrenages";
 import { LocationControllerRequirements } from "../interfaces/LocationControllerRequirements";
 import { LocationDatamapperRequirements } from "../../datamappers/interfaces/LocationDatamapperRequirements";
 import { LocationDeletedConsumer } from "../../../events/index.events";
