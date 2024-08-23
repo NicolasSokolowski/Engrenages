@@ -1,49 +1,31 @@
-import { Request, Response } from "express";
-import { BadRequestError, CoreController, DatabaseConnectionError, NotFoundError } from "@zencorp/engrenages";
+import { CoreController } from "@zencorp/engrenages";
 import { ProductBlockageControllerRequirements } from "../interfaces/ProductBlockageControllerRequirements";
 import { ProductBlockageDatamapperRequirements } from "../../datamappers/interfaces/ProductBlockageDatamapperRequirements";
+import { ProductBlockageCreatedConsumer, ProductBlockageDeletedConsumer, ProductBlockageUpdatedConsumer } from "../../../events/index.events";
 
 export class ProductBlockageController extends CoreController<ProductBlockageControllerRequirements, ProductBlockageDatamapperRequirements> {
   constructor(datamapper: ProductBlockageControllerRequirements["datamapper"]) {
-    super(datamapper);
-
+    const configs = {
+      "create": {
+        fields: ["name"],
+        Publisher: ProductBlockageCreatedConsumer,
+        exchangeName: "logisticExchange",
+        expectedResponses: 1
+      },
+      "update": {
+        fields: ["name"],
+        Publisher: ProductBlockageUpdatedConsumer,
+        exchangeName: "logisticExchange",
+        expectedResponses: 1
+      },
+      "delete": {
+        fields: ["product_blockage_name"],
+        Publisher: ProductBlockageDeletedConsumer,
+        exchangeName: "logisticExchange",
+        expectedResponses: 1
+      }
+    }
+    super(datamapper, configs);
     this.datamapper = datamapper;
-  }
-
-  update = async (req: Request, res: Response): Promise<void> => {
-    const id: number = parseInt(req.params.id);
-
-    if (!id) {
-      throw new BadRequestError("This id doesn't exist");
-    }
-
-    let { name }: Partial<ProductBlockageDatamapperRequirements["data"]> = req.body;
-
-    const productToUpdate = await this.datamapper.findByPk(id);
-
-    if (!productToUpdate) {
-      throw new NotFoundError();
-    }
-
-    if (productToUpdate.version === undefined) {
-      throw new BadRequestError("Version information is missing for the product");
-    }
-    
-    const currentVersion: number = productToUpdate.version;
-
-    name ? name : name = productToUpdate.name;
-
-    const newDataProduct = { 
-      ...productToUpdate, 
-      name
-    };
-
-    const updatedProduct = await this.datamapper.update(newDataProduct, currentVersion);
-
-    if (!updatedProduct) {
-      throw new DatabaseConnectionError();
-    }
-
-    res.status(200).send(updatedProduct);
-  }     
+  }  
 };

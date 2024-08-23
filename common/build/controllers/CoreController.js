@@ -163,7 +163,7 @@ class CoreController {
                             res.status(200).send(deletedItem);
                         }
                         else {
-                            throw new BadRequestError_error_1.BadRequestError("A service failed at product deletion.");
+                            throw new BadRequestError_error_1.BadRequestError("A service failed during deletion.");
                         }
                     }
                     catch (err) {

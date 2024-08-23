@@ -1,13 +1,20 @@
 import { NextFunction, Request, Response } from "express";
-import { BadRequestError, CoreController, DatabaseConnectionError, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
+import { BadRequestError, CoreController, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
 import { LocationControllerRequirements } from "../interfaces/LocationControllerRequirements";
 import { LocationDatamapperRequirements } from "../../datamappers/interfaces/LocationDatamapperRequirements";
 import { LocationCreatedPublisher, LocationDeletedPublisher, LocationUpdatedPublisher } from "../../../events/index.events";
 
 export class LocationController extends CoreController<LocationControllerRequirements, LocationDatamapperRequirements> {
   constructor(datamapper: LocationControllerRequirements["datamapper"]) {
-    super(datamapper);
-
+    const configs = {
+      "delete": {
+        fields: [],
+        Publisher: LocationDeletedPublisher,
+        exchangeName: "logisticExchange",
+        expectedResponses: 1
+      }
+    }
+    super(datamapper, configs);
     this.datamapper = datamapper;
   }
 
@@ -120,48 +127,6 @@ export class LocationController extends CoreController<LocationControllerRequire
       })
     } else {
       throw new BadRequestError(`Location ${newLocation} already exists.`);
-    }
-  }
-
-  requestDeletion = async (req: Request, res: Response, next: NextFunction) => {
-    const id = parseInt(req.params.id, 10);
-
-    const itemToDelete = await this.datamapper.findByPk(id);
-
-    if (!process.env.REDIS_HOST) {
-      throw new Error("Redis host must be set");
-    }
-
-    if (itemToDelete) {
-      const { redis, redisSub } = await redisConnection();
-      const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
-      const rabbitmqPubChan = rabbitMQ.getPubChannel();
-      
-      let eventID = makeRandomString(10);
-      await redis.createTransaction({ eventID, expectedResponses: 1 });
-  
-      const data = {
-        ...itemToDelete,
-        eventID
-      }
-
-      new LocationDeletedPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
-  
-      await redisSub.subscribe(eventID, async (isSuccessful) => {
-        try {
-          if (isSuccessful) {
-            const deletedItem = await this.datamapper.delete(id);
-            console.log("Location deleted successfully");
-            res.status(200).send(deletedItem);
-          } else {
-            throw new BadRequestError("A service failed location deletion. Please check if the location exists and if it's not occupied by any product.");
-          }  
-        } catch (err) {
-          next(err);
-        }
-      })
-    } else {
-      throw new NotFoundError();
     }
   }
 }

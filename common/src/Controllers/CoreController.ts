@@ -225,7 +225,7 @@ export abstract class CoreController<T extends EntityControllerRequirements, Y e
             console.log("Deletion successful");
             res.status(200).send(deletedItem);
           } else {
-            throw new BadRequestError("A service failed at product deletion.");
+            throw new BadRequestError("A service failed during deletion.");
           }        
         } catch (err) {
           next(err);
