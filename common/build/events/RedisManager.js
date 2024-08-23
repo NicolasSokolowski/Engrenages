@@ -1,13 +1,4 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RedisManager = void 0;
 const ioredis_1 = require("ioredis");
@@ -31,70 +22,61 @@ class RedisManager {
         }
         return RedisManager.cmdInstance;
     }
-    ensureConnected() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!this.redis) {
-                try {
-                    yield this.connect();
-                }
-                catch (err) {
-                    console.error("Failed to reconnect to Redis", err);
-                    throw new Error("Redis connection could not be re-etablished");
-                }
-            }
-        });
-    }
-    connect() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.redis) {
-                return;
-            }
+    async ensureConnected() {
+        if (!this.redis) {
             try {
-                this.redis = new ioredis_1.Redis({
-                    host: this.host,
-                    port: this.port
-                });
+                await this.connect();
             }
             catch (err) {
-                console.error("Failed to connect to Redis:", err);
-                this.redis = null;
-                throw err;
+                console.error("Failed to reconnect to Redis", err);
+                throw new Error("Redis connection could not be re-etablished");
             }
-        });
+        }
     }
-    close() {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.redis) {
-                yield this.redis.quit();
-                this.redis = null;
-                console.log("Connection to Redis closed");
-            }
-            else {
-                throw new Error("No Redis connection is open");
-            }
-        });
-    }
-    createTransaction(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ eventID, expectedResponses }) {
-            yield this.ensureConnected();
-            const transactionKey = `transaction:${eventID}`;
-            yield this.redis.hmset(transactionKey, {
-                'expectedResponses': expectedResponses,
-                'receivedResponses': 0,
-                'successfulResponses': 0
+    async connect() {
+        if (this.redis) {
+            return;
+        }
+        try {
+            this.redis = new ioredis_1.Redis({
+                host: this.host,
+                port: this.port
             });
-            yield this.redis.expire(transactionKey, 30);
-            console.log(`Transaction ${eventID} initialized with ${expectedResponses} expected responses.`);
+        }
+        catch (err) {
+            console.error("Failed to connect to Redis:", err);
+            this.redis = null;
+            throw err;
+        }
+    }
+    async close() {
+        if (this.redis) {
+            await this.redis.quit();
+            this.redis = null;
+            console.log("Connection to Redis closed");
+        }
+        else {
+            throw new Error("No Redis connection is open");
+        }
+    }
+    async createTransaction({ eventID, expectedResponses }) {
+        await this.ensureConnected();
+        const transactionKey = `transaction:${eventID}`;
+        await this.redis.hmset(transactionKey, {
+            'expectedResponses': expectedResponses,
+            'receivedResponses': 0,
+            'successfulResponses': 0
         });
+        await this.redis.expire(transactionKey, 30);
+        console.log(`Transaction ${eventID} initialized with ${expectedResponses} expected responses.`);
     }
     ;
-    addResponse(_a) {
-        return __awaiter(this, arguments, void 0, function* ({ eventID, success }) {
-            yield this.ensureConnected();
-            const transactionKey = `transaction:${eventID}`;
-            const channel = `channel:${eventID}`;
-            const successInt = success ? 1 : 0;
-            const luaScript = `
+    async addResponse({ eventID, success }) {
+        await this.ensureConnected();
+        const transactionKey = `transaction:${eventID}`;
+        const channel = `channel:${eventID}`;
+        const successInt = success ? 1 : 0;
+        const luaScript = `
       local transactionKey = KEYS[1]
       local channel = KEYS[2]
       local success = tonumber(ARGV[1])
@@ -113,45 +95,40 @@ class RedisManager {
 
       return received
     `;
-            try {
-                const result = yield this.redis.eval(luaScript, 2, transactionKey, channel, successInt);
-                console.log(`Lua script executed, result: ${result}`);
-            }
-            catch (err) {
-                console.error("Error executing Lua script", err);
-            }
-        });
+        try {
+            const result = await this.redis.eval(luaScript, 2, transactionKey, channel, successInt);
+            console.log(`Lua script executed, result: ${result}`);
+        }
+        catch (err) {
+            console.error("Error executing Lua script", err);
+        }
     }
-    subscribe(eventID, callback) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.ensureConnected();
-            const subscribedChannel = `channel:${eventID}`;
-            this.messageHandler = (channel, message) => {
-                if (channel === subscribedChannel) {
-                    try {
-                        console.log(`Notification received on ${subscribedChannel}: ${message}`);
-                        const isSuccess = message === 'success';
-                        callback(isSuccess);
-                    }
-                    finally {
-                        this.cleanup(subscribedChannel).catch(error => console.error('Cleanup failed:', error));
-                    }
+    async subscribe(eventID, callback) {
+        await this.ensureConnected();
+        const subscribedChannel = `channel:${eventID}`;
+        this.messageHandler = (channel, message) => {
+            if (channel === subscribedChannel) {
+                try {
+                    console.log(`Notification received on ${subscribedChannel}: ${message}`);
+                    const isSuccess = message === 'success';
+                    callback(isSuccess);
                 }
-            };
-            yield this.redis.subscribe(subscribedChannel);
-            console.log("Waiting for notification...");
-            this.redis.on("message", this.messageHandler);
-        });
-    }
-    cleanup(channel) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield this.ensureConnected();
-            if (this.messageHandler) {
-                yield this.redis.unsubscribe(channel);
-                this.redis.removeListener("message", this.messageHandler);
-                this.messageHandler = undefined;
+                finally {
+                    this.cleanup(subscribedChannel).catch(error => console.error('Cleanup failed:', error));
+                }
             }
-        });
+        };
+        await this.redis.subscribe(subscribedChannel);
+        console.log("Waiting for notification...");
+        this.redis.on("message", this.messageHandler);
+    }
+    async cleanup(channel) {
+        await this.ensureConnected();
+        if (this.messageHandler) {
+            await this.redis.unsubscribe(channel);
+            this.redis.removeListener("message", this.messageHandler);
+            this.messageHandler = undefined;
+        }
     }
 }
 exports.RedisManager = RedisManager;

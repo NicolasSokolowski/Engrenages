@@ -29,14 +29,14 @@ export class LocationDeletedConsumer extends CoreConsumer<LocationConsumerReq> {
             const deletedItem = await locationController.datamapper.delete(data.id);
 
             if (deletedItem) {
-              console.log("Location type deleted successfully");
+              console.log("Location deleted successfully");
               await redis.addResponse({ eventID: data.eventID, success: true });
             } else {
-              console.log("Location type deletion failed.");
+              console.log("Location deletion failed.");
               await redis.addResponse({ eventID: data.eventID, success: false });
             }
           } else {
-            console.log("Location type deletion failed.");
+            console.log("Location deletion failed.");
             await redis.addResponse({ eventID: data.eventID, success: false });
           }
 
