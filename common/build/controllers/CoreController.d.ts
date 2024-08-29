@@ -5,7 +5,6 @@ export interface CoreConfig {
     fields: string[];
     Publisher: any;
     exchangeName: string;
-    expectedResponses: number;
 }
 export declare abstract class CoreController<T extends EntityControllerRequirements, Y extends EntityDatamapperRequirements> {
     datamapper: T["datamapper"];
@@ -21,7 +20,7 @@ export declare abstract class CoreController<T extends EntityControllerRequireme
     getBySpecificField: (field: string, value: string) => Promise<any>;
     create: (req: Request, res: Response) => Promise<void>;
     delete: (req: Request, res: Response) => Promise<void>;
-    requestCreation: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+    requestCreation: (req: Request, res: Response) => Promise<void>;
     requestUpdate: (req: Request, res: Response, next: NextFunction) => Promise<void>;
     preDeletionCheck: (fields: string[], value: any) => Promise<void>;
     requestDeletion: (req: Request, res: Response, next: NextFunction) => Promise<void>;

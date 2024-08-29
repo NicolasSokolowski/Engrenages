@@ -4,7 +4,7 @@ import { RabbitmqManager } from "./RabbitmqManager";
 import { RoutingKeys } from "./RoutingKeys";
 import { PublisherReq } from "./PublisherReq";
 import { ConsumerReq } from "./ConsumerReq";
-import { RedisManager } from "./RedisManager";
+import { sseClients } from "./sseClients";
 
 export {
   CoreConsumer,
@@ -13,5 +13,5 @@ export {
   RoutingKeys,
   PublisherReq,
   ConsumerReq,
-  RedisManager
+  sseClients
 }

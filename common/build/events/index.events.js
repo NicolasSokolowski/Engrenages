@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RedisManager = exports.RoutingKeys = exports.RabbitmqManager = exports.CorePublisher = exports.CoreConsumer = void 0;
+exports.sseClients = exports.RoutingKeys = exports.RabbitmqManager = exports.CorePublisher = exports.CoreConsumer = void 0;
 const CoreConsumer_1 = require("./CoreConsumer");
 Object.defineProperty(exports, "CoreConsumer", { enumerable: true, get: function () { return CoreConsumer_1.CoreConsumer; } });
 const CorePublisher_1 = require("./CorePublisher");
@@ -9,5 +9,5 @@ const RabbitmqManager_1 = require("./RabbitmqManager");
 Object.defineProperty(exports, "RabbitmqManager", { enumerable: true, get: function () { return RabbitmqManager_1.RabbitmqManager; } });
 const RoutingKeys_1 = require("./RoutingKeys");
 Object.defineProperty(exports, "RoutingKeys", { enumerable: true, get: function () { return RoutingKeys_1.RoutingKeys; } });
-const RedisManager_1 = require("./RedisManager");
-Object.defineProperty(exports, "RedisManager", { enumerable: true, get: function () { return RedisManager_1.RedisManager; } });
+const sseClients_1 = require("./sseClients");
+Object.defineProperty(exports, "sseClients", { enumerable: true, get: function () { return sseClients_1.sseClients; } });

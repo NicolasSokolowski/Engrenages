@@ -21,4 +21,5 @@ export abstract class CoreConsumer<T extends ConsumerReq> {
     await this.channel.bindQueue(queue.queue, this.exchange, this.routingKey);
     return queue.queue;
   }
+  
 }
