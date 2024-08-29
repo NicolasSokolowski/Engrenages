@@ -1,32 +1,28 @@
-import { NextFunction, Request, Response } from "express";
-import { BadRequestError, CoreController, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
-import { BlockageControllerRequirements } from "../interfaces/BlockageControllerRequirements";
-import { BlockageDatamapperRequirements } from "../../datamappers/interfaces/BlockageDatamapperRequirements";
-import { ProductBlockageCreatedPublisher, ProductBlockageDeletedPublisher, ProductBlockageUpdatedPublisher } from "../../../events/index.events";
+import { BadRequestError, CoreController } from "@zencorp/engrenages";
+import { ProductBlockageControllerRequirements } from "../interfaces/BlockageControllerRequirements"; 
 import { productController } from "../index.controllers";
+import { ProductBlockageCreationRequestPublisher, ProductBlockageDeletionRequestPublisher, ProductBlockageUpdateRequestPublisher } from "../../../events/index.events";
+import { ProductBlockageDatamapperRequirements } from "../../datamappers/interfaces/ProductBlockageDatamapperRequirements";
 
 
-export class ProductBlockageController extends CoreController<BlockageControllerRequirements, BlockageDatamapperRequirements> {
+export class ProductBlockageController extends CoreController<ProductBlockageControllerRequirements, ProductBlockageDatamapperRequirements> {
 
-  constructor(datamapper: BlockageControllerRequirements["datamapper"]) {
+  constructor(datamapper: ProductBlockageControllerRequirements["datamapper"]) {
     const configs = {
       "create": {
         fields: ["name"],
-        Publisher: ProductBlockageCreatedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductBlockageCreationRequestPublisher,
+        exchangeName: "logisticExchange"
       },
       "update": {
         fields: ["name"],
-        Publisher: ProductBlockageUpdatedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductBlockageUpdateRequestPublisher,
+        exchangeName: "logisticExchange"
       },
       "delete": {
         fields: ["product_blockage_name"],
-        Publisher: ProductBlockageDeletedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductBlockageDeletionRequestPublisher,
+        exchangeName: "logisticExchange"
       }
     }
     super(datamapper, configs);

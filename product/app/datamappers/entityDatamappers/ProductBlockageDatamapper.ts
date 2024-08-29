@@ -1,8 +1,8 @@
 import { CoreDatamapper, TableNames } from "@zencorp/engrenages";
 import { pool } from "../../database/pg.client";
-import { BlockageDatamapperRequirements } from "../interfaces/BlockageDatamapperRequirements";
+import { ProductBlockageDatamapperRequirements } from "../interfaces/ProductBlockageDatamapperRequirements";
 
-export class BlockageDatamapper extends CoreDatamapper<BlockageDatamapperRequirements> {
+export class ProductBlockageDatamapper extends CoreDatamapper<ProductBlockageDatamapperRequirements> {
   readonly tableName = TableNames.ProductBlockage;
   pool = pool;
 }

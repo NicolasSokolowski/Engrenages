@@ -1,29 +1,26 @@
 import { BadRequestError, CoreController } from "@zencorp/engrenages";
 import { LocationBlockageControllerRequirements } from "../interfaces/LocationBlockageControllerRequirements";
 import { LocationBlockageDatamapperRequirements } from "../../datamappers/interfaces/LocationBlockageDatamapperRequirements";
-import { LocationBlockageCreatedPublisher, LocationBlockageDeletedPublisher, LocationBlockageUpdatedPublisher } from "../../../events/index.events";
 import { locationController } from "../index.controllers";
+import { LocationBlockageCreationRequestPublisher, LocationBlockageDeletionRequestPublisher, LocationBlockageUpdateRequestPublisher } from "../../../events/index.events";
 
 export class LocationBlockageController extends CoreController<LocationBlockageControllerRequirements, LocationBlockageDatamapperRequirements> {
   constructor(datamapper: LocationBlockageControllerRequirements["datamapper"]) {
     const configs = {
       "create": {
         fields: ["name"],
-        Publisher: LocationBlockageCreatedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: LocationBlockageCreationRequestPublisher,
+        exchangeName: "logisticExchange"
       },
       "update": {
         fields: ["name"],
-        Publisher: LocationBlockageUpdatedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: LocationBlockageUpdateRequestPublisher,
+        exchangeName: "logisticExchange"
       },
       "delete": {
         fields: ["location_blockage_name"],
-        Publisher: LocationBlockageDeletedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: LocationBlockageDeletionRequestPublisher,
+        exchangeName: "logisticExchange"
       }
     }
     super(datamapper, configs);

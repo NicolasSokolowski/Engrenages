@@ -1,21 +1,35 @@
-import { ProductPublisherReq } from "./interfaces/ProductPublisherReq";
-import { ProductBlockagePublisherReq } from "./interfaces/ProductBlockagePublisherReq";
-import { ProductBlockageCreatedPublisher } from "./product_blockage/ProductBlockageCreatedPublisher";
-import { ProductBlockageUpdatedPublisher } from "./product_blockage/ProductBlockageUpdatedPublisher";
-import { ProductBlockageDeletedPublisher } from "./product_blockage/ProductBlockageDeletedPublisher";
-import { ProductCheckPublisher } from "./product/ProductCheckPublisher";
-import { ProductCreatedPublisher } from "./product/ProductCreatedPublisher";
-import { ProductUpdatedPublisher } from "./product/ProductUpdatedPublisher";
-import { ProductDeletedPublisher } from "./product/ProductDeletedPublisher";
+import { ProductPublisherReq } from "./publishers/interfaces/ProductPublisherReq"; 
+import { ProductConsumerReq } from "./consumers/interfaces/ProductConsumerReq";
+import { ProductBlockageConsumerReq } from "./consumers/interfaces/ProductBlockageConsumerReq";
+import { ProductBlockagePublisherReq } from "./publishers/interfaces/ProductBlockagePublisherReq"; 
+import { ProductBlockageCreationRequestPublisher } from "./publishers/product_blockage/ProductBlockageCreationRequestPublisher"; 
+import { ProductBlockageCreatedConsumer } from "./consumers/product_blockage/ProductBlockageCreatedConsumer";
+import { ProductBlockageUpdateRequestPublisher } from "./publishers/product_blockage/ProductBlockageUpdateRequestPublisher"; 
+import { ProductBlockageUpdatedConsumer } from "./consumers/product_blockage/ProductBlockageUpdatedConsumer";
+import { ProductBlockageDeletionRequestPublisher } from "./publishers/product_blockage/ProductBlockageDeletionRequestPublisher"; 
+import { ProductBlockageDeletedConsumer } from "./consumers/product_blockage/ProductBlockageDeletedConsumer";
+import { ProductCreationRequestPublisher } from "./publishers/product/ProductCreationRequestPublisher"; 
+import { ProductCreatedConsumer } from "./consumers/product/ProductCreatedConsumer";
+import { ProductUpdateRequestPublisher } from "./publishers/product/ProductUpdateRequestPublisher"; 
+import { ProductUpdatedConsumer } from "./consumers/product/ProductUpdatedConsumer";
+import { ProductDeletionRequestPublisher } from "./publishers/product/ProductDeletionRequestPublisher"; 
+import { ProductDeletedConsumer } from "./consumers/product/ProductDeletedConsumer";
 
 export {
   ProductPublisherReq,
+  ProductConsumerReq,
+  ProductBlockageConsumerReq,
   ProductBlockagePublisherReq,
-  ProductBlockageCreatedPublisher,
-  ProductBlockageUpdatedPublisher,
-  ProductBlockageDeletedPublisher,
-  ProductCheckPublisher,
-  ProductCreatedPublisher,
-  ProductUpdatedPublisher,
-  ProductDeletedPublisher
+  ProductBlockageCreationRequestPublisher,
+  ProductBlockageCreatedConsumer,
+  ProductBlockageUpdateRequestPublisher,
+  ProductBlockageUpdatedConsumer,
+  ProductBlockageDeletionRequestPublisher,
+  ProductBlockageDeletedConsumer,
+  ProductCreationRequestPublisher,
+  ProductCreatedConsumer,
+  ProductUpdateRequestPublisher,
+  ProductUpdatedConsumer,
+  ProductDeletionRequestPublisher,
+  ProductDeletedConsumer
 }

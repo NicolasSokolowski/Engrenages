@@ -1,6 +1,7 @@
 import { app } from "./app/index.app";
 import { pool } from "./app/database/pg.client";
-import { RabbitmqManager, RedisManager } from "@zencorp/engrenages";
+import { RabbitmqManager } from "@zencorp/engrenages";
+import { consumersSetup } from "./helpers/consumersSetup";
 
 const start = async () => {
   pool.query('SELECT 1;', (err: Error, res: any) => {
@@ -16,13 +17,7 @@ const start = async () => {
     const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
     console.log("Connected to RabbitMQ");
 
-    if (!process.env.REDIS_HOST) {
-      throw new Error("Redis host must be set");
-    }
-
-    const redis = new RedisManager(process.env.REDIS_HOST, 6379);
-    await redis.connect();
-    console.log("Connected to Redis");
+    await consumersSetup();
     
     process.on("SIGINT", async () => {
       await rabbitMQ.close();
