@@ -1,8 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { BadRequestError, CoreController, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
+import { CoreController } from "@zencorp/engrenages";
 import { ProductControllerRequirements } from "../interfaces/ProductControllerRequirements";
 import { ProductDatamapperRequirements } from "../../datamappers/interfaces/ProductDatamapperRequirements";
-import { ProductCreatedPublisher, ProductDeletedPublisher, ProductUpdatedPublisher } from "../../../events/index.events";
+import { ProductCreationRequestPublisher, ProductDeletionRequestPublisher, ProductUpdateRequestPublisher } from "../../../events/index.events";
 
 
 export class ProductController extends CoreController<ProductControllerRequirements, ProductDatamapperRequirements> {
@@ -10,21 +9,18 @@ export class ProductController extends CoreController<ProductControllerRequireme
     const configs = {
       "create": {
         fields: ["title", "ean"],
-        Publisher: ProductCreatedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductCreationRequestPublisher,
+        exchangeName: "logisticExchange"
       },
       "update": {
         fields: ["title", "ean"],
-        Publisher: ProductUpdatedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductUpdateRequestPublisher,
+        exchangeName: "logisticExchange"
       },
       "delete": {
         fields: [],
-        Publisher: ProductDeletedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductDeletionRequestPublisher,
+        exchangeName: "logisticExchange"
       }
     }
     super(datamapper, configs);

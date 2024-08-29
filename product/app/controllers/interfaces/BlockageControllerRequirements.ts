@@ -1,8 +1,8 @@
 import { EntityControllerRequirements } from "@zencorp/engrenages";
-import { BlockageDatamapperRequirements } from "../../datamappers/interfaces/BlockageDatamapperRequirements";
+import { ProductBlockageDatamapperRequirements } from "../../datamappers/interfaces/ProductBlockageDatamapperRequirements"; 
 
-type BlockageDatamapperRequirementsWithoutData = Omit<BlockageDatamapperRequirements, "data">
+type BlockageDatamapperRequirementsWithoutData = Omit<ProductBlockageDatamapperRequirements, "data">
 
-export interface BlockageControllerRequirements extends EntityControllerRequirements {
+export interface ProductBlockageControllerRequirements extends EntityControllerRequirements {
   datamapper: BlockageDatamapperRequirementsWithoutData;
 };

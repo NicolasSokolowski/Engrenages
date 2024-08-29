@@ -1,7 +1,9 @@
 import { CoreController } from "@zencorp/engrenages";
 import { ProductControllerRequirements } from "../interfaces/ProductControllerRequirements";
 import { ProductDatamapperRequirements } from "../../datamappers/interfaces/ProductDatamapperRequirements";
-import { ProductCreatedConsumer, ProductDeletedConsumer, ProductUpdateConsumer } from "../../../events/index.events";
+import { ProductCreatedPublisher } from "../../../events/publishers/product/ProductCreatedPublisher";
+import { ProductUpdatedPublisher } from "../../../events/publishers/product/ProductUpdatedPublisher";
+import { ProductDeletedPublisher } from "../../../events/publishers/product/ProductDeletedPublisher";
 
 
 export class ProductController extends CoreController<ProductControllerRequirements, ProductDatamapperRequirements> {
@@ -9,21 +11,18 @@ export class ProductController extends CoreController<ProductControllerRequireme
     const configs = {
       "create": {
         fields: ["title", "ean"],
-        Publisher: ProductCreatedConsumer,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductCreatedPublisher,
+        exchangeName: "logisticExchange"
       },
       "update": {
         fields: ["title", "ean"],
-        Publisher: ProductUpdateConsumer,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductUpdatedPublisher,
+        exchangeName: "logisticExchange"
       },
       "delete": {
         fields: [],
-        Publisher: ProductDeletedConsumer,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: ProductDeletedPublisher,
+        exchangeName: "logisticExchange"
       }
     }
     super(datamapper, configs);

@@ -1,63 +1,43 @@
 import { NextFunction, Request, Response } from "express";
-import { BadRequestError, CoreController, makeRandomString, NotFoundError, RabbitmqManager, redisConnection } from "@zencorp/engrenages";
+import { BadRequestError, CoreController, makeRandomString, NotFoundError, RabbitmqManager } from "@zencorp/engrenages";
 import { LocationControllerRequirements } from "../interfaces/LocationControllerRequirements";
 import { LocationDatamapperRequirements } from "../../datamappers/interfaces/LocationDatamapperRequirements";
-import { LocationCreatedPublisher, LocationDeletedPublisher, LocationUpdatedPublisher } from "../../../events/index.events";
+import { LocationCreationRequestPublisher, LocationDeletionRequestPublisher, LocationUpdateRequestPublisher } from "../../../events/index.events";
 
 export class LocationController extends CoreController<LocationControllerRequirements, LocationDatamapperRequirements> {
   constructor(datamapper: LocationControllerRequirements["datamapper"]) {
     const configs = {
       "delete": {
         fields: [],
-        Publisher: LocationDeletedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: LocationDeletionRequestPublisher,
+        exchangeName: "logisticExchange"
       }
     }
     super(datamapper, configs);
     this.datamapper = datamapper;
   }
 
-  requestCreation = async (req: Request, res: Response, next: NextFunction) => {
+  requestCreation = async (req: Request, res: Response) => {
     let data = req.body;
 
     const newLocation = `${data.zone}-${data.alley}-${data.position}-${data.lvl}-${data.lvl_position}`;
 
     const checkIfItemExists = await this.datamapper.findBySpecificField("location", newLocation);
 
-    if (!process.env.REDIS_HOST) {
-      throw new Error("Redis host must be set");
-    }
-    
-    const { redis, redisSub } = await redisConnection();
     const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
     const rabbitmqPubChan = rabbitMQ.getPubChannel();
     
     if (!checkIfItemExists) {
-      let eventID = makeRandomString(10);
-      await redis.createTransaction({ eventID, expectedResponses: 1 });
   
       data = {
         ...data,
-        newLocation,
-        eventID
+        newLocation
       }
       
-      new LocationCreatedPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
-  
-      await redisSub.subscribe(eventID, async (isSuccessful) => {
-        try {
-          if (isSuccessful) {
-            const createdItem = await this.datamapper.insert(data);
-            console.log("Location created successfully");
-            res.send(createdItem);
-          } else {
-            throw new BadRequestError("A service failed location creation");
-          }
-        } catch (err) {
-          next(err);
-        }
-      })
+      new LocationCreationRequestPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
+
+      res.status(202).send({ message: "Traitement de la demande de création en cours..."});
+
     } else {
       throw new BadRequestError(`Location ${newLocation} already exists.`)
     }
@@ -90,41 +70,21 @@ export class LocationController extends CoreController<LocationControllerRequire
     const newLocation = `${data.zone}-${data.alley}-${data.position}-${data.lvl}-${data.lvl_position}`;
     
     const checkIfEntreeExists = await this.datamapper.findBySpecificField("location", newLocation);
-    
-    if (!process.env.REDIS_HOST) {
-      throw new Error("Redis host must be set");
-    }
 
     if (!checkIfEntreeExists) {
-      const { redis, redisSub } = await redisConnection();
       const rabbitMQ = await RabbitmqManager.getInstance(`amqp://${process.env.RABBITMQ_USERNAME}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}`);
       const rabbitmqPubChan = rabbitMQ.getPubChannel();
-      
-      let eventID = makeRandomString(10);
-      await redis.createTransaction({ eventID, expectedResponses: 1 });
   
       data = {
         ...data,
         version: itemToUpdate.version,
-        eventID,
         id
       }
   
-      new LocationUpdatedPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
-  
-      await redisSub.subscribe(eventID, async (isSuccessful) => {
-        try {
-          if (isSuccessful) {
-            const updatedItem = await this.datamapper.update(data, itemToUpdate.version);
-            console.log("Location updated successfully");
-            res.status(200).send(updatedItem);
-          } else {
-            throw new BadRequestError("A service failed location update");
-          }          
-        } catch (err) {
-          next(err);
-        }
-      })
+      new LocationUpdateRequestPublisher(rabbitmqPubChan, "logisticExchange").publish(data);
+
+      res.status(202).send({ message: "Traitement de la demande de modification en cours..."});
+
     } else {
       throw new BadRequestError(`Location ${newLocation} already exists.`);
     }

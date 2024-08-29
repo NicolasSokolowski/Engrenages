@@ -1,29 +1,26 @@
 import { BadRequestError, CoreController } from "@zencorp/engrenages";
 import { LocationTypeControllerRequirements } from "../interfaces/LocationTypeControllerRequirements";
 import { LocationTypeDatamapperRequirements } from "../../datamappers/interfaces/LocationTypeDatamapperRequirements";
-import { LocationTypeCreatedPublisher, LocationTypeDeletedPublisher, LocationTypeUpdatedPublisher } from "../../../events/index.events";
 import { locationController } from "../index.controllers";
+import { LocationTypeCreationRequestPublisher, LocationTypeDeletionRequestPublisher, LocationTypeUpdateRequestPublisher } from "../../../events/index.events";
 
 export class LocationTypeController extends CoreController<LocationTypeControllerRequirements, LocationTypeDatamapperRequirements> {
   constructor(datamapper: LocationTypeControllerRequirements["datamapper"]) {
     const configs = {
       "create": {
         fields: ["name"],
-        Publisher: LocationTypeCreatedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: LocationTypeCreationRequestPublisher,
+        exchangeName: "logisticExchange"
       },
       "update": {
         fields: ["name"],
-        Publisher: LocationTypeUpdatedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: LocationTypeUpdateRequestPublisher,
+        exchangeName: "logisticExchange"
       },
       "delete": {
         fields: ["location_type_name"],
-        Publisher: LocationTypeDeletedPublisher,
-        exchangeName: "logisticExchange",
-        expectedResponses: 1
+        Publisher: LocationTypeDeletionRequestPublisher,
+        exchangeName: "logisticExchange"
       }
     }
     super(datamapper, configs);

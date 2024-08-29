@@ -21,7 +21,7 @@
   "dependencies": {
     "@types/express": "^4.17.21",
     "@types/pg": "^8.11.6",
-    "@zencorp/engrenages": "^1.0.94",
+    "@zencorp/engrenages": "^1.0.97",
     "amqplib": "^0.10.4",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

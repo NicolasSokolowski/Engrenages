@@ -8,19 +8,19 @@ export const consumersSetup = async () => {
 
   const exchange = "logisticExchange";
 
-  new consumers.LocationCreatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.LocationUpdatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.LocationDeletedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.LocationBlockageCreatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.LocationBlockageUpdatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.LocationBlockageDeletedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.LocationTypeCreatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.LocationTypeUpdatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.LocationTypeDeletedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.ProductCreatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.ProductUpdateConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.ProductDeletedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.ProductBlockageCreatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.ProductBlockageUpdatedConsumer(rabbitmqSubChan, exchange).consume();
-  new consumers.ProductBlockageDeletedConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationCreationRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationUpdateRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationDeletionRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationBlockageCreationRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationBlockageUpdateRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationBlockageDeletionRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationTypeCreationRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationTypeUpdateRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.LocationTypeDeletionRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.ProductCreationRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.ProductUpdateRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.ProductDeletionRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.ProductBlockageCreationRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.ProductBlockageUpdateRequestConsumer(rabbitmqSubChan, exchange).consume();
+  new consumers.ProductBlockageDeletionRequestConsumer(rabbitmqSubChan, exchange).consume();
 }
